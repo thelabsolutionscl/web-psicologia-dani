@@ -75,7 +75,7 @@ function OpcionBoton({
   );
 }
 
-export function BookingWizard() {
+export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) {
   const [paso, setPaso] = useState(0);
   const [servicio, setServicio] = useState<ServiceOption | null>(null);
   const [fecha, setFecha] = useState<string | null>(null);
@@ -140,6 +140,11 @@ export function BookingWizard() {
     if (!solicitud) return;
     startTransition(async () => {
       const estado = await submitBooking(solicitud);
+      // Con pago del abono: redirigir al checkout de la pasarela.
+      if (estado.checkoutUrl) {
+        window.location.href = estado.checkoutUrl;
+        return;
+      }
       setResultado(estado);
       if (estado.ok || estado.soloWhatsapp) {
         setPaso(3);
@@ -377,9 +382,11 @@ export function BookingWizard() {
             placeholder="Por ejemplo: la edad de tu hijo o hija, o qué te gustaría conversar primero."
           />
           <p className="font-sans text-sm text-quebrada/80">
-            La hora se confirma con un abono de {PRECIOS.abonoReserva}; el
-            saldo se paga antes de la sesión. Boleta de honorarios
-            reembolsable en Isapre y seguros complementarios.
+            {pagoActivo
+              ? `Al continuar irás a pagar el abono de ${PRECIOS.abonoReserva}, que confirma tu hora; el saldo se paga antes de la sesión.`
+              : `La hora se confirma con un abono de ${PRECIOS.abonoReserva}; el saldo se paga antes de la sesión.`}{" "}
+            Boleta de honorarios reembolsable en Isapre y seguros
+            complementarios.
           </p>
           {resultado?.error ? (
             <p
@@ -395,7 +402,11 @@ export function BookingWizard() {
               Volver
             </Button>
             <Button type="submit" disabled={enviando}>
-              {enviando ? "Enviando…" : "Solicitar esta hora"}
+              {enviando
+                ? "Enviando…"
+                : pagoActivo
+                  ? `Pagar abono de ${PRECIOS.abonoReserva}`
+                  : "Solicitar esta hora"}
             </Button>
           </div>
         </form>

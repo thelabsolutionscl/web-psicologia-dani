@@ -51,6 +51,10 @@ Sin `NEXT_PUBLIC_BOOKING_URL`, el CTA de agenda deriva al formulario de contacto
 - **Disponibilidad**: días de atención semanales (tabla `config`, reemplaza al valor por defecto del código) y bloqueo de fechas puntuales o bloques (tabla `bloqueos`) para vacaciones o jornadas de evaluación en Arica.
 - `/admin` está excluido de robots y con `noindex`. Si falta `ADMIN_PASSWORD`, el panel muestra un aviso y no acepta sesiones.
 
+**Fase C — pago del abono (Mercado Pago Checkout Pro)**: al reservar, si hay `MP_ACCESS_TOKEN`, `submitBooking` crea la reserva (bloquea el cupo) y devuelve la URL del checkout hospedado; el paciente paga los $5.000 en Mercado Pago y `/api/pagos/webhook` confirma la reserva automáticamente cuando el pago queda aprobado (verificando el estado real contra la API, nunca contra el navegador). Vuelve a `/agenda/pago`, que muestra el resultado. Sin `MP_ACCESS_TOKEN`, la reserva sigue el flujo manual (Daniela confirma en el panel). La capa está aislada en `src/lib/pagos.ts`: para cambiar a Flow o Khipu se reimplementan `crearPreferenciaPago()` y `verificarPago()` con el mismo contrato.
+
+**Setup del pago**: crear cuenta en mercadopago.cl → Tus integraciones → credenciales → copiar el **Access Token** (de prueba para sandbox, de producción para cobrar de verdad) a `MP_ACCESS_TOKEN` en Vercel, y `MP_MODE=sandbox` mientras se prueba.
+
 ## Estructura
 
 Rutas de la Fase 1 en `src/app/(marketing)/`: home, `evaluaciones` (hub + autismo/tdah/lenguaje), `terapias`, `atencion-online`, `sobre-mi`, `contacto`/`gracias`, `privacidad`/`terminos`. SEO en `src/lib/seo.tsx` (Metadata + JSON-LD), constantes de marca en `src/lib/site.ts`.

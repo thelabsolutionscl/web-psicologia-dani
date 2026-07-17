@@ -2,6 +2,7 @@
 
 import { Resend } from "resend";
 import { BLOQUES, SERVICIOS, type BookingRequest } from "@/lib/booking";
+import { crearPreferenciaPago, pagosConfigurados } from "@/lib/pagos";
 import { crearReserva } from "@/lib/reservas-db";
 
 export type BookingState = {
@@ -11,6 +12,8 @@ export type BookingState = {
   soloWhatsapp?: boolean;
   /** true cuando el cupo fue tomado por otra persona: elegir otra hora. */
   conflicto?: boolean;
+  /** URL del checkout de pago del abono; si viene, la UI redirige allí. */
+  checkoutUrl?: string;
   error?: string;
   fieldErrors?: Partial<Record<"nombre" | "correo" | "telefono", string>>;
 };
@@ -53,7 +56,7 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
 
   // 1. Base de datos: la inserción compite por el cupo (índice único).
   const guardado = await crearReserva(req);
-  if (guardado === "ocupada") {
+  if (guardado.estado === "ocupada") {
     return {
       ok: false,
       conflicto: true,
@@ -61,7 +64,7 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
         "Esa hora acaba de ser tomada por otra persona. Elige otro día u otro bloque.",
     };
   }
-  if (guardado === "error") {
+  if (guardado.estado === "error") {
     return {
       ok: false,
       error:
@@ -69,15 +72,26 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
     };
   }
 
-  // 2. Aviso por correo (mejor esfuerzo cuando la base ya guardó).
-  const emailOk = await enviarAviso(req, servicio.nombre);
-
-  if (guardado === "creada") {
+  if (guardado.estado === "creada") {
+    // 2a. Con pago configurado: llevar al checkout del abono. La hora se
+    //     confirma sola vía webhook cuando el pago quede aprobado.
+    if (pagosConfigurados()) {
+      const checkoutUrl = await crearPreferenciaPago(guardado.reserva);
+      if (checkoutUrl) {
+        void enviarAviso(req, servicio.nombre);
+        return { ok: true, checkoutUrl };
+      }
+      // Si la pasarela falla, no bloqueamos la reserva: se sigue por
+      // confirmación manual (la reserva ya está guardada).
+    }
+    // 2b. Sin pago: aviso a Daniela y confirmación manual.
+    await enviarAviso(req, servicio.nombre);
     // La base es la fuente de verdad: la reserva existe aunque el correo falle.
     return { ok: true };
   }
 
-  // Sin base configurada: el correo es el único registro.
+  // 3. Sin base configurada: el correo es el único registro.
+  const emailOk = await enviarAviso(req, servicio.nombre);
   if (emailOk === "sin-correo") return { ok: false, soloWhatsapp: true };
   if (emailOk === "error") {
     return {

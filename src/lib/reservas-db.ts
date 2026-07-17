@@ -194,29 +194,37 @@ export async function setDiasAtencion(dias: number[]): Promise<boolean> {
   return true;
 }
 
-export type CrearReservaResult = "creada" | "ocupada" | "error" | "sin-db";
+export type CrearReservaResult =
+  | { estado: "creada"; reserva: Reserva }
+  | { estado: "ocupada" }
+  | { estado: "error" }
+  | { estado: "sin-db" };
 
 /** Registra la solicitud. "ocupada" = otra reserva activa ganó el cupo. */
 export async function crearReserva(
   req: BookingRequest,
 ): Promise<CrearReservaResult> {
   const db = getClient();
-  if (!db) return "sin-db";
+  if (!db) return { estado: "sin-db" };
 
-  const { error } = await db.from("reservas").insert({
-    servicio_id: req.servicioId,
-    servicio_nombre: req.servicioNombre,
-    fecha: req.fecha,
-    bloque: req.bloque,
-    nombre: req.nombre.trim(),
-    correo: req.correo.trim(),
-    telefono: req.telefono.trim(),
-    mensaje: req.mensaje.trim(),
-  });
+  const { data, error } = await db
+    .from("reservas")
+    .insert({
+      servicio_id: req.servicioId,
+      servicio_nombre: req.servicioNombre,
+      fecha: req.fecha,
+      bloque: req.bloque,
+      nombre: req.nombre.trim(),
+      correo: req.correo.trim(),
+      telefono: req.telefono.trim(),
+      mensaje: req.mensaje.trim(),
+    })
+    .select("*")
+    .single();
 
-  if (!error) return "creada";
+  if (!error && data) return { estado: "creada", reserva: data as Reserva };
   // 23505 = violación del índice único reservas_slot_activo
-  if (error.code === "23505") return "ocupada";
-  console.error("[reservas] error creando reserva:", error.message);
-  return "error";
+  if (error?.code === "23505") return { estado: "ocupada" };
+  console.error("[reservas] error creando reserva:", error?.message);
+  return { estado: "error" };
 }
