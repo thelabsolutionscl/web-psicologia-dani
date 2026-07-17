@@ -28,7 +28,7 @@ export function Header() {
           className="flex items-center"
         >
           <Image
-            src="/images/logo-horizontal.png"
+            src="/images/logo-horizontal.webp"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
             width={1473}
             height={436}

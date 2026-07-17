@@ -24,7 +24,7 @@ export const TESTIMONIOS: Testimonio[] = [
   },
   {
     cita: "Me he sentido muy bien, confío más en mí, me dan ganas de decir lo que siento y no me guardo las cosas. Me siento optimista e inspirada a recibir las oportunidades o dificultades con optimismo y no con angustia, aunque todo esto lleve un proceso y tenga que seguir trabajándolo. Noté el cambio cuando recibí el temario de la PAES: lo tomé bien, no me angustié ni pensé en negativo, solo sentí que tenía que estudiar y prepararme. Muchas gracias por todo.",
-    autora: "Valentina",
+    autora: "V.",
     contexto: "Proceso de psicoterapia",
   },
   {

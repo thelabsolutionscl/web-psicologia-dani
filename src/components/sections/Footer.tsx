@@ -46,7 +46,7 @@ export function Footer() {
           </ul>
           <div className="mt-8 flex justify-center">
             <Image
-              src="/images/isotipo.png"
+              src="/images/isotipo.webp"
               alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
               width={420}
               height={420}
