@@ -66,7 +66,7 @@ export default function RadiestesiaPage() {
       <PageHero
         eyebrow="Bienestar"
         title="Sesiones de radiestesia"
-        lede="Un espacio complementario centrado en tu bienestar y tu equilibrio, distinto del acompañamiento psicológico y fonoaudiológico. Un momento para hacer una pausa y reconectar contigo."
+        lede="Un espacio suave para detenerte, respirar y volver a tu centro. La radiestesia es un acompañamiento complementario —distinto del trabajo psicológico y fonoaudiológico— para cuidar tu bienestar cuando necesitas hacer una pausa contigo."
       >
         <BookingCTA />
       </PageHero>
@@ -88,9 +88,10 @@ export default function RadiestesiaPage() {
               médico.]
             </p>
             <p>
-              Es un acompañamiento pensado para quienes quieren dedicarse un
-              momento de calma y bienestar, sin que reemplace ningún tratamiento
-              clínico.
+              Lo pienso como un momento de calma para quienes quieren dedicarse
+              un tiempo de cuidado, con la misma escucha y cercanía con la que
+              acompaño cada proceso. No reemplaza ningún tratamiento clínico: lo
+              acompaña.
             </p>
           </div>
         </div>

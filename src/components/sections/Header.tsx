@@ -6,6 +6,7 @@ import { SITE_NAME } from "@/lib/site";
 const navLinks = [
   { href: "/evaluaciones", label: "Evaluaciones" },
   { href: "/terapias", label: "Terapias" },
+  { href: "/radiestesia", label: "Radiestesia" },
   { href: "/atencion-online", label: "Atención online" },
   { href: "/sobre-mi", label: "Sobre mí" },
   { href: "/blog", label: "Blog" },
