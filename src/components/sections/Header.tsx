@@ -32,7 +32,7 @@ export function Header() {
             width={1473}
             height={436}
             priority
-            className="h-9 w-auto sm:h-12"
+            className="h-12 w-auto sm:h-16 lg:h-20"
           />
         </Link>
         <BookingCTA className="shrink-0 px-4 text-sm sm:px-6 sm:text-base" />
