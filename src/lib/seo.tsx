@@ -154,6 +154,36 @@ export function serviceJsonLd({
   };
 }
 
+/** Article para posts del blog (sección 7.1). */
+export function articleJsonLd({
+  title,
+  description,
+  path,
+  datePublished,
+}: {
+  title: string;
+  description: string;
+  path: string;
+  datePublished: string;
+}): JsonLdData {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: title,
+    description,
+    datePublished,
+    inLanguage: "es-CL",
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(path) },
+    author: {
+      "@type": "Person",
+      name: SITE_NAME,
+      url: SITE_URL,
+      jobTitle: "Psicóloga y fonoaudióloga",
+    },
+    publisher: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+  };
+}
+
 /** Inserta un bloque JSON-LD serializado de forma segura. */
 export function JsonLd({ data }: { data: JsonLdData }) {
   return (

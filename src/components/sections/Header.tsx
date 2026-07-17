@@ -7,6 +7,7 @@ const navLinks = [
   { href: "/terapias", label: "Terapias" },
   { href: "/atencion-online", label: "Atención online" },
   { href: "/sobre-mi", label: "Sobre mí" },
+  { href: "/blog", label: "Blog" },
   { href: "/contacto", label: "Contacto" },
 ];
 
