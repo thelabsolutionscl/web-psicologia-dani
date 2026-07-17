@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 
-type Variant = "primary" | "secondary" | "outline";
+type Variant = "primary" | "secondary" | "outline" | "invertido";
 
 /* Targets táctiles ≥ 44 px (min-h-11) y foco visible vía :focus-visible global. */
 const base =
@@ -13,6 +13,8 @@ const variants: Record<Variant, string> = {
   secondary: "bg-pacifico text-white hover:bg-pacifico/90",
   outline:
     "border border-pacifico text-pacifico hover:bg-pacifico hover:text-white",
+  // Para fondos oscuros (banda CtaFinal): superficie clara y foco visible.
+  invertido: "bg-camanchaca text-anahuaca hover:bg-white",
 };
 
 type ButtonLinkProps = {

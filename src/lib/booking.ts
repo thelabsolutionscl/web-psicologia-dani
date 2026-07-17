@@ -16,7 +16,7 @@ import { HORARIO, PRECIOS, whatsappHref } from "@/lib/site";
 export type ServiceOption = {
   id: string;
   nombre: string;
-  tipo: "evaluacion" | "terapia";
+  tipo: "evaluacion" | "terapia" | "bienestar";
   /** Qué se reserva exactamente en este paso. */
   detalle: string;
   /** Información de precio visible (regla 10.3: evaluaciones como proceso). */
@@ -69,6 +69,14 @@ export const SERVICIOS: ServiceOption[] = [
     detalle:
       "Sesión online de 60 minutos, para adultos o infanto-juvenil con su familia.",
     precio: `${PRECIOS.sesionTerapia} por sesión`,
+  },
+  {
+    id: "radiestesia",
+    nombre: "Sesión de radiestesia",
+    tipo: "bienestar",
+    detalle:
+      "Sesión individual de bienestar; una práctica complementaria, distinta del acompañamiento clínico.",
+    precio: "Valor por confirmar",
   },
 ];
 

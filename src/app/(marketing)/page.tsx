@@ -115,9 +115,9 @@ export default function HomePage() {
   return (
     <>
       {/* 1. Hero */}
-      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-14 pb-16 lg:grid-cols-2 sm:pt-20">
+      <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 pt-14 pb-16 lg:grid-cols-2 sm:pt-20">
         <div>
-          <h1 className="font-display text-3xl font-bold tracking-tight text-balance sm:text-4xl">
+          <h1 className="font-display text-3xl font-bold tracking-tight text-balance break-words hyphens-auto sm:text-4xl">
             Evaluación y acompañamiento del neurodesarrollo, online en todo
             Chile
           </h1>
@@ -138,7 +138,7 @@ export default function HomePage() {
             </ButtonLink>
           </div>
         </div>
-        <div className="mx-auto w-full max-w-md lg:max-w-none">
+        <div className="mx-auto w-full max-w-md min-w-0 lg:max-w-none">
           <Image
             src="/images/daniela-hero.webp"
             alt={`${SITE_NAME}, psicóloga y fonoaudióloga`}
@@ -146,7 +146,7 @@ export default function HomePage() {
             height={1297}
             priority
             sizes="(min-width: 1024px) 45vw, (min-width: 640px) 28rem, 100vw"
-            className="rounded-2xl border border-arena object-cover"
+            className="h-auto w-full rounded-2xl border border-arena object-cover"
           />
         </div>
       </section>

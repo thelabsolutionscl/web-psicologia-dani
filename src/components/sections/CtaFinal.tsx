@@ -21,7 +21,7 @@ export function CtaFinal({
           <VoiceLine className="max-w-[10rem]" />
         </div>
         <div className="mt-6 flex justify-center">
-          <BookingCTA label={ctaLabel} />
+          <BookingCTA label={ctaLabel} variant="invertido" />
         </div>
       </div>
     </section>

@@ -56,7 +56,7 @@ const config: EvaluacionConfig = {
     {
       title: "Devolución e informe online",
       description:
-        "Sesión de devolución por videollamada y entrega del informe. Plazo de entrega: [PLACEHOLDER: días].",
+        "Sesión de devolución por videollamada y entrega del informe. Plazo de entrega: por confirmar.",
     },
   ],
   faq: [

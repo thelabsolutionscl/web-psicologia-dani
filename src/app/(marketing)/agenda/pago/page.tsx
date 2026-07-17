@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { CheckCircle2, Clock, XCircle } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
+import { confirmacionPagoPaciente } from "@/lib/email";
 import { verificarPago } from "@/lib/pagos";
-import { confirmarReservaPagada } from "@/lib/reservas-db";
+import { confirmarReservaPagada, getReservaPorId } from "@/lib/reservas-db";
 import { buildMetadata } from "@/lib/seo";
 import { PRECIOS, WHATSAPP_MESSAGES, whatsappHref } from "@/lib/site";
 
@@ -31,8 +32,11 @@ function clasificarParam(status?: string): Estado {
  * Determina el estado real: si viene un payment_id, se consulta el pago
  * contra la API de Mercado Pago (fuente de verdad). Como red de
  * seguridad ante retrasos del webhook, si el pago está aprobado se
- * confirma la reserva aquí también. Sin payment_id se cae al parámetro
- * del navegador (solo cosmético en ese caso).
+ * confirma la reserva aquí también, y si esta página gana la carrera
+ * contra el webhook (confirmarReservaPagada devuelve "confirmada"),
+ * envía el correo de confirmación al paciente para que no se pierda.
+ * Si hay payment_id pero la API falla, se muestra "pendiente" (nunca se
+ * confía en el `status` del navegador cuando había un pago que verificar).
  */
 async function resolverEstado(
   paymentId: string | undefined,
@@ -41,10 +45,25 @@ async function resolverEstado(
   if (paymentId) {
     const pago = await verificarPago(paymentId);
     if (pago?.aprobado) {
-      await confirmarReservaPagada(pago.reservaId);
+      const resultado = await confirmarReservaPagada(pago.reservaId);
+      // Solo quien gana la transición envía el correo (exactamente uno).
+      if (resultado === "confirmada") {
+        const reserva = await getReservaPorId(pago.reservaId);
+        if (reserva) {
+          await confirmacionPagoPaciente({
+            servicioNombre: reserva.servicio_nombre,
+            fecha: reserva.fecha,
+            bloque: reserva.bloque,
+            nombre: reserva.nombre,
+            correo: reserva.correo,
+            telefono: reserva.telefono,
+          });
+        }
+      }
       return "aprobado";
     }
-    if (pago) return "pendiente";
+    // Con payment_id, el estado lo manda la API, no el navegador.
+    return "pendiente";
   }
   return clasificarParam(statusParam);
 }

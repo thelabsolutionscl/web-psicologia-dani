@@ -89,7 +89,7 @@ export default function SobreMiPage() {
           role="img"
           aria-label="Retrato pendiente de Daniela Alejandra Kaiser Ortiz"
         >
-          [PLACEHOLDER: foto retrato — sesión de fotos pendiente]
+          Foto profesional en camino
         </div>
       </section>
 
@@ -115,8 +115,7 @@ export default function SobreMiPage() {
               ))}
             </ul>
             <p className="mt-4 text-base text-quebrada/70">
-              [PLACEHOLDER: lista curada de diplomados y formación continua
-              para la web]
+              En formación continua y actualización permanente.
             </p>
           </div>
           <div>

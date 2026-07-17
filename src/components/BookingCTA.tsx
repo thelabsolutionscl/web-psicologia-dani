@@ -12,7 +12,7 @@ export function BookingCTA({
   className = "",
 }: {
   label?: string;
-  variant?: "primary" | "secondary" | "outline";
+  variant?: "primary" | "secondary" | "outline" | "invertido";
   className?: string;
 }) {
   const href = BOOKING_URL || "/agenda";

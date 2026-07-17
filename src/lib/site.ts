@@ -107,5 +107,6 @@ export const MOTIVOS_CONTACTO = [
   "Psicoterapia infanto-juvenil",
   "Psicoterapia de adultos",
   "Acompañamiento en duelo",
+  "Sesión de radiestesia",
   "Otro motivo",
 ] as const;

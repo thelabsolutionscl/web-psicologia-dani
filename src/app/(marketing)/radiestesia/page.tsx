@@ -23,14 +23,14 @@ const pasos = [
     description: `Eliges tu hora online y la reservas con un abono de ${PRECIOS.abonoReserva}. El saldo se paga antes de la sesión.`,
   },
   {
-    title: "Conversamos qué te trae",
+    title: "Conversamos cómo llegas",
     description:
-      "[PLACEHOLDER: describir cómo comienza la sesión — qué se conversa al inicio y qué se busca acompañar.]",
+      "Nos tomamos un momento para escuchar cómo te sientes y qué te gustaría cuidar en este espacio.",
   },
   {
     title: "Vivimos la sesión",
     description:
-      "[PLACEHOLDER: describir en qué consiste la sesión de radiestesia con las palabras de Daniela: cómo se trabaja y qué puedes esperar.]",
+      "Un espacio tranquilo, a tu ritmo. Si quieres conocer los detalles antes de reservar, escríbeme por WhatsApp.",
   },
 ];
 
@@ -43,11 +43,11 @@ const faqItems: FaqItem[] = [
   {
     question: "¿Es online o presencial?",
     answer:
-      "[PLACEHOLDER: confirmar si la sesión de radiestesia se realiza online, presencial o ambas.]",
+      "Coordinamos la modalidad según lo que necesites. Escríbeme por WhatsApp y lo vemos juntos.",
   },
   {
     question: "¿Cuánto dura y cuánto cuesta?",
-    answer: `[PLACEHOLDER: confirmar la duración de la sesión.] El valor de la sesión es ${PRECIOS.radiestesia}.`,
+    answer: `El valor de la sesión es ${siPendiente(PRECIOS.radiestesia, "a confirmar")}. Para la duración y la disponibilidad, escríbeme por WhatsApp y coordinamos.`,
   },
 ];
 
@@ -82,10 +82,10 @@ export default function RadiestesiaPage() {
           </h2>
           <div className="mt-4 space-y-4 text-base text-quebrada/90">
             <p>
-              [PLACEHOLDER: descripción de la radiestesia con las palabras de
-              Daniela — qué es, en qué consiste, para quién es y qué busca
-              acompañar. Evitar promesas de resultados o afirmaciones de tipo
-              médico.]
+              La radiestesia es una práctica complementaria orientada al
+              bienestar y la calma. En este espacio te acompaño para hacer una
+              pausa y dedicarte un tiempo de cuidado, con la misma escucha y
+              cercanía con la que trabajo cada proceso.
             </p>
             <p>
               Lo pienso como un momento de calma para quienes quieren dedicarse

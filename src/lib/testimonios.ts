@@ -4,9 +4,10 @@
  * tiene elementos; mientras esté vacío, no se renderiza nada público.
  *
  * Para agregar uno cuando llegue la autorización, copiar la forma:
- *   { cita: "…", autora: "Madre de paciente, 6 años", contexto: "Evaluación de autismo" }
- * Usar solo iniciales o descripción genérica de la autora — nunca el
- * nombre completo de un paciente ni datos identificables de un menor.
+ *   { cita: "…", autora: "Patricia", contexto: "Proceso de psicoterapia" }
+ * Requiere autorización escrita de la persona. Usar nombre de pila (o
+ * iniciales) — nunca el apellido ni datos que identifiquen a un paciente,
+ * y con especial cuidado si es o pudo ser menor de edad.
  */
 
 export type Testimonio = {

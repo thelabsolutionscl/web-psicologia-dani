@@ -167,9 +167,8 @@ export default function AtencionOnlinePage() {
               hora.
             </p>
             <p>
-              Medios de pago desde el extranjero:{" "}
-              [PLACEHOLDER: confirmar medios de pago internacionales
-              disponibles en Encuadrado].
+              Medios de pago desde el extranjero: escríbeme por WhatsApp y
+              coordinamos la forma de pago que te acomode.
             </p>
           </div>
         </div>
