@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  /* Paleta — sección 8 de CLAUDE.md (tokens exactos) */
+  --color-camanchaca: #f4f7f6; /* fondo: blanco frío con bruma costera */
+  --color-quebrada: #22302b; /* tinta principal */
+  --color-pacifico: #2e6059; /* primario: enlaces, botones secundarios, detalles */
+  --color-anahuaca: #8a3b5e; /* acento CTA: solo botones primarios y focos */
+  --color-arena: #dce4e0; /* bordes, superficies, fondos de tarjeta */
+
+  /* Tipografía — variables inyectadas por next/font en el layout raíz */
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-source-serif), ui-serif, Georgia, serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  /* Escala modular 1.25 (base 1rem), line-height 1.6 */
+  --text-sm: 0.8rem;
+  --text-sm--line-height: 1.6;
+  --text-base: 1rem;
+  --text-base--line-height: 1.6;
+  --text-lg: 1.25rem;
+  --text-lg--line-height: 1.6;
+  --text-xl: 1.5625rem;
+  --text-xl--line-height: 1.4;
+  --text-2xl: 1.953rem;
+  --text-2xl--line-height: 1.25;
+  --text-3xl: 2.441rem;
+  --text-3xl--line-height: 1.15;
+  --text-4xl: 3.052rem;
+  --text-4xl--line-height: 1.1;
+}
+
+body {
+  background-color: var(--color-camanchaca);
+  color: var(--color-quebrada);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Focos visibles en acento anahuaca (sección 8) */
+:focus-visible {
+  outline: 2px solid var(--color-anahuaca);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background-color: var(--color-arena);
+}
+
+/* "La línea de la voz": animación de dibujo sutil, estática si el
+   usuario prefiere movimiento reducido */
+.voice-line path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: voice-line-draw 1.8s ease-out 0.2s forwards;
+}
+
+@keyframes voice-line-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voice-line path {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+}
