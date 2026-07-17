@@ -31,20 +31,36 @@ export default function TerminosPage() {
             Reservas y pagos
           </h2>
           <p>
-            Las horas se agendan y pagan a través de una plataforma externa de
-            agenda online. La reserva se confirma con un abono de{" "}
-            {PRECIOS.abonoReserva}; el saldo se paga antes de la sesión. Por
-            cada atención se emite boleta de honorarios, reembolsable en
-            Isapre y seguros complementarios según las condiciones de cada
-            plan.
+            Las horas se agendan y pagan en línea a través de este sitio. La
+            reserva se confirma con un abono de {PRECIOS.abonoReserva}; el
+            saldo se paga antes de la sesión. Por cada atención se emite boleta
+            de honorarios, reembolsable en Isapre y seguros complementarios
+            según las condiciones de cada plan.
           </p>
 
           <h2 className="font-display text-xl font-semibold tracking-tight text-quebrada">
             Cancelaciones y reagendamientos
           </h2>
           <p>
-            [PLACEHOLDER: política de cancelación y reagendamiento — pendiente
-            de definición por Daniela]
+            Si necesitas reagendar o cancelar tu hora, escríbeme por WhatsApp
+            con la mayor anticipación posible y lo coordinamos juntos. Cuando la
+            hora ya está abonada, conversamos la mejor alternativa para
+            reprogramarla.
+          </p>
+
+          <h2 className="font-display text-xl font-semibold tracking-tight text-quebrada">
+            Datos personales
+          </h2>
+          <p>
+            El tratamiento de los datos que entregas al reservar o al
+            escribirnos se describe en nuestra{" "}
+            <a
+              href="/privacidad"
+              className="font-semibold text-pacifico underline"
+            >
+              política de privacidad
+            </a>
+            .
           </p>
 
           <h2 className="font-display text-xl font-semibold tracking-tight text-quebrada">
@@ -60,11 +76,6 @@ export default function TerminosPage() {
             Legislación aplicable
           </h2>
           <p>Estos términos se rigen por la legislación chilena.</p>
-
-          <p className="text-quebrada/70">
-            [PLACEHOLDER: revisión legal de estos términos antes del
-            lanzamiento]
-          </p>
         </div>
       </section>
     </>

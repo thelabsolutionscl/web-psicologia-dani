@@ -19,14 +19,65 @@ function correoDaniela(): string {
   return process.env.CONTACT_TO_EMAIL || "psicofono.danielakaiser@gmail.com";
 }
 
+/** Escapa datos de usuario antes de interpolarlos en el HTML del correo. */
+function esc(v: string): string {
+  return v
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+/**
+ * Plantilla HTML de marca (tabla + estilos inline para compatibilidad
+ * con clientes de correo). El texto plano se mantiene como respaldo.
+ */
+function plantillaHtml(opts: {
+  titulo: string;
+  parrafos: string[];
+  nota?: string;
+}): string {
+  const p = opts.parrafos
+    .map(
+      (t) =>
+        `<p style="margin:0 0 14px;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#33222a;">${t}</p>`,
+    )
+    .join("");
+  const nota = opts.nota
+    ? `<div style="margin-top:18px;padding:12px 14px;background:#f8f2ed;border-left:3px solid #8a2f45;border-radius:0 8px 8px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#55453f;">${opts.nota}</div>`
+    : "";
+  return `<!doctype html><html lang="es"><body style="margin:0;padding:0;background:#f8f2ed;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8f2ed;padding:28px 12px;"><tr><td align="center">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background:#ffffff;border-radius:16px;overflow:hidden;border:1px solid #ebe0d8;">
+<tr><td style="background:#8a2f45;padding:18px 28px;">
+<div style="font-family:Georgia,'Times New Roman',serif;font-size:21px;font-weight:700;color:#ffffff;">Daniela Kaiser</div>
+<div style="font-family:Arial,Helvetica,sans-serif;font-size:11px;letter-spacing:2px;color:#f0c9d5;text-transform:uppercase;margin-top:3px;">Psicología &amp; Bienestar</div>
+</td></tr>
+<tr><td style="padding:28px;">
+<h1 style="margin:0 0 16px;font-family:Georgia,'Times New Roman',serif;font-size:22px;line-height:1.25;color:#33222a;">${opts.titulo}</h1>
+${p}${nota}
+</td></tr>
+<tr><td style="padding:16px 28px;border-top:1px solid #ebe0d8;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#8a7d76;">
+Daniela Alejandra Kaiser Ortiz · Psicóloga · Fonoaudióloga<br>WhatsApp ${esc(PHONE_DISPLAY)}
+</td></tr>
+</table></td></tr></table></body></html>`;
+}
+
 type Enviar = {
   to: string;
   subject: string;
   text: string;
+  html?: string;
   replyTo?: string;
 };
 
-async function enviar({ to, subject, text, replyTo }: Enviar): Promise<boolean> {
+async function enviar({
+  to,
+  subject,
+  text,
+  html,
+  replyTo,
+}: Enviar): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey || !to) return false;
   const resend = new Resend(apiKey);
@@ -35,6 +86,7 @@ async function enviar({ to, subject, text, replyTo }: Enviar): Promise<boolean> 
     to,
     subject,
     text,
+    ...(html ? { html } : {}),
     ...(replyTo ? { replyTo } : {}),
   });
   if (error) {
@@ -76,6 +128,15 @@ export function avisarReservaADaniela(r: DatosReserva): Promise<boolean> {
       "",
       `Recuerda confirmar la hora y coordinar el abono de ${PRECIOS.abonoReserva}.`,
     ].join("\n"),
+    html: plantillaHtml({
+      titulo: "Nueva solicitud de hora",
+      parrafos: [
+        `<strong>${esc(r.servicioNombre)}</strong><br>${esc(r.fecha)} · ${esc(r.bloque)} h (hora de Chile continental)`,
+        `<strong>Nombre:</strong> ${esc(r.nombre)}<br><strong>Correo:</strong> ${esc(r.correo)}<br><strong>Teléfono:</strong> ${esc(r.telefono || "(no indicado)")}`,
+        `<strong>Comentario:</strong><br>${esc(r.mensaje?.trim() || "(sin comentario)")}`,
+      ],
+      nota: `Recuerda confirmar la hora y coordinar el abono de ${esc(PRECIOS.abonoReserva)}.`,
+    }),
   });
 }
 
@@ -97,6 +158,16 @@ export function acuseReservaPaciente(r: DatosReserva): Promise<boolean> {
       SITE_NAME,
       "Psicóloga · Fonoaudióloga",
     ].join("\n"),
+    html: plantillaHtml({
+      titulo: "Recibimos tu solicitud de hora",
+      parrafos: [
+        `Hola ${esc(r.nombre)},`,
+        `Recibimos tu solicitud para <strong>${esc(r.servicioNombre)}</strong> el ${esc(r.fecha)}, bloque ${esc(r.bloque)} h (hora de Chile continental).`,
+        `Te contactaré personalmente para confirmar la hora y coordinar el abono de ${esc(PRECIOS.abonoReserva)} que la reserva. La hora queda tomada solo con esa confirmación.`,
+        `Un abrazo,<br><strong>${esc(SITE_NAME)}</strong><br>Psicóloga · Fonoaudióloga`,
+      ],
+      nota: `Si tu consulta es urgente, escríbeme por WhatsApp al ${esc(PHONE_DISPLAY)}.`,
+    }),
   });
 }
 
@@ -119,6 +190,16 @@ export function confirmacionPagoPaciente(r: DatosReserva): Promise<boolean> {
       SITE_NAME,
       "Psicóloga · Fonoaudióloga",
     ].join("\n"),
+    html: plantillaHtml({
+      titulo: "¡Tu hora quedó confirmada!",
+      parrafos: [
+        `Hola ${esc(r.nombre)},`,
+        `Recibimos tu abono y tu hora de <strong>${esc(r.servicioNombre)}</strong> quedó confirmada:`,
+        `<strong>Fecha:</strong> ${esc(r.fecha)}<br><strong>Horario:</strong> ${esc(r.bloque)} h (hora de Chile continental)`,
+        "El saldo se paga antes de la sesión. Si necesitas reagendar, responde este correo o escríbeme por WhatsApp.",
+        `Nos vemos,<br><strong>${esc(SITE_NAME)}</strong><br>Psicóloga · Fonoaudióloga`,
+      ],
+    }),
   });
 }
 
@@ -139,5 +220,14 @@ export function alertaConflictoPagoADaniela(r: DatosReserva): Promise<boolean> {
       `Correo: ${r.correo}`,
       `Teléfono: ${r.telefono || "(no indicado)"}`,
     ].join("\n"),
+    html: plantillaHtml({
+      titulo: "⚠️ Pago recibido sin cupo disponible",
+      parrafos: [
+        "Un paciente pagó el abono pero su cupo ya no estaba disponible (probablemente el pago llegó después de que la reserva expirara, o el cupo fue tomado por otra persona).",
+        `<strong>${esc(r.servicioNombre)}</strong><br>Fecha/bloque solicitado: ${esc(r.fecha)} ${esc(r.bloque)}`,
+        `<strong>Nombre:</strong> ${esc(r.nombre)}<br><strong>Correo:</strong> ${esc(r.correo)}<br><strong>Teléfono:</strong> ${esc(r.telefono || "(no indicado)")}`,
+      ],
+      nota: "Revisa y contáctalo para reagendar o devolver el abono.",
+    }),
   });
 }

@@ -28,28 +28,60 @@ export default function PrivacidadPage() {
             Qué datos se recogen y para qué
           </h2>
           <p>
-            El formulario de contacto solicita tu nombre, correo, teléfono
-            (opcional), motivo de consulta y mensaje. Estos datos se usan
-            exclusivamente para responder tu consulta y coordinar la
-            atención; no se comparten con terceros ni se usan con fines
-            publicitarios.
+            <strong className="font-semibold text-quebrada">
+              Formulario de contacto:
+            </strong>{" "}
+            nombre, correo, teléfono (opcional), motivo de consulta y mensaje.
+            Se usan exclusivamente para responder tu consulta y coordinar la
+            atención.
           </p>
           <p>
-            Por favor, no incluyas información clínica sensible en el
-            formulario: esa información se conversa en un contexto de
-            atención, protegido por el secreto profesional.
+            <strong className="font-semibold text-quebrada">
+              Agenda online:
+            </strong>{" "}
+            al reservar una hora se registran tu nombre, correo, teléfono y el
+            servicio, la fecha y el bloque elegidos, con el fin de gestionar y
+            confirmar tu reserva.
+          </p>
+          <p>
+            En ambos casos los datos se usan solo para esos fines; no se
+            comparten con terceros con fines publicitarios. Por favor, no
+            incluyas información clínica sensible en estos formularios: esa
+            información se conversa en un contexto de atención, protegido por
+            el secreto profesional.
           </p>
 
           <h2 className="font-display text-xl font-semibold tracking-tight text-quebrada">
-            Servicios de terceros
+            Dónde se alojan y servicios de terceros
           </h2>
+          <ul className="list-disc space-y-2 pl-5">
+            <li>
+              <strong className="font-semibold text-quebrada">Correo:</strong>{" "}
+              los avisos y confirmaciones se envían con Resend.
+            </li>
+            <li>
+              <strong className="font-semibold text-quebrada">
+                Base de datos:
+              </strong>{" "}
+              las reservas se almacenan de forma segura en Supabase.
+            </li>
+            <li>
+              <strong className="font-semibold text-quebrada">Pagos:</strong>{" "}
+              el abono se procesa a través de Mercado Pago. Los datos de tu
+              medio de pago los maneja directamente Mercado Pago; este sitio no
+              los recibe ni los almacena.
+            </li>
+            <li>
+              <strong className="font-semibold text-quebrada">
+                Estadísticas:
+              </strong>{" "}
+              el sitio puede usar Plausible o Google Analytics para entender,
+              de forma agregada y anónima, cómo se usa.
+            </li>
+          </ul>
           <p>
-            El envío del formulario utiliza el servicio de correo Resend. La
-            agenda y el pago se gestionan en la plataforma externa Encuadrado,
-            que tiene sus propias condiciones y políticas de privacidad. El
-            sitio puede usar herramientas de estadísticas de navegación
-            (Plausible o Google Analytics) para entender de forma agregada
-            cómo se usa.
+            Cada uno de estos servicios tiene sus propias condiciones y
+            políticas de privacidad.
           </p>
 
           <h2 className="font-display text-xl font-semibold tracking-tight text-quebrada">
@@ -60,11 +92,6 @@ export default function PrivacidadPage() {
             puedes solicitar en cualquier momento el acceso, la rectificación
             o la eliminación de tus datos escribiendo a través de los medios
             de contacto de este sitio.
-          </p>
-
-          <p className="text-quebrada/70">
-            [PLACEHOLDER: revisión legal de esta política antes del
-            lanzamiento]
           </p>
         </div>
       </section>
