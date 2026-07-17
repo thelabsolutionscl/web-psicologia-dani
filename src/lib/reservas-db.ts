@@ -120,6 +120,42 @@ export async function listReservas(): Promise<Reserva[]> {
   return (data ?? []) as Reserva[];
 }
 
+export type ReservaManual = {
+  servicioId: string;
+  servicioNombre: string;
+  fecha: string;
+  bloque: string;
+  nombre: string;
+  correo: string;
+  telefono: string;
+};
+
+/** Crea una reserva ya confirmada desde el panel (hora tomada por
+ *  WhatsApp/teléfono). Compite por el cupo vía el índice único. */
+export async function crearReservaManual(
+  m: ReservaManual,
+): Promise<"creada" | "ocupada" | "error" | "sin-db"> {
+  const db = getClient();
+  if (!db) return "sin-db";
+  await liberarVencidas(db);
+  const { error } = await db.from("reservas").insert({
+    servicio_id: m.servicioId,
+    servicio_nombre: m.servicioNombre,
+    fecha: m.fecha,
+    bloque: m.bloque,
+    nombre: m.nombre.trim(),
+    correo: m.correo.trim(),
+    telefono: m.telefono.trim(),
+    mensaje: "Reserva ingresada manualmente desde el panel.",
+    estado: "confirmada",
+    expira_at: null,
+  });
+  if (!error) return "creada";
+  if (error.code === "23505") return "ocupada";
+  console.error("[admin] error creando reserva manual:", error.message);
+  return "error";
+}
+
 export async function cambiarEstado(
   id: string,
   estado: EstadoReserva,

@@ -1,5 +1,10 @@
-import { actualizarEstadoReserva, logoutAdmin } from "@/app/actions/admin";
+import {
+  actualizarEstadoReserva,
+  crearReservaManualAction,
+  logoutAdmin,
+} from "@/app/actions/admin";
 import { requireAdmin } from "@/lib/admin-auth";
+import { BLOQUES, SERVICIOS } from "@/lib/booking";
 import {
   dbConfigured,
   listReservas,
@@ -8,6 +13,133 @@ import {
 } from "@/lib/reservas-db";
 
 export const dynamic = "force-dynamic";
+
+const ACTIVAS: EstadoReserva[] = ["confirmada", "pagada"];
+
+function Metricas({ reservas }: { reservas: Reserva[] }) {
+  const hoy = new Date().toISOString().slice(0, 10);
+  const en7 = new Date(Date.now() + 7 * 86400000).toISOString().slice(0, 10);
+  const mes = hoy.slice(0, 7);
+
+  const pendientes = reservas.filter((r) => r.estado === "solicitada").length;
+  const hoyCount = reservas.filter(
+    (r) => r.fecha === hoy && ACTIVAS.includes(r.estado),
+  ).length;
+  const semana = reservas.filter(
+    (r) => r.fecha >= hoy && r.fecha <= en7 && ACTIVAS.includes(r.estado),
+  ).length;
+  const delMes = reservas.filter(
+    (r) => r.fecha.startsWith(mes) && ACTIVAS.includes(r.estado),
+  ).length;
+
+  const tarjetas = [
+    { label: "Solicitudes por confirmar", valor: pendientes, alerta: pendientes > 0 },
+    { label: "Confirmadas hoy", valor: hoyCount },
+    { label: "Próximos 7 días", valor: semana },
+    { label: "Confirmadas este mes", valor: delMes },
+  ];
+
+  return (
+    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      {tarjetas.map((t) => (
+        <div
+          key={t.label}
+          className={`rounded-2xl border bg-white p-5 ${
+            t.alerta ? "border-pacifico" : "border-arena"
+          }`}
+        >
+          <p className="font-sans text-3xl font-bold text-quebrada">{t.valor}</p>
+          <p className="mt-1 font-sans text-sm text-quebrada/70">{t.label}</p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function NuevaReservaManual() {
+  return (
+    <details className="rounded-2xl border border-arena bg-white p-5">
+      <summary className="cursor-pointer font-sans text-base font-bold text-quebrada">
+        + Ingresar reserva manual (hora tomada por WhatsApp o teléfono)
+      </summary>
+      <form
+        action={crearReservaManualAction}
+        className="mt-4 grid gap-3 sm:grid-cols-2"
+      >
+        <label className="font-sans text-sm font-semibold">
+          Servicio
+          <select
+            name="servicioId"
+            required
+            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
+          >
+            {SERVICIOS.map((s) => (
+              <option key={s.id} value={s.id}>
+                {s.nombre}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="font-sans text-sm font-semibold">
+          Fecha
+          <input
+            type="date"
+            name="fecha"
+            required
+            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
+          />
+        </label>
+        <label className="font-sans text-sm font-semibold">
+          Bloque
+          <select
+            name="bloque"
+            required
+            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
+          >
+            {BLOQUES.map((b) => (
+              <option key={b} value={b}>
+                {b} h
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="font-sans text-sm font-semibold">
+          Nombre del paciente
+          <input
+            type="text"
+            name="nombre"
+            required
+            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
+          />
+        </label>
+        <label className="font-sans text-sm font-semibold">
+          Teléfono
+          <input
+            type="tel"
+            name="telefono"
+            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
+          />
+        </label>
+        <label className="font-sans text-sm font-semibold">
+          Correo (opcional)
+          <input
+            type="email"
+            name="correo"
+            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
+          />
+        </label>
+        <div className="sm:col-span-2">
+          <button
+            type="submit"
+            className="inline-flex min-h-11 items-center rounded-full bg-pacifico px-6 font-sans text-sm font-semibold text-white hover:bg-pacifico/90"
+          >
+            Agregar como confirmada
+          </button>
+        </div>
+      </form>
+    </details>
+  );
+}
 
 const badgeEstado: Record<EstadoReserva, string> = {
   solicitada: "bg-arena text-quebrada",
@@ -151,6 +283,9 @@ export default async function AdminReservasPage() {
           </button>
         </form>
       </div>
+
+      <Metricas reservas={reservas} />
+      <NuevaReservaManual />
 
       <section>
         <h2 className="mb-3 font-sans text-lg font-bold">

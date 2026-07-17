@@ -10,10 +10,11 @@ import {
   requireAdmin,
   setSesionAdmin,
 } from "@/lib/admin-auth";
-import { BLOQUES } from "@/lib/booking";
+import { BLOQUES, SERVICIOS } from "@/lib/booking";
 import {
   cambiarEstado,
   crearBloqueo,
+  crearReservaManual,
   eliminarBloqueo,
   ESTADOS_RESERVA,
   setDiasAtencion,
@@ -58,6 +59,39 @@ export async function actualizarEstadoReserva(formData: FormData): Promise<void>
   if (reserva && estado === "confirmada") {
     await avisarConfirmacion(reserva);
   }
+  revalidatePath("/admin");
+}
+
+export async function crearReservaManualAction(
+  formData: FormData,
+): Promise<void> {
+  await requireAdmin();
+  const servicioId = String(formData.get("servicioId") ?? "");
+  const servicio = SERVICIOS.find((s) => s.id === servicioId);
+  const fecha = String(formData.get("fecha") ?? "");
+  const bloque = String(formData.get("bloque") ?? "");
+  const nombre = String(formData.get("nombre") ?? "").trim();
+  const telefono = String(formData.get("telefono") ?? "").trim();
+  const correo = String(formData.get("correo") ?? "").trim();
+
+  if (
+    !servicio ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(fecha) ||
+    !(BLOQUES as readonly string[]).includes(bloque) ||
+    nombre.length < 2
+  ) {
+    return;
+  }
+
+  await crearReservaManual({
+    servicioId: servicio.id,
+    servicioNombre: servicio.nombre,
+    fecha,
+    bloque,
+    nombre,
+    correo,
+    telefono,
+  });
   revalidatePath("/admin");
 }
 
