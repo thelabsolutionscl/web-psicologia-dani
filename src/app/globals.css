@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  /* Paleta — sección 8 de CLAUDE.md (tokens exactos) */
-  --color-camanchaca: #f4f7f6; /* fondo: blanco frío con bruma costera */
-  --color-quebrada: #22302b; /* tinta principal */
-  --color-pacifico: #2e6059; /* primario: enlaces, botones secundarios, detalles */
-  --color-anahuaca: #8a3b5e; /* acento CTA: solo botones primarios y focos */
-  --color-arena: #dce4e0; /* bordes, superficies, fondos de tarjeta */
+  /* Paleta derivada del logo de marca (colibrí vino/rosa sobre crema).
+     Contraste verificado WCAG AA en todas las combinaciones de texto. */
+  --color-camanchaca: #f8f2ed; /* fondo: crema cálido del logo */
+  --color-quebrada: #33222a; /* tinta principal: ciruela-café oscuro (13.5:1) */
+  --color-pacifico: #9e4759; /* secundario: enlaces, iconos, detalles (rosa del logo) */
+  --color-anahuaca: #8a2f45; /* acento CTA: botones primarios y focos (vino del logo) */
+  --color-arena: #ebe0d8; /* bordes, superficies, fondos de tarjeta (blush) */
 
   /* Tipografía — variables inyectadas por next/font en el layout raíz */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;

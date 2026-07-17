@@ -8,10 +8,10 @@ import { SITE_NAME, TAGLINE } from "@/lib/site";
  */
 export const runtime = "nodejs";
 
-const CAMANCHACA = "#F4F7F6";
-const QUEBRADA = "#22302B";
-const PACIFICO = "#2E6059";
-const ARENA = "#DCE4E0";
+const CAMANCHACA = "#F8F2ED";
+const QUEBRADA = "#33222A";
+const PACIFICO = "#8A2F45";
+const ARENA = "#EBE0D8";
 
 export function GET(request: Request) {
   const { searchParams } = new URL(request.url);

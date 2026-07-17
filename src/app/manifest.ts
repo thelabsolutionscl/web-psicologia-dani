@@ -9,8 +9,8 @@ export default function manifest(): MetadataRoute.Manifest {
       "Evaluación y acompañamiento del neurodesarrollo, online en todo Chile.",
     start_url: "/",
     display: "standalone",
-    background_color: "#F4F7F6",
-    theme_color: "#F4F7F6",
+    background_color: "#F8F2ED",
+    theme_color: "#F8F2ED",
     lang: "es-CL",
     icons: [
       { src: "/icon", sizes: "32x32", type: "image/png" },
