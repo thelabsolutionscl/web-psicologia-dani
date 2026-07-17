@@ -68,7 +68,7 @@ const badgeEstado: Record<EstadoReserva, string> = {
   confirmada: "bg-pacifico text-white",
   pagada: "bg-quebrada text-white",
   realizada: "border border-arena text-quebrada/70",
-  cancelada: "border border-arena text-quebrada/50 line-through",
+  cancelada: "border border-arena text-quebrada/70 line-through",
 };
 
 /** Transiciones disponibles por estado. */

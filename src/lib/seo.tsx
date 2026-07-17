@@ -233,6 +233,22 @@ export function articleJsonLd({
   };
 }
 
+/** Migas de pan para páginas anidadas (rich results). */
+export function breadcrumbJsonLd(
+  items: { name: string; path: string }[],
+): JsonLdData {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: absoluteUrl(item.path),
+    })),
+  };
+}
+
 /** Inserta un bloque JSON-LD serializado de forma segura. */
 export function JsonLd({ data }: { data: JsonLdData }) {
   return (

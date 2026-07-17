@@ -6,7 +6,12 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps, type ProcessStep } from "@/components/sections/ProcessSteps";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import { JsonLd, serviceJsonLd, type FaqItem } from "@/lib/seo";
+import {
+  breadcrumbJsonLd,
+  JsonLd,
+  serviceJsonLd,
+  type FaqItem,
+} from "@/lib/seo";
 import { PRECIOS, PREVISION, siPendiente } from "@/lib/site";
 
 export type EvaluacionConfig = {
@@ -42,6 +47,13 @@ export function EvaluacionDetalle({ config }: { config: EvaluacionConfig }) {
           description: config.serviceDescription,
           path: config.path,
         })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Evaluaciones", path: "/evaluaciones" },
+          { name: config.serviceName, path: config.path },
+        ])}
       />
 
       <PageHero eyebrow="Evaluación diagnóstica" title={config.h1} lede={config.lede}>

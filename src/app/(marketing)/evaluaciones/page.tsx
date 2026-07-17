@@ -48,7 +48,13 @@ export default function EvaluacionesPage() {
         <BookingCTA label="Reserva tu evaluación" />
       </PageHero>
 
-      <section className="mx-auto max-w-6xl px-4 pb-14">
+      <section
+        aria-labelledby="evaluaciones-titulo"
+        className="mx-auto max-w-6xl px-4 pb-14"
+      >
+        <h2 id="evaluaciones-titulo" className="sr-only">
+          Tipos de evaluación
+        </h2>
         <ServiceGrid services={evaluaciones} />
       </section>
 

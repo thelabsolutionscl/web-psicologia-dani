@@ -7,7 +7,13 @@ import { CtaFinal } from "@/components/sections/CtaFinal";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
 import { formatDate, getAllPosts, getPost } from "@/lib/blog";
-import { absoluteUrl, articleJsonLd, JsonLd, ogImages } from "@/lib/seo";
+import {
+  absoluteUrl,
+  articleJsonLd,
+  breadcrumbJsonLd,
+  JsonLd,
+  ogImages,
+} from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
 
 type Params = { slug: string };
@@ -115,6 +121,13 @@ export default async function BlogPostPage({
           path: `/blog/${slug}`,
           datePublished: post.meta.date,
         })}
+      />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: "Inicio", path: "/" },
+          { name: "Blog", path: "/blog" },
+          { name: post.meta.title, path: `/blog/${slug}` },
+        ])}
       />
 
       <article className="mx-auto max-w-2xl px-4 pt-14 pb-16 sm:pt-20">

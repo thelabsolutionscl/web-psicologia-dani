@@ -26,6 +26,15 @@ function parsePost(fileName: string): Post {
   const slug = fileName.replace(/\.mdx$/, "");
   const raw = fs.readFileSync(path.join(BLOG_DIR, fileName), "utf8");
   const { data, content } = matter(raw);
+  // Validación de frontmatter: falla en build (no en runtime silencioso)
+  // si a un post le falta un campo obligatorio.
+  for (const campo of ["title", "seoTitle", "description", "date"] as const) {
+    if (typeof data[campo] !== "string" || !data[campo]) {
+      throw new Error(
+        `El post "${fileName}" no tiene el campo obligatorio "${campo}" en el frontmatter.`,
+      );
+    }
+  }
   return {
     meta: {
       slug,

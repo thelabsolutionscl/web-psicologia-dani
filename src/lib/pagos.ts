@@ -83,6 +83,44 @@ export async function crearPreferenciaPago(
   }
 }
 
+/**
+ * Valida la firma HMAC del webhook de Mercado Pago (header x-signature).
+ * Si no hay MP_WEBHOOK_SECRET configurado, no se verifica y se devuelve
+ * true (el spoofing ya está mitigado porque el estado se reconsulta
+ * contra la API). Con secreto, rechaza notificaciones no firmadas.
+ */
+export async function firmaWebhookValida(
+  xSignature: string | null,
+  xRequestId: string | null,
+  dataId: string | null,
+): Promise<boolean> {
+  const secret = process.env.MP_WEBHOOK_SECRET;
+  if (!secret) return true;
+  if (!xSignature || !dataId) return false;
+
+  const partes = Object.fromEntries(
+    xSignature.split(",").map((kv) => {
+      const [k, v] = kv.split("=");
+      return [k?.trim(), v?.trim()];
+    }),
+  );
+  const ts = partes.ts;
+  const v1 = partes.v1;
+  if (!ts || !v1) return false;
+
+  let manifest = `id:${dataId.toLowerCase()};`;
+  if (xRequestId) manifest += `request-id:${xRequestId};`;
+  manifest += `ts:${ts};`;
+
+  const { createHmac, timingSafeEqual } = await import("node:crypto");
+  const esperado = createHmac("sha256", secret).update(manifest).digest("hex");
+  try {
+    return timingSafeEqual(Buffer.from(esperado), Buffer.from(v1));
+  } catch {
+    return false;
+  }
+}
+
 export type PagoVerificado = {
   reservaId: string;
   aprobado: boolean;

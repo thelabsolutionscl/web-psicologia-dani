@@ -43,7 +43,9 @@ export default function AdminLayout({
           </nav>
         </div>
       </header>
-      <main className="mx-auto max-w-5xl px-4 py-8">{children}</main>
+      <main id="contenido" className="mx-auto max-w-5xl px-4 py-8">
+        {children}
+      </main>
     </div>
   );
 }

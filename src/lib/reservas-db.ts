@@ -335,9 +335,13 @@ export async function getDiasAtencion(): Promise<number[] | null> {
     .maybeSingle();
   if (error || !data) return null;
   const value = data.value as unknown;
-  return Array.isArray(value) && value.every((v) => typeof v === "number")
-    ? (value as number[])
-    : null;
+  // Debe ser un arreglo NO vacío de días válidos (0-6). Un arreglo vacío
+  // dejaría la agenda sin días; en ese caso caemos al valor por defecto.
+  const valido =
+    Array.isArray(value) &&
+    value.length > 0 &&
+    value.every((v) => typeof v === "number" && v >= 0 && v <= 6);
+  return valido ? (value as number[]) : null;
 }
 
 export async function setDiasAtencion(dias: number[]): Promise<boolean> {

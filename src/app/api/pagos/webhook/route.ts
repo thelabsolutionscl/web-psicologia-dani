@@ -4,7 +4,7 @@ import {
   confirmacionPagoPaciente,
   type DatosReserva,
 } from "@/lib/email";
-import { verificarPago } from "@/lib/pagos";
+import { firmaWebhookValida, verificarPago } from "@/lib/pagos";
 import { confirmarReservaPagada, getReservaPorId } from "@/lib/reservas-db";
 
 /**
@@ -70,6 +70,16 @@ export async function POST(request: Request) {
   if (tipo && tipo !== "payment") {
     // Notificaciones que no son de pago (p. ej. merchant_order) se ignoran.
     return NextResponse.json({ ok: true });
+  }
+
+  // Defensa en profundidad: si hay MP_WEBHOOK_SECRET, validar la firma.
+  const firmaOk = await firmaWebhookValida(
+    request.headers.get("x-signature"),
+    request.headers.get("x-request-id"),
+    paymentId,
+  );
+  if (!firmaOk) {
+    return NextResponse.json({ error: "firma inválida" }, { status: 401 });
   }
 
   await procesar(paymentId);

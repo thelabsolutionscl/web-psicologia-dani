@@ -50,6 +50,21 @@ function datos(req: BookingRequest, servicioNombre: string): DatosReserva {
  * checkout del abono. Degrada sin base (correo) y sin correo (WhatsApp).
  */
 export async function submitBooking(req: BookingRequest): Promise<BookingState> {
+  // Guarda de forma (payload malformado desde un cliente hecho a mano):
+  // evita un 500 por TypeError al llamar .trim() sobre campos ausentes.
+  if (
+    !req ||
+    typeof req !== "object" ||
+    ["servicioId", "fecha", "bloque", "nombre", "correo", "telefono", "mensaje"].some(
+      (k) => typeof (req as Record<string, unknown>)[k] !== "string",
+    )
+  ) {
+    return {
+      ok: false,
+      error: "La solicitud está incompleta. Vuelve a intentarlo desde el inicio.",
+    };
+  }
+
   // Honeypot: si el campo oculto viene relleno, es un bot. Simulamos
   // éxito sin registrar nada (no bloquea cupos ni envía correos).
   if ((req.sitioWeb ?? "").trim() !== "") {
