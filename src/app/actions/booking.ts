@@ -2,12 +2,15 @@
 
 import { Resend } from "resend";
 import { BLOQUES, SERVICIOS, type BookingRequest } from "@/lib/booking";
+import { crearReserva } from "@/lib/reservas-db";
 
 export type BookingState = {
-  /** true cuando la solicitud quedó registrada (correo enviado). */
+  /** true cuando la solicitud quedó registrada (en base de datos o correo). */
   ok: boolean;
-  /** true cuando el correo aún no está habilitado: confirmar por WhatsApp. */
+  /** true cuando no hay base ni correo configurados: confirmar por WhatsApp. */
   soloWhatsapp?: boolean;
+  /** true cuando el cupo fue tomado por otra persona: elegir otra hora. */
+  conflicto?: boolean;
   error?: string;
   fieldErrors?: Partial<Record<"nombre" | "correo" | "telefono", string>>;
 };
@@ -16,9 +19,9 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FECHA_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
 /**
- * Registra una solicitud de reserva. Hoy: correo a Daniela vía Resend.
- * Con dashboard: reemplazar el envío por un POST del mismo BookingRequest
- * al API del dashboard (el resto de la función no cambia).
+ * Registra una solicitud de reserva (Fase A): guarda en la base con
+ * bloqueo de doble reserva y avisa por correo (mejor esfuerzo). Sin base
+ * configurada degrada a correo; sin correo, a WhatsApp.
  */
 export async function submitBooking(req: BookingRequest): Promise<BookingState> {
   const servicio = SERVICIOS.find((s) => s.id === req.servicioId);
@@ -48,12 +51,50 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
     return { ok: false, fieldErrors };
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    // Sin correo configurado la reserva sigue siendo posible: la UI ofrece
-    // enviar la misma solicitud por WhatsApp.
-    return { ok: false, soloWhatsapp: true };
+  // 1. Base de datos: la inserción compite por el cupo (índice único).
+  const guardado = await crearReserva(req);
+  if (guardado === "ocupada") {
+    return {
+      ok: false,
+      conflicto: true,
+      error:
+        "Esa hora acaba de ser tomada por otra persona. Elige otro día u otro bloque.",
+    };
   }
+  if (guardado === "error") {
+    return {
+      ok: false,
+      error:
+        "No pudimos registrar tu solicitud. Inténtalo de nuevo o resérvala por WhatsApp.",
+    };
+  }
+
+  // 2. Aviso por correo (mejor esfuerzo cuando la base ya guardó).
+  const emailOk = await enviarAviso(req, servicio.nombre);
+
+  if (guardado === "creada") {
+    // La base es la fuente de verdad: la reserva existe aunque el correo falle.
+    return { ok: true };
+  }
+
+  // Sin base configurada: el correo es el único registro.
+  if (emailOk === "sin-correo") return { ok: false, soloWhatsapp: true };
+  if (emailOk === "error") {
+    return {
+      ok: false,
+      error:
+        "No pudimos registrar tu solicitud. Inténtalo de nuevo o resérvala por WhatsApp.",
+    };
+  }
+  return { ok: true };
+}
+
+async function enviarAviso(
+  req: BookingRequest,
+  servicioNombre: string,
+): Promise<"enviado" | "sin-correo" | "error"> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return "sin-correo";
 
   const resend = new Resend(apiKey);
   const to =
@@ -63,11 +104,11 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
     from: "Agenda web <onboarding@resend.dev>",
     to,
     replyTo: req.correo.trim(),
-    subject: `Solicitud de hora: ${servicio.nombre} — ${req.fecha} ${req.bloque}`,
+    subject: `Solicitud de hora: ${servicioNombre} — ${req.fecha} ${req.bloque}`,
     text: [
       "Nueva solicitud de hora desde el sitio web",
       "",
-      `Servicio: ${servicio.nombre}`,
+      `Servicio: ${servicioNombre}`,
       `Fecha solicitada: ${req.fecha}`,
       `Bloque: ${req.bloque} (hora de Chile continental)`,
       "",
@@ -83,12 +124,8 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
   });
 
   if (error) {
-    return {
-      ok: false,
-      error:
-        "No pudimos registrar tu solicitud. Inténtalo de nuevo o resérvala por WhatsApp.",
-    };
+    console.error("[reservas] error enviando aviso:", error.message);
+    return "error";
   }
-
-  return { ok: true };
+  return "enviado";
 }

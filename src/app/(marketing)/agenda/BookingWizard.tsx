@@ -1,7 +1,7 @@
 "use client";
 
 import { CalendarClock, Check, ChevronLeft, MessageCircle } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 import { submitBooking, type BookingState } from "@/app/actions/booking";
 import { Button } from "@/components/ui/Button";
 import { InputField, TextareaField } from "@/components/ui/Input";
@@ -11,9 +11,12 @@ import {
   getAvailableDays,
   SERVICIOS,
   type BookingRequest,
+  type DayOption,
   type ServiceOption,
 } from "@/lib/booking";
 import { PRECIOS } from "@/lib/site";
+
+const slotKey = (fecha: string, bloque: string) => `${fecha}|${bloque}`;
 
 const PASOS = ["Servicio", "Fecha y hora", "Tus datos", "Confirmación"];
 
@@ -46,10 +49,12 @@ function Stepper({ actual }: { actual: number }) {
 
 function OpcionBoton({
   seleccionado,
+  deshabilitado = false,
   onClick,
   children,
 }: {
   seleccionado: boolean;
+  deshabilitado?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }) {
@@ -58,7 +63,8 @@ function OpcionBoton({
       type="button"
       onClick={onClick}
       aria-pressed={seleccionado}
-      className={`min-h-11 w-full rounded-xl border px-4 py-3 text-left font-sans text-base transition-colors ${
+      disabled={deshabilitado}
+      className={`min-h-11 w-full rounded-xl border px-4 py-3 text-left font-sans text-base transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
         seleccionado
           ? "border-pacifico bg-pacifico/10 font-semibold text-quebrada"
           : "border-arena bg-white text-quebrada hover:border-pacifico/50"
@@ -81,8 +87,40 @@ export function BookingWizard() {
   const [resultado, setResultado] = useState<BookingState | null>(null);
   const [enviando, startTransition] = useTransition();
 
-  const dias = useMemo(() => getAvailableDays(new Date()), []);
+  /* Disponibilidad real desde /api/disponibilidad (cupos ya tomados);
+     si el API no responde, se muestran los días locales sin descuento. */
+  const [dias, setDias] = useState<DayOption[]>([]);
+  const [ocupados, setOcupados] = useState<Set<string>>(new Set());
+  const [cargando, setCargando] = useState(true);
+
+  const cargarDisponibilidad = useCallback(async () => {
+    setCargando(true);
+    try {
+      const res = await fetch("/api/disponibilidad", { cache: "no-store" });
+      if (!res.ok) throw new Error(String(res.status));
+      const data: {
+        dias: DayOption[];
+        ocupados: { fecha: string; bloque: string }[];
+      } = await res.json();
+      setDias(data.dias);
+      setOcupados(
+        new Set(data.ocupados.map((o) => slotKey(o.fecha, o.bloque))),
+      );
+    } catch {
+      setDias(getAvailableDays(new Date()));
+      setOcupados(new Set());
+    } finally {
+      setCargando(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void cargarDisponibilidad();
+  }, [cargarDisponibilidad]);
+
   const diaSeleccionado = dias.find((d) => d.fecha === fecha);
+  const diaCompleto = (f: string) =>
+    BLOQUES.every((b) => ocupados.has(slotKey(f, b)));
 
   const solicitud: BookingRequest | null =
     servicio && fecha && bloque
@@ -103,7 +141,14 @@ export function BookingWizard() {
     startTransition(async () => {
       const estado = await submitBooking(solicitud);
       setResultado(estado);
-      if (estado.ok || estado.soloWhatsapp) setPaso(3);
+      if (estado.ok || estado.soloWhatsapp) {
+        setPaso(3);
+      } else if (estado.conflicto) {
+        // El cupo lo ganó otra persona: volver a fecha/hora con datos frescos.
+        setBloque(null);
+        setPaso(1);
+        void cargarDisponibilidad();
+      }
     });
   }
 
@@ -202,33 +247,61 @@ export function BookingWizard() {
             definitivos de atención están por confirmar: toda hora se confirma
             personalmente antes del abono.
           </p>
-          <div className="mt-4 grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
-            {dias.map((d) => (
-              <OpcionBoton
-                key={d.fecha}
-                seleccionado={fecha === d.fecha}
-                onClick={() => setFecha(d.fecha)}
-              >
-                {d.etiqueta}
-              </OpcionBoton>
-            ))}
-          </div>
+          {resultado?.conflicto ? (
+            <p
+              role="alert"
+              className="mt-3 rounded-lg border border-quebrada/30 bg-arena/50 px-4 py-3 font-sans text-sm font-semibold text-quebrada"
+            >
+              {resultado.error}
+            </p>
+          ) : null}
+          {cargando ? (
+            <p className="mt-4 font-sans text-sm text-quebrada/80">
+              Cargando disponibilidad…
+            </p>
+          ) : (
+            <div className="mt-4 grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
+              {dias.map((d) => {
+                const completo = diaCompleto(d.fecha);
+                return (
+                  <OpcionBoton
+                    key={d.fecha}
+                    seleccionado={fecha === d.fecha}
+                    deshabilitado={completo}
+                    onClick={() => {
+                      setFecha(d.fecha);
+                      if (bloque && ocupados.has(slotKey(d.fecha, bloque))) {
+                        setBloque(null);
+                      }
+                    }}
+                  >
+                    {d.etiqueta}
+                    {completo ? " — sin cupos" : ""}
+                  </OpcionBoton>
+                );
+              })}
+            </div>
+          )}
           <div className="mt-5 flex flex-wrap gap-3">
-            {BLOQUES.map((b) => (
-              <button
-                key={b}
-                type="button"
-                aria-pressed={bloque === b}
-                onClick={() => setBloque(b)}
-                className={`inline-flex min-h-11 items-center rounded-full border px-5 font-sans text-base font-semibold transition-colors ${
-                  bloque === b
-                    ? "border-pacifico bg-pacifico text-white"
-                    : "border-arena bg-white text-quebrada hover:border-pacifico/50"
-                }`}
-              >
-                {b} h
-              </button>
-            ))}
+            {BLOQUES.map((b) => {
+              const tomado = fecha ? ocupados.has(slotKey(fecha, b)) : false;
+              return (
+                <button
+                  key={b}
+                  type="button"
+                  aria-pressed={bloque === b}
+                  disabled={tomado}
+                  onClick={() => setBloque(b)}
+                  className={`inline-flex min-h-11 items-center rounded-full border px-5 font-sans text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                    bloque === b
+                      ? "border-pacifico bg-pacifico text-white"
+                      : "border-arena bg-white text-quebrada hover:border-pacifico/50"
+                  }`}
+                >
+                  {b} h{tomado ? " — tomado" : ""}
+                </button>
+              );
+            })}
           </div>
           <div className="mt-6 flex flex-wrap gap-3">
             <Button

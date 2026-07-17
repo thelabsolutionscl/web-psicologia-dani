@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { HeartHandshake, Puzzle, Sparkles } from "lucide-react";
 import { BookingCTA } from "@/components/BookingCTA";
 import { CtaFinal } from "@/components/sections/CtaFinal";
@@ -125,12 +126,15 @@ export default function HomePage() {
             </ButtonLink>
           </div>
         </div>
-        <div
-          className="flex aspect-[4/3] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-white p-6 text-center font-sans text-sm text-quebrada/70"
-          role="img"
-          aria-label="Fotografía pendiente de Daniela Alejandra Kaiser Ortiz"
-        >
-          [PLACEHOLDER: foto horizontal de Daniela — sesión de fotos pendiente]
+        <div className="mx-auto w-full max-w-md lg:max-w-none">
+          <Image
+            src="/images/daniela-hero.webp"
+            alt={`${SITE_NAME}, psicóloga y fonoaudióloga`}
+            width={720}
+            height={770}
+            priority
+            className="rounded-2xl border border-arena object-cover"
+          />
         </div>
       </section>
 

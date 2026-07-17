@@ -36,11 +36,16 @@ Sin `NEXT_PUBLIC_BOOKING_URL`, el CTA de agenda deriva al formulario de contacto
 
 ## Sistema de reserva (`/agenda`)
 
-"Agenda tu hora" lleva al wizard de reserva propio (`/agenda`): servicio → fecha y bloque → datos → confirmación. Hoy es solo frontend: la solicitud se envía por correo (Resend) con respaldo por WhatsApp. La capa de datos está aislada en `src/lib/booking.ts` y `src/app/actions/booking.ts` para conectar un dashboard después:
+"Agenda tu hora" lleva al wizard de reserva propio (`/agenda`): servicio → fecha y bloque → datos → confirmación. Con la **Fase A** las reservas persisten en Supabase con bloqueo de doble reserva:
 
-- **Disponibilidad**: reemplazar `getAvailableDays()` por un GET al API del dashboard (hoy genera días hábiles de las próximas 3 semanas con los dos bloques fijos).
-- **Reserva**: reemplazar el envío de correo en `submitBooking()` por un POST del mismo JSON `BookingRequest` (el contrato ya está tipado).
+- **Disponibilidad**: `GET /api/disponibilidad` devuelve los días ofrecidos y los cupos ya tomados (estados activos: solicitada/confirmada/pagada). El wizard deshabilita los cupos ocupados.
+- **Reserva**: `submitBooking()` inserta en la tabla `reservas`; el índice único parcial (`supabase/schema.sql`) resuelve la carrera entre dos solicitudes simultáneas — la segunda recibe "esa hora acaba de ser tomada". Además avisa por correo (Resend, mejor esfuerzo).
+- **Degradación**: sin `SUPABASE_URL`/`SUPABASE_SERVICE_ROLE_KEY` el sitio funciona como antes (toda la agenda visible, solicitud por correo/WhatsApp, sin bloqueo).
 - Si se define `NEXT_PUBLIC_BOOKING_URL` (agenda externa), el CTA vuelve a derivar allá sin tocar código.
+
+**Setup**: crear proyecto en supabase.com → SQL Editor → ejecutar `supabase/schema.sql` → copiar Project URL y service role key (Settings → API) a las env `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` en Vercel. La tabla queda con RLS sin políticas públicas: solo el servidor accede.
+
+**Fase B (dashboard)**: leer/gestionar la misma tabla `reservas` (confirmar/cancelar cambia `estado`, lo que libera o bloquea el cupo automáticamente) y administrar los días de atención reales.
 
 ## Estructura
 
