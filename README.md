@@ -45,7 +45,11 @@ Sin `NEXT_PUBLIC_BOOKING_URL`, el CTA de agenda deriva al formulario de contacto
 
 **Setup**: crear proyecto en supabase.com → SQL Editor → ejecutar `supabase/schema.sql` → copiar Project URL y service role key (Settings → API) a las env `SUPABASE_URL` y `SUPABASE_SERVICE_ROLE_KEY` en Vercel. La tabla queda con RLS sin políticas públicas: solo el servidor accede.
 
-**Fase B (dashboard)**: leer/gestionar la misma tabla `reservas` (confirmar/cancelar cambia `estado`, lo que libera o bloquea el cupo automáticamente) y administrar los días de atención reales.
+**Fase B — panel `/admin`**: dashboard para Daniela con login por contraseña (`ADMIN_PASSWORD`, sesión en cookie httpOnly firmada):
+
+- **Reservas**: bandeja de próximas y pasadas con transiciones de estado (`solicitada → confirmada → pagada → realizada`, o `cancelada` en cualquier punto). Confirmar envía correo automático al paciente; cancelar libera el cupo en la agenda pública al instante.
+- **Disponibilidad**: días de atención semanales (tabla `config`, reemplaza al valor por defecto del código) y bloqueo de fechas puntuales o bloques (tabla `bloqueos`) para vacaciones o jornadas de evaluación en Arica.
+- `/admin` está excluido de robots y con `noindex`. Si falta `ADMIN_PASSWORD`, el panel muestra un aviso y no acepta sesiones.
 
 ## Estructura
 

@@ -30,5 +30,29 @@ create index if not exists reservas_fecha on public.reservas (fecha);
 
 -- RLS activado y sin políticas públicas: a esta tabla solo accede el
 -- servidor (Server Actions / route handlers) con la service role key.
--- El dashboard (Fase B) agregará políticas para el usuario autenticado.
 alter table public.reservas enable row level security;
+
+-- ---------------------------------------------------------------
+-- Fase B: dashboard de administración
+-- ---------------------------------------------------------------
+
+-- Fechas bloqueadas (vacaciones, jornadas presenciales en Arica).
+-- bloque null = día completo bloqueado.
+create table if not exists public.bloqueos (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  fecha date not null,
+  bloque text,
+  motivo text not null default ''
+);
+
+create index if not exists bloqueos_fecha on public.bloqueos (fecha);
+alter table public.bloqueos enable row level security;
+
+-- Configuración simple clave → valor (p. ej. dias_atencion: [1,2,3]).
+create table if not exists public.config (
+  key text primary key,
+  value jsonb not null
+);
+
+alter table public.config enable row level security;

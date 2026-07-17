@@ -53,6 +53,147 @@ export async function getSlotsOcupados(
   return (data ?? []).map((r) => ({ fecha: r.fecha, bloque: r.bloque }));
 }
 
+/* ------------------------------------------------------------------ */
+/* Fase B: operaciones del panel de administración                     */
+/* ------------------------------------------------------------------ */
+
+export const ESTADOS_RESERVA = [
+  "solicitada",
+  "confirmada",
+  "pagada",
+  "realizada",
+  "cancelada",
+] as const;
+
+export type EstadoReserva = (typeof ESTADOS_RESERVA)[number];
+
+export type Reserva = {
+  id: string;
+  created_at: string;
+  servicio_id: string;
+  servicio_nombre: string;
+  fecha: string;
+  bloque: string;
+  nombre: string;
+  correo: string;
+  telefono: string;
+  mensaje: string;
+  estado: EstadoReserva;
+};
+
+export async function listReservas(): Promise<Reserva[]> {
+  const db = getClient();
+  if (!db) return [];
+  const { data, error } = await db
+    .from("reservas")
+    .select("*")
+    .order("fecha", { ascending: true })
+    .order("bloque", { ascending: true });
+  if (error) {
+    console.error("[admin] error listando reservas:", error.message);
+    return [];
+  }
+  return (data ?? []) as Reserva[];
+}
+
+export async function cambiarEstado(
+  id: string,
+  estado: EstadoReserva,
+): Promise<Reserva | null> {
+  const db = getClient();
+  if (!db) return null;
+  const { data, error } = await db
+    .from("reservas")
+    .update({ estado })
+    .eq("id", id)
+    .select("*")
+    .single();
+  if (error) {
+    console.error("[admin] error cambiando estado:", error.message);
+    return null;
+  }
+  return data as Reserva;
+}
+
+export type Bloqueo = {
+  id: string;
+  fecha: string;
+  /** null = día completo. */
+  bloque: string | null;
+  motivo: string;
+};
+
+export async function listBloqueos(desde: string): Promise<Bloqueo[]> {
+  const db = getClient();
+  if (!db) return [];
+  const { data, error } = await db
+    .from("bloqueos")
+    .select("id,fecha,bloque,motivo")
+    .gte("fecha", desde)
+    .order("fecha", { ascending: true });
+  if (error) {
+    console.error("[admin] error listando bloqueos:", error.message);
+    return [];
+  }
+  return (data ?? []) as Bloqueo[];
+}
+
+export async function crearBloqueo(
+  fecha: string,
+  bloque: string | null,
+  motivo: string,
+): Promise<boolean> {
+  const db = getClient();
+  if (!db) return false;
+  const { error } = await db.from("bloqueos").insert({ fecha, bloque, motivo });
+  if (error) {
+    console.error("[admin] error creando bloqueo:", error.message);
+    return false;
+  }
+  return true;
+}
+
+export async function eliminarBloqueo(id: string): Promise<boolean> {
+  const db = getClient();
+  if (!db) return false;
+  const { error } = await db.from("bloqueos").delete().eq("id", id);
+  if (error) {
+    console.error("[admin] error eliminando bloqueo:", error.message);
+    return false;
+  }
+  return true;
+}
+
+/** Días de atención (0=domingo … 6=sábado) desde config; null = usar
+ *  el valor por defecto del código. */
+export async function getDiasAtencion(): Promise<number[] | null> {
+  const db = getClient();
+  if (!db) return null;
+  const { data, error } = await db
+    .from("config")
+    .select("value")
+    .eq("key", "dias_atencion")
+    .maybeSingle();
+  if (error || !data) return null;
+  const value = data.value as unknown;
+  return Array.isArray(value) && value.every((v) => typeof v === "number")
+    ? (value as number[])
+    : null;
+}
+
+export async function setDiasAtencion(dias: number[]): Promise<boolean> {
+  const db = getClient();
+  if (!db) return false;
+  const { error } = await db
+    .from("config")
+    .upsert({ key: "dias_atencion", value: dias });
+  if (error) {
+    console.error("[admin] error guardando días:", error.message);
+    return false;
+  }
+  return true;
+}
+
 export type CrearReservaResult = "creada" | "ocupada" | "error" | "sin-db";
 
 /** Registra la solicitud. "ocupada" = otra reserva activa ganó el cupo. */

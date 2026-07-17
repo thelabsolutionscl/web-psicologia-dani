@@ -130,9 +130,10 @@ export default function HomePage() {
           <Image
             src="/images/daniela-hero.webp"
             alt={`${SITE_NAME}, psicóloga y fonoaudióloga`}
-            width={720}
-            height={770}
+            width={1212}
+            height={1297}
             priority
+            sizes="(min-width: 1024px) 45vw, (min-width: 640px) 28rem, 100vw"
             className="rounded-2xl border border-arena object-cover"
           />
         </div>

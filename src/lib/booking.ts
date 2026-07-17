@@ -93,10 +93,14 @@ export type DayOption = {
 };
 
 /**
- * Días reservables desde mañana, según DIAS_ATENCION.
- * Con dashboard: sustituir por disponibilidad real del API.
+ * Días reservables desde mañana. `diasAtencion` permite al dashboard
+ * definir los días reales (0=domingo … 6=sábado); sin él se usa el
+ * valor por defecto DIAS_ATENCION.
  */
-export function getAvailableDays(hoy: Date): DayOption[] {
+export function getAvailableDays(
+  hoy: Date,
+  diasAtencion: number[] = DIAS_ATENCION,
+): DayOption[] {
   const dias: DayOption[] = [];
   const cursor = new Date(hoy);
   cursor.setDate(cursor.getDate() + 1);
@@ -104,7 +108,7 @@ export function getAvailableDays(hoy: Date): DayOption[] {
   fin.setDate(fin.getDate() + SEMANAS_VISIBLES * 7);
 
   while (cursor <= fin) {
-    if (DIAS_ATENCION.includes(cursor.getDay())) {
+    if (diasAtencion.includes(cursor.getDay())) {
       const fecha = [
         cursor.getFullYear(),
         String(cursor.getMonth() + 1).padStart(2, "0"),
