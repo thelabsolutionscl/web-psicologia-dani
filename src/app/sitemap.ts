@@ -9,6 +9,7 @@ const routes: Array<{ path: string; priority: number }> = [
   { path: "/evaluaciones/tdah", priority: 0.9 },
   { path: "/evaluaciones/lenguaje", priority: 0.9 },
   { path: "/terapias", priority: 0.8 },
+  { path: "/agenda", priority: 0.8 },
   { path: "/atencion-online", priority: 0.7 },
   { path: "/sobre-mi", priority: 0.7 },
   { path: "/blog", priority: 0.6 },
