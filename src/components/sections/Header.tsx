@@ -27,10 +27,10 @@ export function Header() {
           className="flex items-center"
         >
           <Image
-            src="/images/logo-horizontal.webp"
+            src="/images/logo-horizontal.png"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-            width={1467}
-            height={432}
+            width={1473}
+            height={436}
             priority
             className="h-9 w-auto sm:h-12"
           />
