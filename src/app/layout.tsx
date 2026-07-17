@@ -19,6 +19,9 @@ const sourceSerif = Source_Serif_4({
   style: ["normal", "italic"],
   variable: "--font-source-serif",
   display: "swap",
+  // Fuente secundaria (prosa/citas): no bloquear el render inicial con su
+  // precarga; la display (bricolage) y la sans (figtree) sí se precargan.
+  preload: false,
 });
 
 const figtree = Figtree({

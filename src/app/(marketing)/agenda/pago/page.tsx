@@ -2,8 +2,13 @@ import type { Metadata } from "next";
 import { CheckCircle2, Clock, XCircle } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
+import { verificarPago } from "@/lib/pagos";
+import { confirmarReservaPagada } from "@/lib/reservas-db";
 import { buildMetadata } from "@/lib/seo";
 import { PRECIOS, WHATSAPP_MESSAGES, whatsappHref } from "@/lib/site";
+
+// El estado se verifica en el servidor (no se confía en el navegador).
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   ...buildMetadata({
@@ -16,10 +21,32 @@ export const metadata: Metadata = {
 
 type Estado = "aprobado" | "pendiente" | "rechazado";
 
-function clasificar(status?: string): Estado {
+function clasificarParam(status?: string): Estado {
   if (status === "approved" || status === "success") return "aprobado";
   if (status === "pending" || status === "in_process") return "pendiente";
   return "rechazado";
+}
+
+/**
+ * Determina el estado real: si viene un payment_id, se consulta el pago
+ * contra la API de Mercado Pago (fuente de verdad). Como red de
+ * seguridad ante retrasos del webhook, si el pago está aprobado se
+ * confirma la reserva aquí también. Sin payment_id se cae al parámetro
+ * del navegador (solo cosmético en ese caso).
+ */
+async function resolverEstado(
+  paymentId: string | undefined,
+  statusParam: string | undefined,
+): Promise<Estado> {
+  if (paymentId) {
+    const pago = await verificarPago(paymentId);
+    if (pago?.aprobado) {
+      await confirmarReservaPagada(pago.reservaId);
+      return "aprobado";
+    }
+    if (pago) return "pendiente";
+  }
+  return clasificarParam(statusParam);
 }
 
 const CONTENIDO: Record<
@@ -49,10 +76,17 @@ const CONTENIDO: Record<
 export default async function PagoPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; collection_status?: string }>;
+  searchParams: Promise<{
+    status?: string;
+    collection_status?: string;
+    payment_id?: string;
+  }>;
 }) {
   const params = await searchParams;
-  const estado = clasificar(params.status ?? params.collection_status);
+  const estado = await resolverEstado(
+    params.payment_id,
+    params.status ?? params.collection_status,
+  );
   const { icon: Icon, titulo, texto } = CONTENIDO[estado];
 
   return (

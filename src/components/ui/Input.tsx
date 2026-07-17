@@ -18,7 +18,11 @@ type CommonProps = {
 function FieldError({ id, error }: { id: string; error?: string }) {
   if (!error) return null;
   return (
-    <p id={id} className="mt-1 font-sans text-sm font-semibold text-quebrada">
+    <p
+      id={id}
+      role="alert"
+      className="mt-1 font-sans text-sm font-semibold text-quebrada"
+    >
       {error}
     </p>
   );

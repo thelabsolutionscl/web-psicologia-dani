@@ -1,7 +1,13 @@
 "use client";
 
 import { CalendarClock, Check, ChevronLeft, MessageCircle } from "lucide-react";
-import { useCallback, useEffect, useState, useTransition } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 import { submitBooking, type BookingState } from "@/app/actions/booking";
 import { Button } from "@/components/ui/Button";
 import { InputField, TextareaField } from "@/components/ui/Input";
@@ -88,6 +94,21 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   const [resultado, setResultado] = useState<BookingState | null>(null);
   const [enviando, startTransition] = useTransition();
 
+  // Accesibilidad: al cambiar de paso, llevar el foco al título del nuevo
+  // paso para que teclado y lectores de pantalla no queden en el body.
+  const tituloRef = useRef<HTMLElement | null>(null);
+  const setTituloRef = (el: HTMLElement | null) => {
+    tituloRef.current = el;
+  };
+  const yaMontado = useRef(false);
+  useEffect(() => {
+    if (!yaMontado.current) {
+      yaMontado.current = true;
+      return;
+    }
+    tituloRef.current?.focus();
+  }, [paso]);
+
   /* Disponibilidad real desde /api/disponibilidad (cupos ya tomados);
      si el API no responde, se muestran los días locales sin descuento. */
   const [dias, setDias] = useState<DayOption[]>([]);
@@ -155,6 +176,12 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
         setBloque(null);
         setPaso(1);
         void cargarDisponibilidad();
+      } else if (estado.fieldErrors) {
+        // Llevar el foco al primer campo con error (SC 3.3.1/4.1.3).
+        const primero = (["nombre", "correo", "telefono"] as const).find(
+          (c) => estado.fieldErrors?.[c],
+        );
+        if (primero) document.getElementById(primero)?.focus();
       }
     });
   }
@@ -164,7 +191,11 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
     return (
       <div className="rounded-2xl border border-arena bg-white p-6 sm:p-8">
         <Check className="size-10 text-pacifico" aria-hidden="true" />
-        <h2 className="mt-3 font-display text-2xl font-bold tracking-tight">
+        <h2
+          ref={setTituloRef}
+          tabIndex={-1}
+          className="mt-3 font-display text-2xl font-bold tracking-tight outline-none"
+        >
           {resultado.ok
             ? "Tu solicitud quedó registrada"
             : "Un paso más: confirma por WhatsApp"}
@@ -209,7 +240,11 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
       {/* Paso 1: servicio */}
       {paso === 0 && (
         <fieldset className="mt-6">
-          <legend className="font-sans text-lg font-bold">
+          <legend
+            ref={setTituloRef}
+            tabIndex={-1}
+            className="font-sans text-lg font-bold outline-none"
+          >
             ¿Qué hora necesitas?
           </legend>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -245,7 +280,11 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
       {/* Paso 2: fecha y bloque */}
       {paso === 1 && (
         <div className="mt-6">
-          <p className="flex items-center gap-2 font-sans text-lg font-bold">
+          <p
+            ref={setTituloRef}
+            tabIndex={-1}
+            className="flex items-center gap-2 font-sans text-lg font-bold outline-none"
+          >
             <CalendarClock className="size-5 text-pacifico" aria-hidden="true" />
             Elige fecha y bloque
           </p>
@@ -341,6 +380,13 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
           }}
           noValidate
         >
+          <p
+            ref={setTituloRef}
+            tabIndex={-1}
+            className="font-sans text-lg font-bold outline-none"
+          >
+            Tus datos de contacto
+          </p>
           <p className="rounded-xl bg-camanchaca px-4 py-3 font-sans text-sm text-quebrada">
             <strong className="font-semibold">{servicio.nombre}</strong> ·{" "}
             {diaSeleccionado.etiqueta} · {bloque} h (Chile continental)

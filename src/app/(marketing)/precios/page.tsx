@@ -6,7 +6,7 @@ import { FaqSection } from "@/components/sections/FaqSection";
 import { PageHero } from "@/components/sections/PageHero";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
-import { buildMetadata, type FaqItem } from "@/lib/seo";
+import { buildMetadata, type FaqItem, JsonLd, serviceJsonLd } from "@/lib/seo";
 import { PRECIOS, PREVISION, siPendiente } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
@@ -61,6 +61,15 @@ const faqItems: FaqItem[] = [
 export default function PreciosPage() {
   return (
     <>
+      <JsonLd
+        data={serviceJsonLd({
+          name: "Psicoterapia online",
+          description:
+            "Sesión de psicoterapia online en todo Chile. Las evaluaciones se cobran como proceso completo.",
+          path: "/precios",
+          offer: { price: PRECIOS.sesionTerapia.replace(/[^\d]/g, "") || "40000" },
+        })}
+      />
       <PageHero
         eyebrow="Precios"
         title="Valores claros, sin sorpresas"

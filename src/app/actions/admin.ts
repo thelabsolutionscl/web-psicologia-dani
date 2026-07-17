@@ -11,6 +11,7 @@ import {
   setSesionAdmin,
 } from "@/lib/admin-auth";
 import { BLOQUES, SERVICIOS } from "@/lib/booking";
+import { permitir } from "@/lib/rate-limit";
 import {
   cambiarEstado,
   crearBloqueo,
@@ -33,6 +34,12 @@ export async function loginAdmin(
     return {
       error:
         "El panel no está habilitado: falta configurar ADMIN_PASSWORD en el entorno.",
+    };
+  }
+  // Rate limit por IP contra fuerza bruta de la contraseña.
+  if (!(await permitir("login", 8, 900))) {
+    return {
+      error: "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
     };
   }
   const intento = String(formData.get("password") ?? "");
@@ -62,9 +69,17 @@ export async function actualizarEstadoReserva(formData: FormData): Promise<void>
   revalidatePath("/admin");
 }
 
+export type ReservaManualState = {
+  ok: boolean;
+  mensaje: string;
+} | null;
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 export async function crearReservaManualAction(
+  _prev: ReservaManualState,
   formData: FormData,
-): Promise<void> {
+): Promise<ReservaManualState> {
   await requireAdmin();
   const servicioId = String(formData.get("servicioId") ?? "");
   const servicio = SERVICIOS.find((s) => s.id === servicioId);
@@ -80,10 +95,16 @@ export async function crearReservaManualAction(
     !(BLOQUES as readonly string[]).includes(bloque) ||
     nombre.length < 2
   ) {
-    return;
+    return {
+      ok: false,
+      mensaje: "Revisa los datos: falta el servicio, la fecha, el bloque o el nombre.",
+    };
+  }
+  if (correo && !EMAIL_REGEX.test(correo)) {
+    return { ok: false, mensaje: "El correo no tiene un formato válido." };
   }
 
-  await crearReservaManual({
+  const resultado = await crearReservaManual({
     servicioId: servicio.id,
     servicioNombre: servicio.nombre,
     fecha,
@@ -92,7 +113,22 @@ export async function crearReservaManualAction(
     correo,
     telefono,
   });
+
+  if (resultado === "ocupada") {
+    return {
+      ok: false,
+      mensaje: `Ese cupo (${fecha}, ${bloque}) ya está tomado. Elige otro día u horario.`,
+    };
+  }
+  if (resultado === "error" || resultado === "sin-db") {
+    return { ok: false, mensaje: "No se pudo guardar la reserva. Inténtalo de nuevo." };
+  }
+
   revalidatePath("/admin");
+  return {
+    ok: true,
+    mensaje: `Reserva de ${nombre} agregada como confirmada para el ${fecha}, ${bloque}.`,
+  };
 }
 
 export async function crearBloqueoAction(formData: FormData): Promise<void> {

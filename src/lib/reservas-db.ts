@@ -175,6 +175,30 @@ export async function cambiarEstado(
   return data as Reserva;
 }
 
+/**
+ * Rate limit atómico vía función SQL. Devuelve true si la acción está
+ * permitida. Sin base configurada degrada a `true` (no limita), igual que
+ * el resto del sitio.
+ */
+export async function checkRateLimit(
+  clave: string,
+  max: number,
+  ventanaSeg: number,
+): Promise<boolean> {
+  const db = getClient();
+  if (!db) return true;
+  const { data, error } = await db.rpc("check_rate_limit", {
+    p_clave: clave,
+    p_max: max,
+    p_ventana_seg: ventanaSeg,
+  });
+  if (error) {
+    console.error("[rate-limit] error:", error.message);
+    return true; // ante fallo, no bloqueamos a usuarios legítimos
+  }
+  return data === true;
+}
+
 export async function getReservaPorId(id: string): Promise<Reserva | null> {
   const db = getClient();
   if (!db) return null;

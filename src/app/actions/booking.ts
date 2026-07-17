@@ -8,6 +8,7 @@ import {
   type DatosReserva,
 } from "@/lib/email";
 import { crearPreferenciaPago, pagosConfigurados } from "@/lib/pagos";
+import { permitir } from "@/lib/rate-limit";
 import {
   crearReserva,
   quitarHold,
@@ -53,6 +54,15 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
   // éxito sin registrar nada (no bloquea cupos ni envía correos).
   if ((req.sitioWeb ?? "").trim() !== "") {
     return { ok: true };
+  }
+
+  // Rate limit por IP: frena flood de solicitudes que bloquearían cupos.
+  if (!(await permitir("booking", 6, 600))) {
+    return {
+      ok: false,
+      error:
+        "Recibimos varias solicitudes desde tu conexión. Espera unos minutos e inténtalo de nuevo, o escríbeme por WhatsApp.",
+    };
   }
 
   const servicio = SERVICIOS.find((s) => s.id === req.servicioId);

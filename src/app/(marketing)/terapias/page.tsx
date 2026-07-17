@@ -5,8 +5,10 @@ import { FaqSection } from "@/components/sections/FaqSection";
 import { PageHero } from "@/components/sections/PageHero";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
-import { buildMetadata, type FaqItem } from "@/lib/seo";
+import { buildMetadata, type FaqItem, JsonLd, serviceJsonLd } from "@/lib/seo";
 import { PRECIOS, PREVISION } from "@/lib/site";
+
+const PRECIO_TERAPIA = PRECIOS.sesionTerapia.replace(/[^\d]/g, "") || "40000";
 
 export const metadata: Metadata = buildMetadata({
   title: "Terapias",
@@ -89,6 +91,15 @@ function TerapiaSeccion({
 export default function TerapiasPage() {
   return (
     <>
+      <JsonLd
+        data={serviceJsonLd({
+          name: "Psicoterapia online",
+          description:
+            "Psicoterapia infanto-juvenil, de adultos y acompañamiento en duelo, online en todo Chile.",
+          path: "/terapias",
+          offer: { price: PRECIO_TERAPIA },
+        })}
+      />
       <PageHero
         eyebrow="Psicoterapia online"
         title="Terapia para niños, adolescentes y adultos"

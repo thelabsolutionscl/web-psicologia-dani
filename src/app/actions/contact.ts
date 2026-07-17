@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { Resend } from "resend";
+import { permitir } from "@/lib/rate-limit";
 import { MOTIVOS_CONTACTO } from "@/lib/site";
 
 export type ContactFields = {
@@ -29,6 +30,14 @@ export async function sendContact(
   // Honeypot antispam: si el campo oculto viene lleno, se simula éxito.
   if (String(formData.get("empresa") ?? "").trim() !== "") {
     redirect("/gracias");
+  }
+
+  // Rate limit por IP: evita bombardeo de correos vía el formulario.
+  if (!(await permitir("contacto", 5, 600))) {
+    return {
+      error:
+        "Recibimos varios mensajes desde tu conexión. Espera unos minutos e inténtalo de nuevo, o escríbeme por WhatsApp.",
+    };
   }
 
   const values: ContactFields = {

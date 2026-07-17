@@ -1,10 +1,6 @@
-import {
-  actualizarEstadoReserva,
-  crearReservaManualAction,
-  logoutAdmin,
-} from "@/app/actions/admin";
+import { actualizarEstadoReserva, logoutAdmin } from "@/app/actions/admin";
+import { ReservaManualForm } from "@/app/admin/ReservaManualForm";
 import { requireAdmin } from "@/lib/admin-auth";
-import { BLOQUES, SERVICIOS } from "@/lib/booking";
 import {
   dbConfigured,
   listReservas,
@@ -62,81 +58,7 @@ function NuevaReservaManual() {
       <summary className="cursor-pointer font-sans text-base font-bold text-quebrada">
         + Ingresar reserva manual (hora tomada por WhatsApp o teléfono)
       </summary>
-      <form
-        action={crearReservaManualAction}
-        className="mt-4 grid gap-3 sm:grid-cols-2"
-      >
-        <label className="font-sans text-sm font-semibold">
-          Servicio
-          <select
-            name="servicioId"
-            required
-            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
-          >
-            {SERVICIOS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.nombre}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="font-sans text-sm font-semibold">
-          Fecha
-          <input
-            type="date"
-            name="fecha"
-            required
-            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
-          />
-        </label>
-        <label className="font-sans text-sm font-semibold">
-          Bloque
-          <select
-            name="bloque"
-            required
-            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
-          >
-            {BLOQUES.map((b) => (
-              <option key={b} value={b}>
-                {b} h
-              </option>
-            ))}
-          </select>
-        </label>
-        <label className="font-sans text-sm font-semibold">
-          Nombre del paciente
-          <input
-            type="text"
-            name="nombre"
-            required
-            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
-          />
-        </label>
-        <label className="font-sans text-sm font-semibold">
-          Teléfono
-          <input
-            type="tel"
-            name="telefono"
-            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
-          />
-        </label>
-        <label className="font-sans text-sm font-semibold">
-          Correo (opcional)
-          <input
-            type="email"
-            name="correo"
-            className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base"
-          />
-        </label>
-        <div className="sm:col-span-2">
-          <button
-            type="submit"
-            className="inline-flex min-h-11 items-center rounded-full bg-pacifico px-6 font-sans text-sm font-semibold text-white hover:bg-pacifico/90"
-          >
-            Agregar como confirmada
-          </button>
-        </div>
-      </form>
+      <ReservaManualForm />
     </details>
   );
 }

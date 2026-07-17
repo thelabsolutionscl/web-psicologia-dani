@@ -61,3 +61,41 @@ create table if not exists public.config (
 );
 
 alter table public.config enable row level security;
+
+-- Rate limiting (anti fuerza bruta / spam) por clave (acción + IP).
+-- Ventana deslizante simple con contador; atómico vía SELECT ... FOR UPDATE.
+create table if not exists public.rate_limits (
+  clave text primary key,
+  ventana_inicio timestamptz not null default now(),
+  contador int not null default 0
+);
+
+alter table public.rate_limits enable row level security;
+
+create or replace function public.check_rate_limit(
+  p_clave text,
+  p_max int,
+  p_ventana_seg int
+) returns boolean
+language plpgsql
+as $$
+declare
+  v_row public.rate_limits;
+begin
+  select * into v_row from public.rate_limits where clave = p_clave for update;
+  if not found then
+    insert into public.rate_limits (clave, ventana_inicio, contador)
+      values (p_clave, now(), 1);
+    return true;
+  end if;
+  if now() - v_row.ventana_inicio > make_interval(secs => p_ventana_seg) then
+    update public.rate_limits set ventana_inicio = now(), contador = 1 where clave = p_clave;
+    return true;
+  end if;
+  if v_row.contador >= p_max then
+    return false;
+  end if;
+  update public.rate_limits set contador = contador + 1 where clave = p_clave;
+  return true;
+end;
+$$;

@@ -24,6 +24,9 @@ jobs:
       - name: Chequeo de tipos
         run: npx tsc --noEmit
 
+      - name: Lint
+        run: npm run lint
+
       - name: Build de producción
         run: npm run build
         env:

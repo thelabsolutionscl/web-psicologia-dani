@@ -160,10 +160,13 @@ export function serviceJsonLd({
   name,
   description,
   path,
+  offer,
 }: {
   name: string;
   description: string;
   path: string;
+  /** Precio en CLP (entero, sin símbolo) para emitir un Offer. */
+  offer?: { price: string };
 }): JsonLdData {
   return {
     "@context": "https://schema.org",
@@ -174,6 +177,17 @@ export function serviceJsonLd({
     serviceType: name,
     areaServed: "CL",
     provider: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    ...(offer
+      ? {
+          offers: {
+            "@type": "Offer",
+            price: offer.price,
+            priceCurrency: "CLP",
+            availability: "https://schema.org/InStock",
+            url: absoluteUrl(path),
+          },
+        }
+      : {}),
   };
 }
 
@@ -183,18 +197,22 @@ export function articleJsonLd({
   description,
   path,
   datePublished,
+  dateModified,
 }: {
   title: string;
   description: string;
   path: string;
   datePublished: string;
+  dateModified?: string;
 }): JsonLdData {
   return {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: title,
     description,
+    image: [ogImageUrl(title, "Blog")],
     datePublished,
+    dateModified: dateModified ?? datePublished,
     inLanguage: "es-CL",
     mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(path) },
     author: {
@@ -203,7 +221,15 @@ export function articleJsonLd({
       url: SITE_URL,
       jobTitle: "Psicóloga y fonoaudióloga",
     },
-    publisher: { "@type": "Person", name: SITE_NAME, url: SITE_URL },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      url: SITE_URL,
+      logo: {
+        "@type": "ImageObject",
+        url: absoluteUrl("/apple-icon.png"),
+      },
+    },
   };
 }
 
