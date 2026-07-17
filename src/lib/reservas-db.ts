@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { BookingRequest } from "@/lib/booking";
+import { BLOQUES, getAvailableDays, type BookingRequest } from "@/lib/booking";
 
 /**
  * Acceso a la base de reservas (Supabase, Fase A). Solo se usa desde el
@@ -175,6 +175,81 @@ export async function cambiarEstado(
   return data as Reserva;
 }
 
+export async function getReservaPorId(id: string): Promise<Reserva | null> {
+  const db = getClient();
+  if (!db) return null;
+  const { data, error } = await db
+    .from("reservas")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+  if (error) {
+    console.error("[reservas] error leyendo reserva:", error.message);
+    return null;
+  }
+  return (data as Reserva) ?? null;
+}
+
+/** Quita la retención temporal (expira_at) de una reserva: evita que se
+ *  auto-cancele si el pago no llegó a iniciarse (pasarela caída). */
+export async function quitarHold(id: string): Promise<void> {
+  const db = getClient();
+  if (!db) return;
+  const { error } = await db
+    .from("reservas")
+    .update({ expira_at: null })
+    .eq("id", id);
+  if (error) console.error("[reservas] error quitando hold:", error.message);
+}
+
+export type ConfirmarPagoResult =
+  | "confirmada"
+  | "ya-procesada"
+  | "conflicto"
+  | "error"
+  | "sin-db";
+
+/**
+ * Confirma una reserva tras el pago del abono, de forma segura:
+ * - solo promueve desde 'solicitada' (update guardado con .eq),
+ * - idempotente si ya está confirmada/pagada/realizada,
+ * - "conflicto" si la reserva fue cancelada/liberada o el cupo ya no está
+ *   (pago capturado sin cupo → el webhook alerta a Daniela).
+ */
+export async function confirmarReservaPagada(
+  id: string,
+): Promise<ConfirmarPagoResult> {
+  const db = getClient();
+  if (!db) return "sin-db";
+
+  const actual = await getReservaPorId(id);
+  if (!actual) return "conflicto";
+  if (
+    actual.estado === "confirmada" ||
+    actual.estado === "pagada" ||
+    actual.estado === "realizada"
+  ) {
+    return "ya-procesada";
+  }
+  if (actual.estado === "cancelada") return "conflicto";
+
+  // estado === 'solicitada': confirmar y quitar el vencimiento.
+  const { data, error } = await db
+    .from("reservas")
+    .update({ estado: "confirmada", expira_at: null })
+    .eq("id", id)
+    .eq("estado", "solicitada")
+    .select("*");
+  if (error) {
+    if (error.code === "23505") return "conflicto";
+    console.error("[pagos] error confirmando reserva:", error.message);
+    return "error";
+  }
+  // Si otra transición ganó la carrera, no se actualizó ninguna fila.
+  if (!data || data.length === 0) return "conflicto";
+  return "confirmada";
+}
+
 export type Bloqueo = {
   id: string;
   fecha: string;
@@ -252,6 +327,30 @@ export async function setDiasAtencion(dias: number[]): Promise<boolean> {
     return false;
   }
   return true;
+}
+
+/**
+ * ¿El slot (fecha, bloque) es realmente reservable ahora? Comprueba que
+ * el día esté dentro de la ventana ofrecida y sea día de atención (lo que
+ * ya excluye fechas pasadas), que el bloque sea válido y que no exista un
+ * bloqueo (de día completo o de ese bloque). No depende de Supabase para
+ * lo básico: sin base, todos los días de atención se consideran válidos.
+ */
+export async function slotDisponible(
+  fecha: string,
+  bloque: string,
+): Promise<boolean> {
+  if (!(BLOQUES as readonly string[]).includes(bloque)) return false;
+
+  const diasConfig = await getDiasAtencion();
+  const dias = getAvailableDays(diasConfig ?? undefined);
+  if (!dias.some((d) => d.fecha === fecha)) return false;
+
+  const bloqueos = await listBloqueos(fecha);
+  const bloqueado = bloqueos.some(
+    (b) => b.fecha === fecha && (b.bloque === null || b.bloque === bloque),
+  );
+  return !bloqueado;
 }
 
 export type CrearReservaResult =

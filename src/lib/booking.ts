@@ -92,38 +92,52 @@ export type DayOption = {
   etiqueta: string;
 };
 
+/** Fecha de "hoy" en Chile continental (America/Santiago), como YYYY-MM-DD.
+ *  Evita el off-by-one de usar la hora del servidor (UTC en Vercel). */
+export function hoyChileISO(): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Santiago",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+}
+
+/** "Hoy" en Chile como Date anclado a medianoche UTC de esa fecha
+ *  calendario, para hacer aritmética de días con métodos UTC. */
+function hoyChileUTC(): Date {
+  const [y, m, d] = hoyChileISO().split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+
 /**
- * Días reservables desde mañana. `diasAtencion` permite al dashboard
- * definir los días reales (0=domingo … 6=sábado); sin él se usa el
- * valor por defecto DIAS_ATENCION.
+ * Días reservables desde mañana (hora de Chile). `diasAtencion` permite
+ * al dashboard definir los días reales (0=domingo … 6=sábado); sin él se
+ * usa el valor por defecto DIAS_ATENCION.
  */
 export function getAvailableDays(
-  hoy: Date,
   diasAtencion: number[] = DIAS_ATENCION,
 ): DayOption[] {
   const dias: DayOption[] = [];
+  const hoy = hoyChileUTC();
   const cursor = new Date(hoy);
-  cursor.setDate(cursor.getDate() + 1);
+  cursor.setUTCDate(cursor.getUTCDate() + 1);
   const fin = new Date(hoy);
-  fin.setDate(fin.getDate() + SEMANAS_VISIBLES * 7);
+  fin.setUTCDate(fin.getUTCDate() + SEMANAS_VISIBLES * 7);
 
   while (cursor <= fin) {
-    if (diasAtencion.includes(cursor.getDay())) {
-      const fecha = [
-        cursor.getFullYear(),
-        String(cursor.getMonth() + 1).padStart(2, "0"),
-        String(cursor.getDate()).padStart(2, "0"),
-      ].join("-");
+    if (diasAtencion.includes(cursor.getUTCDay())) {
       dias.push({
-        fecha,
+        fecha: cursor.toISOString().slice(0, 10),
         etiqueta: cursor.toLocaleDateString("es-CL", {
           weekday: "long",
           day: "numeric",
           month: "long",
+          timeZone: "UTC",
         }),
       });
     }
-    cursor.setDate(cursor.getDate() + 1);
+    cursor.setUTCDate(cursor.getUTCDate() + 1);
   }
   return dias;
 }

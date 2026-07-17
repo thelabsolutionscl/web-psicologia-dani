@@ -79,6 +79,13 @@ export const PRECIOS = {
 export const PREVISION =
   "Boleta de honorarios reembolsable en Isapre y seguros complementarios";
 
+/** Devuelve `fallback` amable cuando el valor sigue siendo un
+ *  `[PLACEHOLDER: ...]` sin definir, para no mostrar el corchete crudo
+ *  en las páginas públicas. */
+export function siPendiente(valor: string, fallback: string): string {
+  return valor.trim().startsWith("[PLACEHOLDER") ? fallback : valor;
+}
+
 /** Mensajes precargados del WhatsApp FAB según página (sección 4.2). */
 export const WHATSAPP_MESSAGES = {
   autismo: "Hola Daniela, quiero información sobre la evaluación de autismo.",

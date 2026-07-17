@@ -7,7 +7,7 @@ import { ProcessSteps, type ProcessStep } from "@/components/sections/ProcessSte
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { JsonLd, serviceJsonLd, type FaqItem } from "@/lib/seo";
-import { PRECIOS, PREVISION } from "@/lib/site";
+import { PRECIOS, PREVISION, siPendiente } from "@/lib/site";
 
 export type EvaluacionConfig = {
   path: string;
@@ -121,7 +121,7 @@ export function EvaluacionDetalle({ config }: { config: EvaluacionConfig }) {
             Valor del proceso completo
           </h2>
           <p className="mt-3 font-sans text-lg font-semibold text-quebrada">
-            {PRECIOS.evaluacionProceso}
+            {siPendiente(PRECIOS.evaluacionProceso, "Valor por confirmar")}
           </p>
           <p className="mt-2 text-base text-quebrada/90">
             La evaluación se cobra como un proceso cerrado, que incluye las

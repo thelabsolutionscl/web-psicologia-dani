@@ -7,7 +7,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { buildMetadata, type FaqItem } from "@/lib/seo";
-import { PRECIOS, PREVISION } from "@/lib/site";
+import { PRECIOS, PREVISION, siPendiente } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
   title: "Precios",
@@ -91,7 +91,7 @@ export default function PreciosPage() {
                 {e.nombre}
               </h3>
               <p className="mt-3 font-sans text-lg font-bold text-pacifico">
-                {e.precio}
+                {siPendiente(e.precio, "Valor por confirmar")}
               </p>
               <p className="mt-1 font-sans text-sm text-quebrada/70">
                 Proceso completo

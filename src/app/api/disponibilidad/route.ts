@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   const diasConfig = await getDiasAtencion();
-  const dias = getAvailableDays(new Date(), diasConfig ?? undefined);
+  const dias = getAvailableDays(diasConfig ?? undefined);
   if (dias.length === 0) {
     return NextResponse.json(
       { dias, ocupados: [] },

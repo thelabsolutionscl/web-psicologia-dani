@@ -6,7 +6,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { Card } from "@/components/ui/Card";
 import { buildMetadata } from "@/lib/seo";
-import { ADDRESS, HORARIO, PRECIOS } from "@/lib/site";
+import { ADDRESS, HORARIO, PRECIOS, siPendiente } from "@/lib/site";
 
 export const metadata: Metadata = buildMetadata({
   title: "Atención online",
@@ -130,7 +130,7 @@ export default function AtencionOnlinePage() {
             <p className="mt-3 font-sans text-base font-bold">Horarios</p>
             <p className="mt-1 text-base text-quebrada/90">
               Atención de {HORARIO.rango}. Días de atención:{" "}
-              {HORARIO.dias}.
+              {siPendiente(HORARIO.dias, "por confirmar")}.
             </p>
           </Card>
         </div>

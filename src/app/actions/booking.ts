@@ -1,9 +1,18 @@
 "use server";
 
-import { Resend } from "resend";
 import { BLOQUES, SERVICIOS, type BookingRequest } from "@/lib/booking";
+import {
+  acuseReservaPaciente,
+  avisarReservaADaniela,
+  emailConfigurado,
+  type DatosReserva,
+} from "@/lib/email";
 import { crearPreferenciaPago, pagosConfigurados } from "@/lib/pagos";
-import { crearReserva } from "@/lib/reservas-db";
+import {
+  crearReserva,
+  quitarHold,
+  slotDisponible,
+} from "@/lib/reservas-db";
 
 export type BookingState = {
   /** true cuando la solicitud quedó registrada (en base de datos o correo). */
@@ -21,10 +30,23 @@ export type BookingState = {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const FECHA_REGEX = /^\d{4}-\d{2}-\d{2}$/;
 
+function datos(req: BookingRequest, servicioNombre: string): DatosReserva {
+  return {
+    servicioNombre,
+    fecha: req.fecha,
+    bloque: req.bloque,
+    nombre: req.nombre.trim(),
+    correo: req.correo.trim(),
+    telefono: req.telefono.trim(),
+    mensaje: req.mensaje,
+  };
+}
+
 /**
- * Registra una solicitud de reserva (Fase A): guarda en la base con
- * bloqueo de doble reserva y avisa por correo (mejor esfuerzo). Sin base
- * configurada degrada a correo; sin correo, a WhatsApp.
+ * Registra una solicitud de reserva. Valida en el servidor (formato,
+ * campos y disponibilidad real del cupo), guarda en la base con bloqueo
+ * de doble reserva, y avisa por correo. Con pago activo deriva al
+ * checkout del abono. Degrada sin base (correo) y sin correo (WhatsApp).
  */
 export async function submitBooking(req: BookingRequest): Promise<BookingState> {
   // Honeypot: si el campo oculto viene relleno, es un bot. Simulamos
@@ -60,8 +82,20 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
     return { ok: false, fieldErrors };
   }
 
-  // 1. Base de datos: la inserción compite por el cupo (índice único).
-  //    Con pago activo, el cupo se retiene temporalmente (expira_at).
+  // Validación de disponibilidad en el servidor: rechaza fechas pasadas,
+  // días fuera de atención y días/bloques bloqueados (los bloqueos son
+  // solo filtro visual en el cliente; aquí se aplican de verdad).
+  if (await slotDisponible(req.fecha, req.bloque) === false) {
+    return {
+      ok: false,
+      conflicto: true,
+      error:
+        "Ese día u horario ya no está disponible. Elige otro de la lista.",
+    };
+  }
+
+  // Base de datos: la inserción compite por el cupo (índice único).
+  // Con pago activo, el cupo se retiene temporalmente (expira_at).
   const guardado = await crearReserva(req, pagosConfigurados());
   if (guardado.estado === "ocupada") {
     return {
@@ -80,112 +114,35 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
   }
 
   if (guardado.estado === "creada") {
-    // 2a. Con pago configurado: llevar al checkout del abono. La hora se
-    //     confirma sola vía webhook cuando el pago quede aprobado.
+    const d = datos(req, servicio.nombre);
+    // Con pago configurado: llevar al checkout del abono. La hora se
+    // confirma sola vía webhook cuando el pago quede aprobado.
     if (pagosConfigurados()) {
       const checkoutUrl = await crearPreferenciaPago(guardado.reserva);
       if (checkoutUrl) {
-        void enviarAviso(req, servicio.nombre);
+        await avisarReservaADaniela(d);
         return { ok: true, checkoutUrl };
       }
-      // Si la pasarela falla, no bloqueamos la reserva: se sigue por
-      // confirmación manual (la reserva ya está guardada).
+      // Pasarela caída: quitar el hold para que la reserva no se
+      // auto-cancele, y seguir por confirmación manual.
+      await quitarHold(guardado.reserva.id);
     }
-    // 2b. Sin pago: aviso a Daniela + acuse de recibo al paciente.
-    await enviarAviso(req, servicio.nombre);
-    void enviarAcusePaciente(req, servicio.nombre);
-    // La base es la fuente de verdad: la reserva existe aunque el correo falle.
+    // Sin pago (o pasarela caída): aviso a Daniela + acuse al paciente.
+    await avisarReservaADaniela(d);
+    await acuseReservaPaciente(d);
     return { ok: true };
   }
 
-  // 3. Sin base configurada: el correo es el único registro.
-  const emailOk = await enviarAviso(req, servicio.nombre);
-  if (emailOk === "sin-correo") return { ok: false, soloWhatsapp: true };
-  if (emailOk === "error") {
+  // Sin base configurada: el correo es el único registro.
+  if (!emailConfigurado()) return { ok: false, soloWhatsapp: true };
+  const enviado = await avisarReservaADaniela(datos(req, servicio.nombre));
+  if (!enviado) {
     return {
       ok: false,
       error:
         "No pudimos registrar tu solicitud. Inténtalo de nuevo o resérvala por WhatsApp.",
     };
   }
+  await acuseReservaPaciente(datos(req, servicio.nombre));
   return { ok: true };
-}
-
-/** Remitente configurable: usar RESEND_FROM (dominio propio verificado)
- *  cuando exista; si no, el remitente de prueba de Resend. */
-function remitente(): string {
-  return process.env.RESEND_FROM || "Agenda web <onboarding@resend.dev>";
-}
-
-async function enviarAviso(
-  req: BookingRequest,
-  servicioNombre: string,
-): Promise<"enviado" | "sin-correo" | "error"> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return "sin-correo";
-
-  const resend = new Resend(apiKey);
-  const to =
-    process.env.CONTACT_TO_EMAIL || "psicofono.danielakaiser@gmail.com";
-
-  const { error } = await resend.emails.send({
-    from: remitente(),
-    to,
-    replyTo: req.correo.trim(),
-    subject: `Solicitud de hora: ${servicioNombre} — ${req.fecha} ${req.bloque}`,
-    text: [
-      "Nueva solicitud de hora desde el sitio web",
-      "",
-      `Servicio: ${servicioNombre}`,
-      `Fecha solicitada: ${req.fecha}`,
-      `Bloque: ${req.bloque} (hora de Chile continental)`,
-      "",
-      `Nombre: ${req.nombre.trim()}`,
-      `Correo: ${req.correo.trim()}`,
-      `Teléfono: ${req.telefono.trim()}`,
-      "",
-      "Comentario:",
-      req.mensaje.trim() || "(sin comentario)",
-      "",
-      "Recuerda confirmar la hora y coordinar el abono de $5.000.",
-    ].join("\n"),
-  });
-
-  if (error) {
-    console.error("[reservas] error enviando aviso:", error.message);
-    return "error";
-  }
-  return "enviado";
-}
-
-/** Acuse de recibo al paciente cuando la reserva entra por el flujo
- *  manual (sin pago online). Mejor esfuerzo. */
-async function enviarAcusePaciente(
-  req: BookingRequest,
-  servicioNombre: string,
-): Promise<void> {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) return;
-  const resend = new Resend(apiKey);
-  const { error } = await resend.emails.send({
-    from: remitente(),
-    to: req.correo.trim(),
-    subject: `Recibimos tu solicitud de hora — ${req.fecha}, ${req.bloque}`,
-    text: [
-      `Hola ${req.nombre.trim()},`,
-      "",
-      `Recibimos tu solicitud de hora para ${servicioNombre} el ${req.fecha}, bloque ${req.bloque} (hora de Chile continental).`,
-      "",
-      "Te contactaré personalmente para confirmar la hora y coordinar el abono de $5.000 que la reserva. La hora queda tomada solo con esa confirmación.",
-      "",
-      "Si tu consulta es urgente, escríbeme por WhatsApp al +56 9 6682 8311.",
-      "",
-      "Un abrazo,",
-      "Daniela Alejandra Kaiser Ortiz",
-      "Psicóloga · Fonoaudióloga",
-    ].join("\n"),
-  });
-  if (error) {
-    console.error("[reservas] error enviando acuse al paciente:", error.message);
-  }
 }

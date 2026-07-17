@@ -4,7 +4,13 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { buildMetadata } from "@/lib/seo";
-import { ADDRESS, HORARIO, WHATSAPP_MESSAGES, whatsappHref } from "@/lib/site";
+import {
+  ADDRESS,
+  HORARIO,
+  siPendiente,
+  WHATSAPP_MESSAGES,
+  whatsappHref,
+} from "@/lib/site";
 import { ContactForm } from "./ContactForm";
 
 export const metadata: Metadata = buildMetadata({
@@ -53,7 +59,7 @@ export default function ContactoPage() {
             </h2>
             <p className="mt-3 text-base text-quebrada/90">
               Atención de {HORARIO.rango}, con dos cupos diarios. Días de
-              atención: {HORARIO.dias}.
+              atención: {siPendiente(HORARIO.dias, "por confirmar")}.
             </p>
           </Card>
         </div>

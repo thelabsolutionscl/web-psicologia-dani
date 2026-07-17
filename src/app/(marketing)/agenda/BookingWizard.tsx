@@ -108,7 +108,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
         new Set(data.ocupados.map((o) => slotKey(o.fecha, o.bloque))),
       );
     } catch {
-      setDias(getAvailableDays(new Date()));
+      setDias(getAvailableDays());
       setOcupados(new Set());
     } finally {
       setCargando(false);
