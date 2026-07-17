@@ -26,4 +26,9 @@ export const TESTIMONIOS: Testimonio[] = [
     autora: "Valentina",
     contexto: "Proceso de psicoterapia",
   },
+  {
+    cita: "Quisiera agradecer el tiempo dedicado para mejorar mi estado anímico mediante la sesión de radiestesia. En una palabra diría plenitud: volví a sentirme con energía y con la capacidad para continuar avanzando hacia mis objetivos. ¡Muchas gracias!",
+    autora: "Felipe",
+    contexto: "Sesión de radiestesia",
+  },
 ];
