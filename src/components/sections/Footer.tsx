@@ -33,13 +33,6 @@ export function Footer() {
     <footer className="border-t border-arena bg-white">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-3">
         <div>
-          <Image
-            src="/images/logo.webp"
-            alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-            width={80}
-            height={80}
-            className="mb-4 size-20 rounded-full"
-          />
           <p className="font-sans text-base font-bold">{SITE_NAME}</p>
           <p className="mt-1 font-sans text-sm text-pacifico">
             Psicóloga · Fonoaudióloga
@@ -50,6 +43,15 @@ export function Footer() {
             <li>{REGISTROS.colegioFono}</li>
             <li>{PREVISION}</li>
           </ul>
+          <div className="mt-8 flex justify-center">
+            <Image
+              src="/images/logo-horizontal.png"
+              alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
+              width={1473}
+              height={436}
+              className="h-24 w-auto max-w-full sm:h-28"
+            />
+          </div>
         </div>
 
         <div>
