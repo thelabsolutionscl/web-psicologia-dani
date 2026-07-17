@@ -12,6 +12,21 @@ export function absoluteUrl(path: string): string {
   return new URL(path, SITE_URL).toString();
 }
 
+/** URL absoluta de la imagen OG de marca generada al vuelo (/api/og). */
+export function ogImageUrl(title: string, eyebrow?: string): string {
+  const params = new URLSearchParams({ title });
+  if (eyebrow) params.set("eyebrow", eyebrow);
+  return absoluteUrl(`/api/og?${params.toString()}`);
+}
+
+/** Bloque openGraph.images + twitter reutilizable. */
+export function ogImages(title: string, eyebrow?: string) {
+  const url = ogImageUrl(title, eyebrow);
+  return {
+    images: [{ url, width: 1200, height: 630, alt: title }],
+  };
+}
+
 type PageSeo = {
   /** ≤ 60 caracteres contando la plantilla "· Daniela Alejandra Kaiser Ortiz" */
   title: string;
@@ -19,17 +34,18 @@ type PageSeo = {
   description: string;
   path: string;
   noIndex?: boolean;
+  /** Texto del "eyebrow" en la imagen OG (opcional). */
+  ogEyebrow?: string;
 };
 
 /** Metadata API por página: title ≤ 60, description ≤ 155, canonical
- *  absoluto y OG básico (plantilla next/og queda para Fase 2).
- *  [PLACEHOLDER: openGraph.images — falta la foto cuadrada OG de la
- *  sesión de fotos pendiente; agregarla aquí cuando exista]. */
+ *  absoluto y OG con imagen de marca dinámica (next/og). */
 export function buildMetadata({
   title,
   description,
   path,
   noIndex,
+  ogEyebrow,
 }: PageSeo): Metadata {
   const url = absoluteUrl(path);
   return {
@@ -43,6 +59,13 @@ export function buildMetadata({
       siteName: SITE_NAME,
       locale: "es_CL",
       type: "website",
+      ...ogImages(title, ogEyebrow),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      ...ogImages(title, ogEyebrow),
     },
     ...(noIndex ? { robots: { index: false, follow: false } } : {}),
   };

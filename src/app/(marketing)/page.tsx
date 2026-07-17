@@ -9,7 +9,7 @@ import { ServiceGrid } from "@/components/sections/ServiceGrid";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
-import { absoluteUrl, type FaqItem } from "@/lib/seo";
+import { absoluteUrl, ogImages, type FaqItem } from "@/lib/seo";
 import {
   PRECIOS,
   SITE_NAME,
@@ -32,6 +32,17 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "es_CL",
     type: "website",
+    ...ogImages(
+      "Evaluación y acompañamiento del neurodesarrollo, online en todo Chile",
+    ),
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_NAME} — Psicóloga y fonoaudióloga`,
+    description,
+    ...ogImages(
+      "Evaluación y acompañamiento del neurodesarrollo, online en todo Chile",
+    ),
   },
 };
 

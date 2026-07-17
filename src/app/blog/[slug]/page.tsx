@@ -7,7 +7,7 @@ import { CtaFinal } from "@/components/sections/CtaFinal";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
 import { formatDate, getAllPosts, getPost } from "@/lib/blog";
-import { absoluteUrl, articleJsonLd, JsonLd } from "@/lib/seo";
+import { absoluteUrl, articleJsonLd, JsonLd, ogImages } from "@/lib/seo";
 import { SITE_NAME } from "@/lib/site";
 
 type Params = { slug: string };
@@ -40,6 +40,13 @@ export async function generateMetadata({
       locale: "es_CL",
       type: "article",
       publishedTime: post.meta.date,
+      ...ogImages(post.meta.title, "Blog"),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.meta.seoTitle,
+      description: post.meta.description,
+      ...ogImages(post.meta.title, "Blog"),
     },
   };
 }
