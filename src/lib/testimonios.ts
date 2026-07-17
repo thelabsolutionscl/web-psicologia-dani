@@ -16,6 +16,14 @@ export type Testimonio = {
 };
 
 export const TESTIMONIOS: Testimonio[] = [
-  // [PLACEHOLDER: agregar testimonios reales cuando Daniela entregue las
-  // autorizaciones escritas. Daniela confirmó que hay pacientes dispuestos.]
+  {
+    cita: "Gracias por acompañarme durante este proceso, por creer en mí cuando me costaba hacerlo, por entregarme tanto cariño y paciencia. Llegué en un momento muy difícil de mi vida, con muchos miedos e inseguridades, y gracias a tu calidez, tu escucha y tu forma de guiarme fui aprendiendo a mirarme con más compasión, a aprender herramientas y estrategias que voy a poder usar a lo largo de mi vida, y pude volver a reconocerme. Sé que estará ese lugar seguro al que volver cuando lo necesite, y también te agradezco por eso.",
+    autora: "Patricia",
+    contexto: "Proceso de psicoterapia",
+  },
+  {
+    cita: "Me he sentido muy bien, confío más en mí, me dan ganas de decir lo que siento y no me guardo las cosas. Me siento optimista e inspirada a recibir las oportunidades o dificultades con optimismo y no con angustia, aunque todo esto lleve un proceso y tenga que seguir trabajándolo. Noté el cambio cuando recibí el temario de la PAES: lo tomé bien, no me angustié ni pensé en negativo, solo sentí que tenía que estudiar y prepararme. Muchas gracias por todo.",
+    autora: "Valentina",
+    contexto: "Proceso de psicoterapia",
+  },
 ];
