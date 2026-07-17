@@ -84,6 +84,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   const [correo, setCorreo] = useState("");
   const [telefono, setTelefono] = useState("");
   const [mensaje, setMensaje] = useState("");
+  const [sitioWeb, setSitioWeb] = useState(""); // honeypot anti-spam
   const [resultado, setResultado] = useState<BookingState | null>(null);
   const [enviando, startTransition] = useTransition();
 
@@ -133,6 +134,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
           correo,
           telefono,
           mensaje,
+          sitioWeb,
         }
       : null;
 
@@ -343,6 +345,19 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
             <strong className="font-semibold">{servicio.nombre}</strong> ·{" "}
             {diaSeleccionado.etiqueta} · {bloque} h (Chile continental)
           </p>
+          {/* Honeypot anti-spam: oculto para personas, visible para bots */}
+          <div className="hidden" aria-hidden="true">
+            <label htmlFor="sitioWeb">Sitio web</label>
+            <input
+              id="sitioWeb"
+              name="sitioWeb"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+              value={sitioWeb}
+              onChange={(e) => setSitioWeb(e.target.value)}
+            />
+          </div>
           <InputField
             label="Nombre"
             name="nombre"

@@ -27,6 +27,12 @@ const FECHA_REGEX = /^\d{4}-\d{2}-\d{2}$/;
  * configurada degrada a correo; sin correo, a WhatsApp.
  */
 export async function submitBooking(req: BookingRequest): Promise<BookingState> {
+  // Honeypot: si el campo oculto viene relleno, es un bot. Simulamos
+  // éxito sin registrar nada (no bloquea cupos ni envía correos).
+  if ((req.sitioWeb ?? "").trim() !== "") {
+    return { ok: true };
+  }
+
   const servicio = SERVICIOS.find((s) => s.id === req.servicioId);
   if (
     !servicio ||
@@ -55,7 +61,8 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
   }
 
   // 1. Base de datos: la inserción compite por el cupo (índice único).
-  const guardado = await crearReserva(req);
+  //    Con pago activo, el cupo se retiene temporalmente (expira_at).
+  const guardado = await crearReserva(req, pagosConfigurados());
   if (guardado.estado === "ocupada") {
     return {
       ok: false,
@@ -84,8 +91,9 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
       // Si la pasarela falla, no bloqueamos la reserva: se sigue por
       // confirmación manual (la reserva ya está guardada).
     }
-    // 2b. Sin pago: aviso a Daniela y confirmación manual.
+    // 2b. Sin pago: aviso a Daniela + acuse de recibo al paciente.
     await enviarAviso(req, servicio.nombre);
+    void enviarAcusePaciente(req, servicio.nombre);
     // La base es la fuente de verdad: la reserva existe aunque el correo falle.
     return { ok: true };
   }
@@ -103,6 +111,12 @@ export async function submitBooking(req: BookingRequest): Promise<BookingState> 
   return { ok: true };
 }
 
+/** Remitente configurable: usar RESEND_FROM (dominio propio verificado)
+ *  cuando exista; si no, el remitente de prueba de Resend. */
+function remitente(): string {
+  return process.env.RESEND_FROM || "Agenda web <onboarding@resend.dev>";
+}
+
 async function enviarAviso(
   req: BookingRequest,
   servicioNombre: string,
@@ -115,7 +129,7 @@ async function enviarAviso(
     process.env.CONTACT_TO_EMAIL || "psicofono.danielakaiser@gmail.com";
 
   const { error } = await resend.emails.send({
-    from: "Agenda web <onboarding@resend.dev>",
+    from: remitente(),
     to,
     replyTo: req.correo.trim(),
     subject: `Solicitud de hora: ${servicioNombre} — ${req.fecha} ${req.bloque}`,
@@ -142,4 +156,36 @@ async function enviarAviso(
     return "error";
   }
   return "enviado";
+}
+
+/** Acuse de recibo al paciente cuando la reserva entra por el flujo
+ *  manual (sin pago online). Mejor esfuerzo. */
+async function enviarAcusePaciente(
+  req: BookingRequest,
+  servicioNombre: string,
+): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return;
+  const resend = new Resend(apiKey);
+  const { error } = await resend.emails.send({
+    from: remitente(),
+    to: req.correo.trim(),
+    subject: `Recibimos tu solicitud de hora — ${req.fecha}, ${req.bloque}`,
+    text: [
+      `Hola ${req.nombre.trim()},`,
+      "",
+      `Recibimos tu solicitud de hora para ${servicioNombre} el ${req.fecha}, bloque ${req.bloque} (hora de Chile continental).`,
+      "",
+      "Te contactaré personalmente para confirmar la hora y coordinar el abono de $5.000 que la reserva. La hora queda tomada solo con esa confirmación.",
+      "",
+      "Si tu consulta es urgente, escríbeme por WhatsApp al +56 9 6682 8311.",
+      "",
+      "Un abrazo,",
+      "Daniela Alejandra Kaiser Ortiz",
+      "Psicóloga · Fonoaudióloga",
+    ].join("\n"),
+  });
+  if (error) {
+    console.error("[reservas] error enviando acuse al paciente:", error.message);
+  }
 }

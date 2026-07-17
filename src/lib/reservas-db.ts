@@ -16,6 +16,27 @@ const ESTADOS_ACTIVOS = ["solicitada", "confirmada", "pagada"];
 
 export type SlotOcupado = { fecha: string; bloque: string };
 
+/** Minutos que una reserva con pago pendiente retiene el cupo antes de
+ *  liberarse sola (cubre el tiempo de ir al checkout y volver). */
+const HOLD_MINUTOS = 30;
+
+/**
+ * Libera las reservas con pago pendiente que vencieron: pasa a
+ * 'cancelada' las 'solicitada' cuyo expira_at ya expiró. Es "lazy
+ * expiry": se ejecuta antes de leer disponibilidad y antes de insertar,
+ * así no hace falta un cron. Las reservas sin expira_at (flujo manual)
+ * no se tocan.
+ */
+async function liberarVencidas(db: SupabaseClient): Promise<void> {
+  const { error } = await db
+    .from("reservas")
+    .update({ estado: "cancelada" })
+    .eq("estado", "solicitada")
+    .not("expira_at", "is", null)
+    .lt("expira_at", new Date().toISOString());
+  if (error) console.error("[reservas] error liberando vencidas:", error.message);
+}
+
 function getClient(): SupabaseClient | null {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
@@ -36,6 +57,8 @@ export async function getSlotsOcupados(
 ): Promise<SlotOcupado[]> {
   const db = getClient();
   if (!db) return [];
+
+  await liberarVencidas(db);
 
   const { data, error } = await db
     .from("reservas")
@@ -79,6 +102,7 @@ export type Reserva = {
   telefono: string;
   mensaje: string;
   estado: EstadoReserva;
+  expira_at: string | null;
 };
 
 export async function listReservas(): Promise<Reserva[]> {
@@ -200,12 +224,22 @@ export type CrearReservaResult =
   | { estado: "error" }
   | { estado: "sin-db" };
 
-/** Registra la solicitud. "ocupada" = otra reserva activa ganó el cupo. */
+/** Registra la solicitud. "ocupada" = otra reserva activa ganó el cupo.
+ *  `conPago` activa la retención temporal del cupo (expira_at) mientras
+ *  el paciente completa el checkout. */
 export async function crearReserva(
   req: BookingRequest,
+  conPago = false,
 ): Promise<CrearReservaResult> {
   const db = getClient();
   if (!db) return { estado: "sin-db" };
+
+  // Libera cupos de checkouts abandonados antes de competir por este.
+  await liberarVencidas(db);
+
+  const expira_at = conPago
+    ? new Date(Date.now() + HOLD_MINUTOS * 60_000).toISOString()
+    : null;
 
   const { data, error } = await db
     .from("reservas")
@@ -218,6 +252,7 @@ export async function crearReserva(
       correo: req.correo.trim(),
       telefono: req.telefono.trim(),
       mensaje: req.mensaje.trim(),
+      expira_at,
     })
     .select("*")
     .single();

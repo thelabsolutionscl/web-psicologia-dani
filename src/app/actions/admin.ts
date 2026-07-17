@@ -99,7 +99,7 @@ async function avisarConfirmacion(reserva: Reserva): Promise<void> {
   if (!apiKey) return;
   const resend = new Resend(apiKey);
   const { error } = await resend.emails.send({
-    from: "Agenda web <onboarding@resend.dev>",
+    from: process.env.RESEND_FROM || "Agenda web <onboarding@resend.dev>",
     to: reserva.correo,
     subject: `Tu hora quedó confirmada — ${reserva.fecha}, ${reserva.bloque}`,
     text: [

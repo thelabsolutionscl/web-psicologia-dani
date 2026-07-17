@@ -70,8 +70,8 @@ export async function sendContact(
   const to = process.env.CONTACT_TO_EMAIL || "psicofono.danielakaiser@gmail.com";
 
   const { error } = await resend.emails.send({
-    // Remitente por defecto de Resend hasta verificar el dominio propio.
-    from: "Sitio web <onboarding@resend.dev>",
+    // RESEND_FROM (dominio propio) cuando exista; si no, remitente de prueba.
+    from: process.env.RESEND_FROM || "Sitio web <onboarding@resend.dev>",
     to,
     replyTo: values.correo,
     subject: `Nueva consulta web: ${values.motivo} — ${values.nombre}`,

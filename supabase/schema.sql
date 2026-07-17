@@ -28,6 +28,11 @@ create unique index if not exists reservas_slot_activo
 
 create index if not exists reservas_fecha on public.reservas (fecha);
 
+-- Fase C/blindaje: vencimiento de reservas que esperan pago del abono.
+-- Solo se setea cuando hay pago online; una reserva sin pago (confirmación
+-- manual) deja expira_at nulo y nunca se auto-cancela.
+alter table public.reservas add column if not exists expira_at timestamptz;
+
 -- RLS activado y sin políticas públicas: a esta tabla solo accede el
 -- servidor (Server Actions / route handlers) con la service role key.
 alter table public.reservas enable row level security;

@@ -138,6 +138,8 @@ export type BookingRequest = {
   correo: string;
   telefono: string;
   mensaje: string;
+  /** Honeypot anti-spam: campo oculto que solo un bot rellena. */
+  sitioWeb?: string;
 };
 
 /** Mensaje de WhatsApp con la solicitud, como respaldo/confirmación. */
