@@ -45,11 +45,11 @@ export function Footer() {
           </ul>
           <div className="mt-8 flex justify-center">
             <Image
-              src="/images/logo-horizontal.png"
+              src="/images/isotipo.png"
               alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-              width={1473}
-              height={436}
-              className="h-24 w-auto max-w-full sm:h-28"
+              width={420}
+              height={420}
+              className="size-28 sm:size-32"
             />
           </div>
         </div>
