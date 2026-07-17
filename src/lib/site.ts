@@ -65,6 +65,7 @@ export const HORARIO = {
 export const PRECIOS = {
   sesionTerapia: "$40.000",
   abonoReserva: "$5.000",
+  radiestesia: "[PLACEHOLDER: precio de la sesión de radiestesia]",
   evaluacionProceso:
     "[PLACEHOLDER: precio del proceso completo — lo define Daniela]",
   /** Precio por evaluación (proceso completo). Reemplazar cada

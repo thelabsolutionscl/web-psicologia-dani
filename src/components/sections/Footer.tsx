@@ -15,6 +15,7 @@ import {
 const footerNav = [
   { href: "/evaluaciones", label: "Evaluaciones" },
   { href: "/terapias", label: "Terapias" },
+  { href: "/radiestesia", label: "Radiestesia" },
   { href: "/precios", label: "Precios" },
   { href: "/atencion-online", label: "Atención online" },
   { href: "/sobre-mi", label: "Sobre mí" },
