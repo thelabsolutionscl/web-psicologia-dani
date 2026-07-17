@@ -4,8 +4,10 @@ import type {
   TextareaHTMLAttributes,
 } from "react";
 
+/* Errores en quebrada, no en anahuaca: el acento CTA queda reservado a
+   botones primarios y focos (sección 8). placeholder ≥ 4.5:1 (WCAG AA). */
 const fieldClasses =
-  "w-full min-h-11 rounded-lg border border-arena bg-white px-4 py-2.5 font-sans text-base text-quebrada placeholder:text-quebrada/50 aria-[invalid=true]:border-anahuaca";
+  "w-full min-h-11 rounded-lg border border-arena bg-white px-4 py-2.5 font-sans text-base text-quebrada placeholder:text-quebrada/70 aria-[invalid=true]:border-quebrada";
 
 type CommonProps = {
   label: string;
@@ -16,7 +18,7 @@ type CommonProps = {
 function FieldError({ id, error }: { id: string; error?: string }) {
   if (!error) return null;
   return (
-    <p id={id} className="mt-1 font-sans text-sm font-semibold text-anahuaca">
+    <p id={id} className="mt-1 font-sans text-sm font-semibold text-quebrada">
       {error}
     </p>
   );

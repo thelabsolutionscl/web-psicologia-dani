@@ -85,7 +85,7 @@ export default function SobreMiPage() {
           </p>
         </div>
         <div
-          className="flex aspect-[3/4] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-white p-6 text-center font-sans text-sm text-quebrada/60"
+          className="flex aspect-[3/4] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-white p-6 text-center font-sans text-sm text-quebrada/70"
           role="img"
           aria-label="Retrato pendiente de Daniela Alejandra Kaiser Ortiz"
         >

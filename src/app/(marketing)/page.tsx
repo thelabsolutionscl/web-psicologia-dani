@@ -126,7 +126,7 @@ export default function HomePage() {
           </div>
         </div>
         <div
-          className="flex aspect-[4/3] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-white p-6 text-center font-sans text-sm text-quebrada/60"
+          className="flex aspect-[4/3] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-white p-6 text-center font-sans text-sm text-quebrada/70"
           role="img"
           aria-label="Fotografía pendiente de Daniela Alejandra Kaiser Ortiz"
         >
@@ -185,9 +185,9 @@ export default function HomePage() {
               />
               <p className="text-base text-quebrada/90">
                 <strong className="font-semibold text-quebrada">
-                  Tratamiento coordinado
+                  Tratamiento coordinado:
                 </strong>{" "}
-                : lo comunicativo y lo emocional se trabajan juntos, no en
+                lo comunicativo y lo emocional se trabajan juntos, no en
                 paralelo.
               </p>
             </div>

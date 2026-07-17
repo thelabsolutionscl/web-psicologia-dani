@@ -4,7 +4,7 @@ import { PageHero } from "@/components/sections/PageHero";
 import { ButtonLink } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { buildMetadata } from "@/lib/seo";
-import { ADDRESS, WHATSAPP_MESSAGES, whatsappHref } from "@/lib/site";
+import { ADDRESS, HORARIO, WHATSAPP_MESSAGES, whatsappHref } from "@/lib/site";
 import { ContactForm } from "./ContactForm";
 
 export const metadata: Metadata = buildMetadata({
@@ -52,9 +52,8 @@ export default function ContactoPage() {
               Horarios
             </h2>
             <p className="mt-3 text-base text-quebrada/90">
-              Atención de 17:30 a 19:30 h, hora de Chile continental, con dos
-              cupos diarios. Días de atención: [PLACEHOLDER: confirmar días de
-              la semana].
+              Atención de {HORARIO.rango}, con dos cupos diarios. Días de
+              atención: {HORARIO.dias}.
             </p>
           </Card>
         </div>

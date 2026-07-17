@@ -46,30 +46,31 @@ export function Footer() {
           <p className="font-sans text-sm font-bold tracking-wide uppercase">
             Contacto
           </p>
-          <ul className="mt-3 space-y-2 font-sans text-sm text-quebrada/80">
+          {/* Enlaces con target táctil ≥ 44 px (sección 8) */}
+          <ul className="mt-1 font-sans text-sm text-quebrada/80">
             <li>
               <a
                 href={whatsappHref(WHATSAPP_MESSAGES.default)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-pacifico"
+                className="inline-flex min-h-11 items-center hover:text-pacifico"
               >
                 WhatsApp: {PHONE_DISPLAY}
               </a>
             </li>
-            <li>
+            <li className="py-2">
               Atención online en todo Chile.
               <br />
               Jornadas presenciales de evaluación:
               <br />
               {ADDRESS.label}
             </li>
-            <li className="flex gap-4">
+            <li className="flex gap-6">
               <a
                 href={SOCIAL.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-pacifico"
+                className="inline-flex min-h-11 items-center hover:text-pacifico"
               >
                 Instagram
               </a>
@@ -77,7 +78,7 @@ export function Footer() {
                 href={SOCIAL.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-pacifico"
+                className="inline-flex min-h-11 items-center hover:text-pacifico"
               >
                 LinkedIn
               </a>
@@ -89,10 +90,13 @@ export function Footer() {
           <p className="font-sans text-sm font-bold tracking-wide uppercase">
             Navegación
           </p>
-          <ul className="mt-3 space-y-2 font-sans text-sm">
+          <ul className="mt-1 font-sans text-sm">
             {footerNav.map((link) => (
               <li key={link.href}>
-                <Link href={link.href} className="hover:text-pacifico">
+                <Link
+                  href={link.href}
+                  className="inline-flex min-h-11 items-center hover:text-pacifico"
+                >
                   {link.label}
                 </Link>
               </li>
@@ -101,7 +105,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="text-quebrada/70 hover:text-pacifico"
+                  className="inline-flex min-h-11 items-center text-quebrada/70 hover:text-pacifico"
                 >
                   {link.label}
                 </Link>

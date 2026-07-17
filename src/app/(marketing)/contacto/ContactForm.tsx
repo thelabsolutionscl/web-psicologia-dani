@@ -68,7 +68,7 @@ export function ContactForm() {
       {state.error ? (
         <p
           role="alert"
-          className="rounded-lg border border-anahuaca/40 bg-anahuaca/5 px-4 py-3 font-sans text-sm font-semibold text-anahuaca"
+          className="rounded-lg border border-quebrada/30 bg-arena/50 px-4 py-3 font-sans text-sm font-semibold text-quebrada"
         >
           {state.error}
         </p>

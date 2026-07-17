@@ -22,7 +22,9 @@ type PageSeo = {
 };
 
 /** Metadata API por página: title ≤ 60, description ≤ 155, canonical
- *  absoluto y OG básico (plantilla next/og queda para Fase 2). */
+ *  absoluto y OG básico (plantilla next/og queda para Fase 2).
+ *  [PLACEHOLDER: openGraph.images — falta la foto cuadrada OG de la
+ *  sesión de fotos pendiente; agregarla aquí cuando exista]. */
 export function buildMetadata({
   title,
   description,

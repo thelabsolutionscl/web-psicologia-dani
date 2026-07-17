@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo";
 export const metadata: Metadata = buildMetadata({
   title: "Evaluaciones",
   description:
-    "Evaluaciones diagnósticas de autismo, TDAH y lenguaje con instrumentos estandarizados: entrevistas online y jornada presencial de evaluación en Arica.",
+    "Evaluaciones del neurodesarrollo para niños, adolescentes y adultos: autismo, TDAH y lenguaje con instrumentos estandarizados y jornada en Arica.",
   path: "/evaluaciones",
 });
 
@@ -42,8 +42,8 @@ export default function EvaluacionesPage() {
     <>
       <PageHero
         eyebrow="Evaluaciones diagnósticas"
-        title="Una evaluación seria comienza con los instrumentos correctos"
-        lede="Trabajo con instrumentos estandarizados y certificaciones específicas para cada área. Cada proceso integra lo comunicativo, lo cognitivo y lo emocional, porque una sola especialista mira el desarrollo completo."
+        title="Evaluación del neurodesarrollo, con los instrumentos correctos"
+        lede="Evalúo a niños, niñas, adolescentes y adultos con instrumentos estandarizados y certificaciones específicas para cada área. Cada proceso integra lo comunicativo, lo cognitivo y lo emocional, porque una sola especialista mira el desarrollo completo."
       >
         <BookingCTA label="Reserva tu evaluación" />
       </PageHero>

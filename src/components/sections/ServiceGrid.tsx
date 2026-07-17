@@ -15,7 +15,8 @@ export function ServiceGrid({ services }: { services: ServiceCard[] }) {
     <div className="grid gap-6 md:grid-cols-3">
       {services.map((service) => (
         <Card key={service.href} className="flex flex-col">
-          <h3 className="font-display text-xl font-semibold tracking-tight">
+          {/* Bricolage queda reservada a H1/H2 (sección 8); los h3 van en Figtree */}
+          <h3 className="font-sans text-lg font-bold text-quebrada">
             {service.title}
           </h3>
           <p className="mt-3 flex-1 text-base text-quebrada/90">
