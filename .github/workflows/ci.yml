@@ -1,0 +1,31 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Typecheck y build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Chequeo de tipos
+        run: npx tsc --noEmit
+
+      - name: Build de producción
+        run: npm run build
+        env:
+          # El build no requiere secretos: la app degrada sin ellos.
+          NEXT_PUBLIC_SITE_URL: https://danielakaiser.cl
