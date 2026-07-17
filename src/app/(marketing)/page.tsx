@@ -6,6 +6,7 @@ import { CtaFinal } from "@/components/sections/CtaFinal";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { ProcessSteps } from "@/components/sections/ProcessSteps";
 import { ServiceGrid } from "@/components/sections/ServiceGrid";
+import { Testimonios } from "@/components/sections/Testimonios";
 import { TrustBar } from "@/components/sections/TrustBar";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
@@ -225,9 +226,9 @@ export default function HomePage() {
       {/* 5. TrustBar */}
       <TrustBar />
 
-      {/* 6. Testimonios: sección oculta hasta contar con testimonios reales
-          autorizados por escrito (regla 10.4). [PLACEHOLDER: recolectar
-          autorizaciones — Daniela confirmó que hay pacientes dispuestos] */}
+      {/* 6. Testimonios: se muestra sola cuando haya testimonios reales
+          autorizados (regla 10.4); oculta mientras tanto. */}
+      <Testimonios />
 
       {/* 7. FAQ breve + CTA final */}
       <FaqSection items={faqItems} />

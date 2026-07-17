@@ -67,6 +67,13 @@ export const PRECIOS = {
   abonoReserva: "$5.000",
   evaluacionProceso:
     "[PLACEHOLDER: precio del proceso completo — lo define Daniela]",
+  /** Precio por evaluación (proceso completo). Reemplazar cada
+   *  placeholder cuando Daniela defina los valores. */
+  evaluaciones: {
+    autismo: "[PLACEHOLDER: precio proceso completo — autismo]",
+    tdah: "[PLACEHOLDER: precio proceso completo — TDAH]",
+    lenguaje: "[PLACEHOLDER: precio proceso completo — lenguaje]",
+  },
 } as const;
 
 export const PREVISION =
