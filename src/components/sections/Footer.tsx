@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   ADDRESS,
@@ -32,6 +33,13 @@ export function Footer() {
     <footer className="border-t border-arena bg-white">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-3">
         <div>
+          <Image
+            src="/images/logo.webp"
+            alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
+            width={80}
+            height={80}
+            className="mb-4 size-20 rounded-full"
+          />
           <p className="font-sans text-base font-bold">{SITE_NAME}</p>
           <p className="mt-1 font-sans text-sm text-pacifico">
             Psicóloga · Fonoaudióloga

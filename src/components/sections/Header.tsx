@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { BookingCTA } from "@/components/BookingCTA";
 import { SITE_NAME } from "@/lib/site";
@@ -20,13 +21,20 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-arena bg-camanchaca/95 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-        <Link
-          href="/"
-          className="font-sans text-sm leading-snug font-bold text-quebrada sm:text-base"
-        >
-          {SITE_NAME}
-          <span className="block font-sans text-sm font-normal text-pacifico">
-            Psicóloga · Fonoaudióloga
+        <Link href="/" className="flex items-center gap-3">
+          <Image
+            src="/images/logo.webp"
+            alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
+            width={56}
+            height={56}
+            priority
+            className="size-12 shrink-0 rounded-full sm:size-14"
+          />
+          <span className="hidden font-sans text-sm leading-snug font-bold text-quebrada sm:block sm:text-base">
+            {SITE_NAME}
+            <span className="block font-sans text-sm font-normal text-pacifico">
+              Psicóloga · Fonoaudióloga
+            </span>
           </span>
         </Link>
         <BookingCTA className="shrink-0 px-4 text-sm sm:px-6 sm:text-base" />
