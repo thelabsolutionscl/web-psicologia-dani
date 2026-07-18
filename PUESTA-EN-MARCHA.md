@@ -106,6 +106,15 @@ En **Project → Settings → Environment Variables**, agregar (referencia: `.en
 | `MP_WEBHOOK_SECRET` | (del paso 4) | Opcional |
 | `NEXT_PUBLIC_ANALYTICS` | `plausible`, `ga4` u `off` | Opcional |
 | `NEXT_PUBLIC_GA4_ID` | `G-XXXXXXX` (solo si `ga4`) | Opcional |
+| `CRON_SECRET` | una cadena larga y única | Recordatorios |
+
+> **Recordatorio 24 h antes:** Vercel Cron llama a diario a
+> `/api/cron/recordatorios` (ver `vercel.json`) y envía el aviso a las
+> reservas cuya sesión es al día siguiente. Vercel adjunta el header
+> `Authorization: Bearer $CRON_SECRET` automáticamente, así que basta con
+> definir `CRON_SECRET` en las variables. Sin `CRON_SECRET` el endpoint
+> queda abierto: conviene definirlo en producción. Requiere Supabase y
+> Resend configurados.
 
 > **Dejar vacía** `NEXT_PUBLIC_BOOKING_URL`: el sitio usa su propio sistema
 > de reservas interno (`/agenda`). Esa variable es de una integración
@@ -167,5 +176,6 @@ Cuando Daniela entregue los datos, editar estos archivos (son ediciones de una o
 ## Notas
 - El panel de administración está en `/admin` (no indexable). Se entra con `ADMIN_PASSWORD`.
 - Los días y los bloqueos de agenda se gestionan desde `/admin/disponibilidad`.
-- Cada `git push` a `main` dispara un despliegue automático en Vercel y el CI (typecheck + lint + build).
+- Desde `/admin` se puede **exportar todas las reservas a CSV** (botón "Exportar CSV") para respaldo o contabilidad; abre directo en Excel (UTF-8).
+- Cada `git push` a `main` dispara un despliegue automático en Vercel y el CI (typecheck + lint + **pruebas** + build). Las pruebas unitarias se corren en local con `npm test`.
 - Sin Supabase configurado, el sitio degrada con elegancia: toda la agenda se ve disponible y las reservas llegan por correo/WhatsApp, sin bloqueo de cupos.
