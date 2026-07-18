@@ -1,4 +1,5 @@
 import { Resend } from "resend";
+import { eventoICS } from "@/lib/calendario";
 import { PHONE_DISPLAY, PRECIOS, SITE_NAME } from "@/lib/site";
 
 /**
@@ -63,12 +64,15 @@ Daniela Alejandra Kaiser Ortiz · Psicóloga · Fonoaudióloga<br>WhatsApp ${esc
 </table></td></tr></table></body></html>`;
 }
 
+type Adjunto = { filename: string; content: string; contentType?: string };
+
 type Enviar = {
   to: string;
   subject: string;
   text: string;
   html?: string;
   replyTo?: string;
+  attachments?: Adjunto[];
 };
 
 async function enviar({
@@ -77,6 +81,7 @@ async function enviar({
   text,
   html,
   replyTo,
+  attachments,
 }: Enviar): Promise<boolean> {
   const apiKey = process.env.RESEND_API_KEY;
   if (!apiKey || !to) return false;
@@ -88,6 +93,7 @@ async function enviar({
     text,
     ...(html ? { html } : {}),
     ...(replyTo ? { replyTo } : {}),
+    ...(attachments ? { attachments } : {}),
   });
   if (error) {
     console.error("[email] error enviando:", error.message);
@@ -105,6 +111,21 @@ export type DatosReserva = {
   telefono: string;
   mensaje?: string;
 };
+
+/** Adjunto .ics con la hora, para "agregar al calendario" desde el correo. */
+function icsAdjunto(r: DatosReserva): Adjunto {
+  const ics = eventoICS({
+    fecha: r.fecha,
+    bloque: r.bloque,
+    titulo: `${r.servicioNombre} — ${SITE_NAME}`,
+    descripcion: `Sesión con ${SITE_NAME}. Recuerda pagar el saldo antes de la sesión.`,
+  });
+  return {
+    filename: "reserva.ics",
+    content: Buffer.from(ics, "utf8").toString("base64"),
+    contentType: "text/calendar",
+  };
+}
 
 /** Aviso de nueva solicitud a Daniela. */
 export function avisarReservaADaniela(r: DatosReserva): Promise<boolean> {
@@ -200,6 +221,36 @@ export function confirmacionPagoPaciente(r: DatosReserva): Promise<boolean> {
         `Nos vemos,<br><strong>${esc(SITE_NAME)}</strong><br>Psicóloga · Fonoaudióloga`,
       ],
     }),
+    attachments: [icsAdjunto(r)],
+  });
+}
+
+/** Recordatorio automático el día previo a la sesión. */
+export function recordatorioPaciente(r: DatosReserva): Promise<boolean> {
+  return enviar({
+    to: r.correo,
+    subject: `Recordatorio: tu hora es mañana — ${r.bloque}`,
+    text: [
+      `Hola ${r.nombre},`,
+      "",
+      `Te recuerdo tu hora de ${r.servicioNombre} mañana ${r.fecha}, bloque ${r.bloque} (hora de Chile continental).`,
+      "",
+      "Recuerda pagar el saldo antes de la sesión. Si necesitas reagendar, escríbeme por WhatsApp lo antes posible.",
+      "",
+      "Nos vemos,",
+      SITE_NAME,
+    ].join("\n"),
+    html: plantillaHtml({
+      titulo: "Te espero mañana",
+      parrafos: [
+        `Hola ${esc(r.nombre)},`,
+        `Te recuerdo tu hora de <strong>${esc(r.servicioNombre)}</strong> mañana:`,
+        `<strong>Fecha:</strong> ${esc(r.fecha)}<br><strong>Horario:</strong> ${esc(r.bloque)} h (hora de Chile continental)`,
+        `Nos vemos,<br><strong>${esc(SITE_NAME)}</strong>`,
+      ],
+      nota: "Recuerda pagar el saldo antes de la sesión. Si necesitas reagendar, escríbeme por WhatsApp lo antes posible.",
+    }),
+    attachments: [icsAdjunto(r)],
   });
 }
 

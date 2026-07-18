@@ -1,5 +1,10 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { BLOQUES, getAvailableDays, type BookingRequest } from "@/lib/booking";
+import {
+  BLOQUES,
+  getAvailableDays,
+  hoyChileISO,
+  type BookingRequest,
+} from "@/lib/booking";
 
 /**
  * Acceso a la base de reservas (Supabase, Fase A). Solo se usa desde el
@@ -197,6 +202,31 @@ export async function checkRateLimit(
     return true; // ante fallo, no bloqueamos a usuarios legítimos
   }
   return data === true;
+}
+
+/** Reservas activas cuya sesión es mañana (Chile) y aún sin recordatorio. */
+export async function reservasParaRecordar(): Promise<Reserva[]> {
+  const db = getClient();
+  if (!db) return [];
+  const [y, m, d] = hoyChileISO().split("-").map(Number);
+  const manana = new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+  const { data, error } = await db
+    .from("reservas")
+    .select("*")
+    .eq("fecha", manana)
+    .eq("recordado", false)
+    .in("estado", ["confirmada", "pagada"]);
+  if (error) {
+    console.error("[recordatorios] error consultando:", error.message);
+    return [];
+  }
+  return (data as Reserva[]) ?? [];
+}
+
+export async function marcarRecordada(id: string): Promise<void> {
+  const db = getClient();
+  if (!db) return;
+  await db.from("reservas").update({ recordado: true }).eq("id", id);
 }
 
 export async function getReservaPorId(id: string): Promise<Reserva | null> {
