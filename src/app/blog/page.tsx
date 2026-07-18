@@ -29,18 +29,18 @@ export default function BlogPage() {
       <section className="mx-auto max-w-3xl space-y-6 px-4 pb-16">
         {posts.map((post) => (
           <Card key={post.slug}>
-            <p className="font-sans text-sm font-semibold text-pacifico">
+            <p className="font-sans text-sm font-semibold text-enlace">
               {formatDate(post.date)}
             </p>
             <h2 className="mt-2 font-display text-xl font-semibold tracking-tight">
-              <Link href={`/blog/${post.slug}`} className="hover:text-pacifico">
+              <Link href={`/blog/${post.slug}`} className="hover:text-enlace">
                 {post.title}
               </Link>
             </h2>
             <p className="mt-3 text-base text-quebrada/90">{post.description}</p>
             <Link
               href={`/blog/${post.slug}`}
-              className="mt-4 inline-flex min-h-11 items-center gap-2 font-sans text-base font-semibold text-pacifico hover:underline"
+              className="mt-4 inline-flex min-h-11 items-center gap-2 font-sans text-base font-semibold text-enlace hover:underline"
             >
               Leer el artículo
               <ArrowRight className="size-4" aria-hidden="true" />

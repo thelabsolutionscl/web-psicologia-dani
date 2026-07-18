@@ -24,7 +24,7 @@ export function ServiceGrid({ services }: { services: ServiceCard[] }) {
           </p>
           <Link
             href={service.href}
-            className="mt-5 inline-flex min-h-11 items-center gap-2 font-sans text-base font-semibold text-pacifico hover:underline"
+            className="mt-5 inline-flex min-h-11 items-center gap-2 font-sans text-base font-semibold text-enlace hover:underline"
           >
             {service.linkLabel ?? "Conocer más"}
             <ArrowRight className="size-4" aria-hidden="true" />

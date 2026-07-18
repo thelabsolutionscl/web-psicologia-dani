@@ -24,7 +24,7 @@ export default function Error({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-      <p className="font-sans text-sm font-semibold tracking-wide text-pacifico uppercase">
+      <p className="font-sans text-sm font-semibold tracking-wide text-enlace uppercase">
         Algo salió mal
       </p>
       <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">

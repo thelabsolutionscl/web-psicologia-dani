@@ -54,7 +54,7 @@ export default function AtencionOnlinePage() {
       </section>
 
       {/* Modelo híbrido */}
-      <section aria-labelledby="hibrido-titulo" className="bg-white">
+      <section aria-labelledby="hibrido-titulo" className="bg-superficie">
         <div className="mx-auto max-w-3xl px-4 py-12">
           <h2
             id="hibrido-titulo"
@@ -99,7 +99,7 @@ export default function AtencionOnlinePage() {
         </h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           <Card>
-            <Wifi className="size-6 text-pacifico" aria-hidden="true" />
+            <Wifi className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Conexión estable
             </p>
@@ -108,7 +108,7 @@ export default function AtencionOnlinePage() {
             </p>
           </Card>
           <Card>
-            <MonitorSmartphone className="size-6 text-pacifico" aria-hidden="true" />
+            <MonitorSmartphone className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Cámara y micrófono
             </p>
@@ -117,7 +117,7 @@ export default function AtencionOnlinePage() {
             </p>
           </Card>
           <Card>
-            <Lock className="size-6 text-pacifico" aria-hidden="true" />
+            <Lock className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Espacio tranquilo
             </p>
@@ -126,7 +126,7 @@ export default function AtencionOnlinePage() {
             </p>
           </Card>
           <Card>
-            <Globe className="size-6 text-pacifico" aria-hidden="true" />
+            <Globe className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">Horarios</p>
             <p className="mt-1 text-base text-quebrada/90">
               Atención de {HORARIO.rango}. Días de atención:{" "}
@@ -146,7 +146,7 @@ export default function AtencionOnlinePage() {
       </section>
 
       {/* Chilenos en el extranjero */}
-      <section aria-labelledby="extranjero-titulo" className="bg-white">
+      <section aria-labelledby="extranjero-titulo" className="bg-superficie">
         <div className="mx-auto max-w-3xl px-4 py-12">
           <h2
             id="extranjero-titulo"

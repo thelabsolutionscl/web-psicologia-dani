@@ -31,11 +31,11 @@ const legalNav = [
 /** Footer con nombre completo, lema, registros y NAP (sección 8). */
 export function Footer() {
   return (
-    <footer className="border-t border-arena bg-white">
+    <footer className="border-t border-arena bg-superficie">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-3">
         <div>
           <p className="font-sans text-base font-bold">{SITE_NAME}</p>
-          <p className="mt-1 font-sans text-sm text-pacifico">
+          <p className="mt-1 font-sans text-sm text-enlace">
             Psicóloga · Fonoaudióloga
           </p>
           <p className="mt-3 text-base italic">“{TAGLINE}”</p>
@@ -66,7 +66,7 @@ export function Footer() {
                 href={whatsappHref(WHATSAPP_MESSAGES.default)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center hover:text-pacifico"
+                className="inline-flex min-h-11 items-center hover:text-enlace"
               >
                 WhatsApp: {PHONE_DISPLAY}
               </a>
@@ -83,7 +83,7 @@ export function Footer() {
                 href={SOCIAL.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center hover:text-pacifico"
+                className="inline-flex min-h-11 items-center hover:text-enlace"
               >
                 Instagram
               </a>
@@ -91,7 +91,7 @@ export function Footer() {
                 href={SOCIAL.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex min-h-11 items-center hover:text-pacifico"
+                className="inline-flex min-h-11 items-center hover:text-enlace"
               >
                 LinkedIn
               </a>
@@ -108,7 +108,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-flex min-h-11 items-center hover:text-pacifico"
+                  className="inline-flex min-h-11 items-center hover:text-enlace"
                 >
                   {link.label}
                 </Link>
@@ -118,7 +118,7 @@ export function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="inline-flex min-h-11 items-center text-quebrada/70 hover:text-pacifico"
+                  className="inline-flex min-h-11 items-center text-quebrada/70 hover:text-enlace"
                 >
                   {link.label}
                 </Link>

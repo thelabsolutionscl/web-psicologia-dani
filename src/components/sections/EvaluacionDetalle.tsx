@@ -61,7 +61,7 @@ export function EvaluacionDetalle({ config }: { config: EvaluacionConfig }) {
       </PageHero>
 
       {/* Para quién */}
-      <section aria-labelledby="para-quien-titulo" className="bg-white">
+      <section aria-labelledby="para-quien-titulo" className="bg-superficie">
         <div className="mx-auto max-w-3xl px-4 py-12">
           <h2
             id="para-quien-titulo"
@@ -105,7 +105,7 @@ export function EvaluacionDetalle({ config }: { config: EvaluacionConfig }) {
       </section>
 
       {/* Proceso */}
-      <section aria-labelledby="proceso-eval-titulo" className="bg-white">
+      <section aria-labelledby="proceso-eval-titulo" className="bg-superficie">
         <div className="mx-auto max-w-6xl px-4 py-12">
           <h2
             id="proceso-eval-titulo"
@@ -142,16 +142,16 @@ export function EvaluacionDetalle({ config }: { config: EvaluacionConfig }) {
           </p>
           <ul className="mt-5 space-y-3 font-sans text-sm font-semibold text-quebrada">
             <li className="flex items-center gap-3">
-              <CalendarClock className="size-5 shrink-0 text-pacifico" aria-hidden="true" />
+              <CalendarClock className="size-5 shrink-0 text-enlace" aria-hidden="true" />
               Reservas con un abono de {PRECIOS.abonoReserva}; el saldo se paga
               antes de comenzar.
             </li>
             <li className="flex items-center gap-3">
-              <Receipt className="size-5 shrink-0 text-pacifico" aria-hidden="true" />
+              <Receipt className="size-5 shrink-0 text-enlace" aria-hidden="true" />
               {PREVISION}.
             </li>
             <li className="flex items-center gap-3">
-              <Users className="size-5 shrink-0 text-pacifico" aria-hidden="true" />
+              <Users className="size-5 shrink-0 text-enlace" aria-hidden="true" />
               Cupos limitados por mes.
             </li>
           </ul>

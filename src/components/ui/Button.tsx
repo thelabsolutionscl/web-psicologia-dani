@@ -12,9 +12,10 @@ const variants: Record<Variant, string> = {
   primary: "bg-anahuaca text-white hover:bg-anahuaca/90",
   secondary: "bg-pacifico text-white hover:bg-pacifico/90",
   outline:
-    "border border-pacifico text-pacifico hover:bg-pacifico hover:text-white",
-  // Para fondos oscuros (banda CtaFinal): superficie clara y foco visible.
-  invertido: "bg-camanchaca text-anahuaca hover:bg-white",
+    "border border-pacifico text-enlace hover:bg-pacifico hover:text-white",
+  // Para fondos oscuros (banda CtaFinal): superficie clara FIJA (no cambia
+  // con el tema, porque la banda es oscura en claro y en oscuro).
+  invertido: "bg-[#f8f2ed] text-anahuaca hover:bg-[#fff]",
 };
 
 type ButtonLinkProps = {

@@ -29,7 +29,7 @@ export default async function AdminDisponibilidadPage() {
 
   if (!dbConfigured()) {
     return (
-      <p className="rounded-2xl border border-arena bg-white p-6 text-base text-quebrada/90">
+      <p className="rounded-2xl border border-arena bg-superficie p-6 text-base text-quebrada/90">
         La base de reservas no está configurada: faltan las variables{" "}
         <code className="font-sans">SUPABASE_URL</code> y{" "}
         <code className="font-sans">SUPABASE_SERVICE_ROLE_KEY</code>.
@@ -62,7 +62,7 @@ export default async function AdminDisponibilidadPage() {
             {NOMBRES_DIAS.map((dia) => (
               <label
                 key={dia.valor}
-                className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-arena bg-white px-4 font-sans text-sm font-semibold has-checked:border-pacifico has-checked:bg-pacifico/10"
+                className="inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-arena bg-superficie px-4 font-sans text-sm font-semibold has-checked:border-pacifico has-checked:bg-pacifico/10"
               >
                 <input
                   type="checkbox"
@@ -104,14 +104,14 @@ export default async function AdminDisponibilidadPage() {
               name="fecha"
               required
               min={hoy}
-              className="mt-1 block min-h-11 rounded-lg border border-arena bg-white px-3 font-sans text-base"
+              className="mt-1 block min-h-11 rounded-lg border border-arena bg-superficie px-3 font-sans text-base"
             />
           </label>
           <label className="font-sans text-sm font-semibold">
             Bloque
             <select
               name="bloque"
-              className="mt-1 block min-h-11 rounded-lg border border-arena bg-white px-3 font-sans text-base"
+              className="mt-1 block min-h-11 rounded-lg border border-arena bg-superficie px-3 font-sans text-base"
             >
               <option value="">Día completo</option>
               {BLOQUES.map((b) => (
@@ -127,7 +127,7 @@ export default async function AdminDisponibilidadPage() {
               type="text"
               name="motivo"
               placeholder="Ej: jornada de evaluación en Arica"
-              className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base placeholder:text-quebrada/70"
+              className="mt-1 block min-h-11 w-full rounded-lg border border-arena bg-superficie px-3 font-sans text-base placeholder:text-quebrada/70"
             />
           </label>
           <button

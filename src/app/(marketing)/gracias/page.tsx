@@ -18,7 +18,7 @@ export default function GraciasPage() {
   return (
     <section className="mx-auto flex max-w-2xl flex-col items-center px-4 py-24 text-center">
       <TrackOnMount evento="contacto_enviado" />
-      <CheckCircle2 className="size-12 text-pacifico" aria-hidden="true" />
+      <CheckCircle2 className="size-12 text-enlace" aria-hidden="true" />
       <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">
         Gracias por tu mensaje
       </h1>

@@ -127,7 +127,7 @@ export default function HomePage() {
             Chile
           </h1>
           <VoiceLine className="mt-4" />
-          <p className="mt-5 text-xl text-pacifico italic">“{TAGLINE}”</p>
+          <p className="mt-5 text-xl text-enlace italic">“{TAGLINE}”</p>
           <p className="mt-4 max-w-prose text-lg text-quebrada/90">
             Soy {SITE_NAME}, psicóloga y fonoaudióloga. Acompaño a niños,
             niñas, adolescentes y adultos con una mirada que integra lo
@@ -170,7 +170,7 @@ export default function HomePage() {
       </section>
 
       {/* 3. Diferencial */}
-      <section aria-labelledby="diferencial-titulo" className="bg-white">
+      <section aria-labelledby="diferencial-titulo" className="bg-superficie">
         <div className="mx-auto max-w-6xl px-4 py-14">
           <h2
             id="diferencial-titulo"
@@ -184,7 +184,7 @@ export default function HomePage() {
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             <div className="flex gap-4">
-              <Puzzle className="size-8 shrink-0 text-pacifico" aria-hidden="true" />
+              <Puzzle className="size-8 shrink-0 text-enlace" aria-hidden="true" />
               <p className="text-base text-quebrada/90">
                 <strong className="font-semibold text-quebrada">
                   Evaluación completa sin peregrinar
@@ -193,7 +193,7 @@ export default function HomePage() {
               </p>
             </div>
             <div className="flex gap-4">
-              <Sparkles className="size-8 shrink-0 text-pacifico" aria-hidden="true" />
+              <Sparkles className="size-8 shrink-0 text-enlace" aria-hidden="true" />
               <p className="text-base text-quebrada/90">
                 <strong className="font-semibold text-quebrada">
                   Un informe que integra
@@ -204,7 +204,7 @@ export default function HomePage() {
             </div>
             <div className="flex gap-4">
               <HeartHandshake
-                className="size-8 shrink-0 text-pacifico"
+                className="size-8 shrink-0 text-enlace"
                 aria-hidden="true"
               />
               <p className="text-base text-quebrada/90">

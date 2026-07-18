@@ -41,8 +41,15 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#F8F2ED",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F8F2ED" },
+    { media: "(prefers-color-scheme: dark)", color: "#1c1418" },
+  ],
 };
+
+/* Fija el tema antes del primer pintado para evitar el parpadeo (FOUC):
+   usa la preferencia guardada o, si no hay, la del sistema. */
+const scriptTema = `(function(){try{var t=localStorage.getItem('tema');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();`;
 
 export default function RootLayout({
   children,
@@ -51,11 +58,13 @@ export default function RootLayout({
     <html
       lang="es-CL"
       className={`${bricolage.variable} ${sourceSerif.variable} ${figtree.variable}`}
+      suppressHydrationWarning
     >
       <body>
+        <script dangerouslySetInnerHTML={{ __html: scriptTema }} />
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:font-sans focus:font-semibold"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-superficie focus:px-4 focus:py-2 focus:font-sans focus:font-semibold"
         >
           Saltar al contenido
         </a>

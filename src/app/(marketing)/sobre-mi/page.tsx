@@ -85,7 +85,7 @@ export default function SobreMiPage() {
           </p>
         </div>
         <div
-          className="flex aspect-[3/4] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-white p-6 text-center font-sans text-sm text-quebrada/70"
+          className="flex aspect-[3/4] items-center justify-center rounded-2xl border-2 border-dashed border-arena bg-superficie p-6 text-center font-sans text-sm text-quebrada/70"
           role="img"
           aria-label="Retrato pendiente de Daniela Alejandra Kaiser Ortiz"
         >
@@ -94,7 +94,7 @@ export default function SobreMiPage() {
       </section>
 
       {/* Formación y registros */}
-      <section aria-labelledby="formacion-titulo" className="bg-white">
+      <section aria-labelledby="formacion-titulo" className="bg-superficie">
         <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 md:grid-cols-2">
           <div>
             <h2
@@ -160,7 +160,7 @@ export default function SobreMiPage() {
       </section>
 
       {/* Enfoque */}
-      <section aria-labelledby="enfoque-titulo" className="bg-white">
+      <section aria-labelledby="enfoque-titulo" className="bg-superficie">
         <div className="mx-auto max-w-3xl px-4 py-12">
           <h2
             id="enfoque-titulo"
@@ -180,7 +180,7 @@ export default function SobreMiPage() {
               devolución busca traducir los resultados en orientaciones
               concretas para la casa, el jardín o el colegio.
             </p>
-            <p className="text-lg text-pacifico italic">“{TAGLINE}”</p>
+            <p className="text-lg text-enlace italic">“{TAGLINE}”</p>
           </div>
         </div>
       </section>

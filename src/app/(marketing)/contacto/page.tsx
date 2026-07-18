@@ -47,7 +47,7 @@ export default function ContactoPage() {
               Jornadas presenciales
             </h2>
             <p className="mt-3 flex gap-3 text-base text-quebrada/90">
-              <MapPin className="mt-1 size-5 shrink-0 text-pacifico" aria-hidden="true" />
+              <MapPin className="mt-1 size-5 shrink-0 text-enlace" aria-hidden="true" />
               Las jornadas presenciales de evaluación se realizan en{" "}
               {ADDRESS.label}. Todo el resto del proceso — entrevistas,
               terapia y devoluciones — es online.

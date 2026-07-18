@@ -15,7 +15,7 @@ export function Newsletter() {
   const [state, formAction, isPending] = useActionState(suscribir, initial);
 
   return (
-    <section aria-labelledby="boletin-titulo" className="bg-white">
+    <section aria-labelledby="boletin-titulo" className="bg-superficie">
       <div className="mx-auto max-w-3xl px-4 py-14">
         <div className="rounded-2xl border border-arena bg-camanchaca p-6 sm:p-8">
           <h2
@@ -33,7 +33,7 @@ export function Newsletter() {
           {state.ok ? (
             <p
               role="status"
-              className="mt-5 rounded-lg border border-pacifico/40 bg-white px-4 py-3 font-sans text-sm font-semibold text-quebrada"
+              className="mt-5 rounded-lg border border-pacifico/40 bg-superficie px-4 py-3 font-sans text-sm font-semibold text-quebrada"
             >
               {state.mensaje}
             </p>
@@ -66,7 +66,7 @@ export function Newsletter() {
                   autoComplete="email"
                   required
                   placeholder="tu@correo.cl"
-                  className="min-h-11 w-full rounded-xl border border-arena bg-white px-4 font-sans text-base text-quebrada outline-none focus:border-pacifico"
+                  className="min-h-11 w-full rounded-xl border border-arena bg-superficie px-4 font-sans text-base text-quebrada outline-none focus:border-pacifico"
                 />
               </div>
               <Button type="submit" disabled={isPending}>

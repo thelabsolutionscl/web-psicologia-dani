@@ -11,13 +11,13 @@ export function CtaFinal({
   ctaLabel?: string;
 }) {
   return (
-    <section className="bg-quebrada">
+    <section className="bg-[#33222a]">
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
         <h2 className="font-display text-2xl font-bold tracking-tight text-white">
           {title}
         </h2>
-        <p className="mt-3 text-lg text-arena italic">“{TAGLINE}”</p>
-        <div className="mt-4 flex justify-center text-arena/70">
+        <p className="mt-3 text-lg text-[#ebe0d8] italic">“{TAGLINE}”</p>
+        <div className="mt-4 flex justify-center text-[#ebe0d8]/70">
           <VoiceLine className="max-w-[10rem]" />
         </div>
         <div className="mt-6 flex justify-center">

@@ -40,7 +40,7 @@ function Metricas({ reservas }: { reservas: Reserva[] }) {
       {tarjetas.map((t) => (
         <div
           key={t.label}
-          className={`rounded-2xl border bg-white p-5 ${
+          className={`rounded-2xl border bg-superficie p-5 ${
             t.alerta ? "border-pacifico" : "border-arena"
           }`}
         >
@@ -54,7 +54,7 @@ function Metricas({ reservas }: { reservas: Reserva[] }) {
 
 function NuevaReservaManual() {
   return (
-    <details className="rounded-2xl border border-arena bg-white p-5">
+    <details className="rounded-2xl border border-arena bg-superficie p-5">
       <summary className="cursor-pointer font-sans text-base font-bold text-quebrada">
         + Ingresar reserva manual (hora tomada por WhatsApp o teléfono)
       </summary>
@@ -66,7 +66,7 @@ function NuevaReservaManual() {
 const badgeEstado: Record<EstadoReserva, string> = {
   solicitada: "bg-arena text-quebrada",
   confirmada: "bg-pacifico text-white",
-  pagada: "bg-quebrada text-white",
+  pagada: "bg-[#33222a] text-white",
   realizada: "border border-arena text-quebrada/70",
   cancelada: "border border-arena text-quebrada/70 line-through",
 };
@@ -101,14 +101,14 @@ function FilaReserva({ reserva }: { reserva: Reserva }) {
         <span className="font-semibold">{reserva.nombre}</span>
         <a
           href={`mailto:${reserva.correo}`}
-          className="block text-pacifico hover:underline"
+          className="block text-enlace hover:underline"
         >
           {reserva.correo}
         </a>
         <span className="block text-quebrada/70">{reserva.telefono}</span>
         {reserva.mensaje ? (
           <details className="mt-1">
-            <summary className="cursor-pointer text-pacifico">
+            <summary className="cursor-pointer text-enlace">
               Ver comentario
             </summary>
             <p className="mt-1 max-w-xs text-quebrada/90">{reserva.mensaje}</p>
@@ -150,7 +150,7 @@ function FilaReserva({ reserva }: { reserva: Reserva }) {
 
 function TablaReservas({ reservas }: { reservas: Reserva[] }) {
   return (
-    <div className="overflow-x-auto rounded-2xl border border-arena bg-white">
+    <div className="overflow-x-auto rounded-2xl border border-arena bg-superficie">
       <table className="w-full min-w-[720px] text-left">
         <thead>
           <tr className="font-sans text-sm text-quebrada/70">
@@ -176,7 +176,7 @@ export default async function AdminReservasPage() {
 
   if (!dbConfigured()) {
     return (
-      <p className="rounded-2xl border border-arena bg-white p-6 text-base text-quebrada/90">
+      <p className="rounded-2xl border border-arena bg-superficie p-6 text-base text-quebrada/90">
         La base de reservas no está configurada: faltan las variables{" "}
         <code className="font-sans">SUPABASE_URL</code> y{" "}
         <code className="font-sans">SUPABASE_SERVICE_ROLE_KEY</code> (ver

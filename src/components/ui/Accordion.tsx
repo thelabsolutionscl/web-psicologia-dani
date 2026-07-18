@@ -15,7 +15,7 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   return (
-    <div className="divide-y divide-arena rounded-2xl border border-arena bg-white">
+    <div className="divide-y divide-arena rounded-2xl border border-arena bg-superficie">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const buttonId = `${baseId}-boton-${index}`;
@@ -34,7 +34,7 @@ export function Accordion({ items }: { items: AccordionItem[] }) {
                 {item.question}
                 <ChevronDown
                   aria-hidden="true"
-                  className={`size-5 shrink-0 text-pacifico transition-transform ${
+                  className={`size-5 shrink-0 text-enlace transition-transform ${
                     isOpen ? "rotate-180" : ""
                   }`}
                 />

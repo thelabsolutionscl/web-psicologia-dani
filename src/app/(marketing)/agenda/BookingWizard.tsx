@@ -38,8 +38,8 @@ function Stepper({ actual }: { actual: number }) {
             i === actual
               ? "border-pacifico bg-pacifico text-white"
               : i < actual
-                ? "border-pacifico/40 bg-white text-pacifico"
-                : "border-arena bg-white text-quebrada/70"
+                ? "border-pacifico/40 bg-superficie text-enlace"
+                : "border-arena bg-superficie text-quebrada/70"
           }`}
         >
           {i < actual ? (
@@ -74,7 +74,7 @@ function OpcionBoton({
       className={`min-h-11 w-full rounded-xl border px-4 py-3 text-left font-sans text-base transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
         seleccionado
           ? "border-pacifico bg-pacifico/10 font-semibold text-quebrada"
-          : "border-arena bg-white text-quebrada hover:border-pacifico/50"
+          : "border-arena bg-superficie text-quebrada hover:border-pacifico/50"
       }`}
     >
       {children}
@@ -195,8 +195,8 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   /* Paso 4: confirmación */
   if (paso === 3 && solicitud && resultado) {
     return (
-      <div className="rounded-2xl border border-arena bg-white p-6 sm:p-8">
-        <Check className="size-10 text-pacifico" aria-hidden="true" />
+      <div className="rounded-2xl border border-arena bg-superficie p-6 sm:p-8">
+        <Check className="size-10 text-enlace" aria-hidden="true" />
         <h2
           ref={setTituloRef}
           tabIndex={-1}
@@ -246,7 +246,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   }
 
   return (
-    <div className="rounded-2xl border border-arena bg-white p-6 sm:p-8">
+    <div className="rounded-2xl border border-arena bg-superficie p-6 sm:p-8">
       <Stepper actual={paso} />
 
       {/* Paso 1: servicio */}
@@ -270,7 +270,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
                 <span className="mt-1 block text-sm text-quebrada/80">
                   {s.detalle}
                 </span>
-                <span className="mt-1 block text-sm font-semibold text-pacifico">
+                <span className="mt-1 block text-sm font-semibold text-enlace">
                   {s.precio}
                 </span>
               </OpcionBoton>
@@ -297,7 +297,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
             tabIndex={-1}
             className="flex items-center gap-2 font-sans text-lg font-bold outline-none"
           >
-            <CalendarClock className="size-5 text-pacifico" aria-hidden="true" />
+            <CalendarClock className="size-5 text-enlace" aria-hidden="true" />
             Elige fecha y bloque
           </p>
           <p className="mt-2 font-sans text-sm text-quebrada/80">
@@ -353,7 +353,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
                   className={`inline-flex min-h-11 items-center rounded-full border px-5 font-sans text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                     bloque === b
                       ? "border-pacifico bg-pacifico text-white"
-                      : "border-arena bg-white text-quebrada hover:border-pacifico/50"
+                      : "border-arena bg-superficie text-quebrada hover:border-pacifico/50"
                   }`}
                 >
                   {b} h{tomado ? " — tomado" : ""}

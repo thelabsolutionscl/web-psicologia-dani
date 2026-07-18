@@ -72,7 +72,7 @@ export default function RadiestesiaPage() {
       </PageHero>
 
       {/* Qué es */}
-      <section aria-labelledby="que-es-titulo" className="bg-white">
+      <section aria-labelledby="que-es-titulo" className="bg-superficie">
         <div className="mx-auto max-w-3xl px-4 py-12">
           <h2
             id="que-es-titulo"
@@ -121,14 +121,14 @@ export default function RadiestesiaPage() {
         </h2>
         <div className="grid gap-6 sm:grid-cols-3">
           <Card>
-            <Sparkles className="size-6 text-pacifico" aria-hidden="true" />
+            <Sparkles className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">Un momento de calma</p>
             <p className="mt-1 text-base text-quebrada/90">
               Un espacio tranquilo para hacer una pausa y bajar el ritmo.
             </p>
           </Card>
           <Card>
-            <HeartHandshake className="size-6 text-pacifico" aria-hidden="true" />
+            <HeartHandshake className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Acompañamiento cercano
             </p>
@@ -137,7 +137,7 @@ export default function RadiestesiaPage() {
             </p>
           </Card>
           <Card>
-            <Info className="size-6 text-pacifico" aria-hidden="true" />
+            <Info className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">Complementario</p>
             <p className="mt-1 text-base text-quebrada/90">
               Convive con tu proceso, pero no reemplaza la atención clínica.
@@ -148,7 +148,7 @@ export default function RadiestesiaPage() {
 
       {/* Nota / encuadre responsable */}
       <section className="mx-auto max-w-3xl px-4 pb-12">
-        <div className="rounded-2xl border border-arena bg-white p-6">
+        <div className="rounded-2xl border border-arena bg-superficie p-6">
           <p className="font-sans text-sm text-quebrada/80">
             La radiestesia es una práctica complementaria orientada al
             bienestar. No constituye un diagnóstico ni un tratamiento

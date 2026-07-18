@@ -113,7 +113,7 @@ export default async function PagoPage({
     <section className="mx-auto flex max-w-2xl flex-col items-center px-4 py-24 text-center">
       <TrackOnMount evento={`pago_${estado}`} />
       <Icon
-        className={`size-12 ${estado === "rechazado" ? "text-quebrada" : "text-pacifico"}`}
+        className={`size-12 ${estado === "rechazado" ? "text-quebrada" : "text-enlace"}`}
         aria-hidden="true"
       />
       <h1 className="mt-4 font-display text-3xl font-bold tracking-tight text-balance">

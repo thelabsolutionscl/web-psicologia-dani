@@ -13,7 +13,7 @@ export function Testimonios() {
   const destacado = TESTIMONIOS.length === 1;
 
   return (
-    <section aria-labelledby="testimonios-titulo" className="bg-white">
+    <section aria-labelledby="testimonios-titulo" className="bg-superficie">
       <JsonLd data={reviewsJsonLd(TESTIMONIOS)} />
       <div className="mx-auto max-w-6xl px-4 py-16">
         <div className="text-center">
@@ -42,7 +42,7 @@ export function Testimonios() {
             >
               <p
                 aria-hidden="true"
-                className="font-display text-4xl leading-none text-pacifico/50"
+                className="font-display text-4xl leading-none text-enlace/50"
               >
                 “
               </p>
@@ -55,7 +55,7 @@ export function Testimonios() {
                 {t.autora}
               </p>
               {t.contexto ? (
-                <p className="font-sans text-sm text-pacifico">{t.contexto}</p>
+                <p className="font-sans text-sm text-enlace">{t.contexto}</p>
               ) : null}
             </Card>
           ))}

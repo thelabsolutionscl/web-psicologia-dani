@@ -13,7 +13,7 @@ export function TrustBar() {
   return (
     <section
       aria-label="Credenciales y respaldo profesional"
-      className="border-y border-arena bg-white"
+      className="border-y border-arena bg-superficie"
     >
       <ul className="mx-auto grid max-w-6xl grid-cols-1 gap-4 px-4 py-6 sm:grid-cols-2 lg:grid-cols-4">
         {items.map(({ icon: Icon, text }) => (
@@ -21,7 +21,7 @@ export function TrustBar() {
             key={text}
             className="flex items-center gap-3 font-sans text-sm font-semibold text-quebrada"
           >
-            <Icon className="size-5 shrink-0 text-pacifico" aria-hidden="true" />
+            <Icon className="size-5 shrink-0 text-enlace" aria-hidden="true" />
             {text}
           </li>
         ))}

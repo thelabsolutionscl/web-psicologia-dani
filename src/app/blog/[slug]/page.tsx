@@ -81,19 +81,19 @@ const mdxComponents: MDXComponents = {
   ),
   blockquote: (props) => (
     <blockquote
-      className="my-6 border-l-2 border-pacifico pl-4 text-lg text-pacifico italic"
+      className="my-6 border-l-2 border-pacifico pl-4 text-lg text-enlace italic"
       {...props}
     />
   ),
   a: ({ href = "", children, ...props }) =>
     href.startsWith("/") ? (
-      <Link href={href} className="text-pacifico underline" {...props}>
+      <Link href={href} className="text-enlace underline" {...props}>
         {children}
       </Link>
     ) : (
       <a
         href={href}
-        className="text-pacifico underline"
+        className="text-enlace underline"
         target="_blank"
         rel="noopener noreferrer"
         {...props}
@@ -132,7 +132,7 @@ export default async function BlogPostPage({
 
       <article className="mx-auto max-w-2xl px-4 pt-14 pb-16 sm:pt-20">
         <header>
-          <p className="font-sans text-sm font-semibold text-pacifico">
+          <p className="font-sans text-sm font-semibold text-enlace">
             {formatDate(post.meta.date)} · {SITE_NAME}
           </p>
           <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance">
@@ -151,7 +151,7 @@ export default async function BlogPostPage({
           profesional.
         </p>
 
-        <div className="mt-8 rounded-2xl border border-arena bg-white p-6">
+        <div className="mt-8 rounded-2xl border border-arena bg-superficie p-6">
           <p className="font-sans text-base font-bold text-quebrada">
             ¿Te hizo sentido este artículo?
           </p>

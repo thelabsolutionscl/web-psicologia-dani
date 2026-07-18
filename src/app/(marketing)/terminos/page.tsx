@@ -56,7 +56,7 @@ export default function TerminosPage() {
             escribirnos se describe en nuestra{" "}
             <a
               href="/privacidad"
-              className="font-semibold text-pacifico underline"
+              className="font-semibold text-enlace underline"
             >
               política de privacidad
             </a>

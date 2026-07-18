@@ -8,7 +8,7 @@ import {
 import { BLOQUES, SERVICIOS } from "@/lib/booking";
 
 const campo =
-  "mt-1 block min-h-11 w-full rounded-lg border border-arena bg-white px-3 font-sans text-base";
+  "mt-1 block min-h-11 w-full rounded-lg border border-arena bg-superficie px-3 font-sans text-base";
 
 /**
  * Formulario de reserva manual con feedback: usa useActionState para
@@ -73,7 +73,7 @@ export function ReservaManualForm() {
           role="alert"
           className={`sm:col-span-2 rounded-lg px-4 py-2 font-sans text-sm font-semibold ${
             estado.ok
-              ? "bg-pacifico/10 text-pacifico"
+              ? "bg-pacifico/10 text-enlace"
               : "bg-quebrada/10 text-quebrada"
           }`}
         >

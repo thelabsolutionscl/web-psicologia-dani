@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-      <p className="font-sans text-sm font-semibold tracking-wide text-pacifico uppercase">
+      <p className="font-sans text-sm font-semibold tracking-wide text-enlace uppercase">
         Error 404
       </p>
       <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">
@@ -23,7 +23,7 @@ export default function NotFound() {
       <p className="mt-4 max-w-md text-base text-quebrada/90">
         La página que buscas no existe o cambió de dirección. Puedes volver al
         inicio o revisar los{" "}
-        <Link href="/evaluaciones" className="text-pacifico underline">
+        <Link href="/evaluaciones" className="text-enlace underline">
           servicios de evaluación
         </Link>
         .

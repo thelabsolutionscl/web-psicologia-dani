@@ -2,12 +2,17 @@
 
 @theme {
   /* Paleta derivada del logo de marca (colibrí vino/rosa sobre crema).
-     Contraste verificado WCAG AA en todas las combinaciones de texto. */
-  --color-camanchaca: #f8f2ed; /* fondo: crema cálido del logo */
+     Contraste verificado WCAG AA en todas las combinaciones de texto.
+     Los valores por defecto son el tema claro; el tema oscuro los
+     redefine más abajo (:root[data-theme="dark"]). */
+  --color-camanchaca: #f8f2ed; /* fondo de página: crema cálido del logo */
   --color-quebrada: #33222a; /* tinta principal: ciruela-café oscuro (13.5:1) */
-  --color-pacifico: #9e4759; /* secundario: enlaces, iconos, detalles (rosa del logo) */
-  --color-anahuaca: #8a2f45; /* acento CTA: botones primarios y focos (vino del logo) */
-  --color-arena: #ebe0d8; /* bordes, superficies, fondos de tarjeta (blush) */
+  --color-pacifico: #9e4759; /* acento de superficie: botones, bordes (rosa) */
+  --color-anahuaca: #8a2f45; /* acento CTA: botones primarios (vino del logo) */
+  --color-arena: #ebe0d8; /* bordes y fondos sutiles (blush) */
+  --color-superficie: #ffffff; /* tarjetas y paneles (antes bg-white) */
+  --color-enlace: #9e4759; /* texto de enlaces/íconos (= pacifico en claro) */
+  --color-foco: #8a2f45; /* color del anillo de foco (= anahuaca en claro) */
 
   /* Tipografía — variables inyectadas por next/font en el layout raíz */
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
@@ -31,6 +36,48 @@
   --text-4xl--line-height: 1.1;
 }
 
+/* Tema oscuro. Solo redefine las variables cuyo rol cambia; los acentos
+   (anahuaca en botones, pacifico como fondo con texto blanco) se mantienen.
+   Contraste AA verificado: enlace #c76b7f sobre superficie #271d22 = 4.5:1,
+   texto #ede4dd sobre fondo #1c1418 = 13:1. */
+:root[data-theme="dark"] {
+  --color-camanchaca: #1c1418; /* fondo de página oscuro */
+  --color-quebrada: #ede4dd; /* texto claro cálido */
+  --color-arena: #3a2c33; /* bordes y fondos sutiles oscuros */
+  --color-superficie: #271d22; /* tarjetas elevadas */
+  --color-enlace: #c76b7f; /* enlaces aclarados para AA sobre oscuro */
+  --color-foco: #c76b7f; /* anillo de foco visible sobre oscuro */
+}
+
+/* Sin JavaScript: respeta la preferencia del sistema salvo tema claro
+   explícito. Con JS, el script del layout fija data-theme y manda. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-camanchaca: #1c1418;
+    --color-quebrada: #ede4dd;
+    --color-arena: #3a2c33;
+    --color-superficie: #271d22;
+    --color-enlace: #c76b7f;
+    --color-foco: #c76b7f;
+  }
+}
+
+/* En tema oscuro el logotipo (palabra "Daniela Kaiser" en vino) pierde
+   contraste sobre el fondo oscuro. Se le da un respaldo crema fijo para
+   mantener los colores de marca legibles, sin recolorear el logo. */
+:root[data-theme="dark"] .logo-marca {
+  background-color: #f6efe8;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.85rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .logo-marca {
+    background-color: #f6efe8;
+    padding: 0.2rem 0.55rem;
+    border-radius: 0.85rem;
+  }
+}
+
 body {
   background-color: var(--color-camanchaca);
   color: var(--color-quebrada);
@@ -39,9 +86,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Focos visibles en acento anahuaca (sección 8) */
+/* Focos visibles (sección 8): anahuaca en claro, rosa claro en oscuro */
 :focus-visible {
-  outline: 2px solid var(--color-anahuaca);
+  outline: 2px solid var(--color-foco);
   outline-offset: 2px;
   border-radius: 2px;
 }

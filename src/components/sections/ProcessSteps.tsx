@@ -16,7 +16,7 @@ export function ProcessSteps({
       {steps.map((step, index) => (
         <li
           key={step.title}
-          className="rounded-2xl border border-arena bg-white p-6"
+          className="rounded-2xl border border-arena bg-superficie p-6"
         >
           <span
             aria-hidden="true"

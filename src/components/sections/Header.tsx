@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BookingCTA } from "@/components/BookingCTA";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { SITE_NAME } from "@/lib/site";
 
 const navLinks = [
@@ -25,7 +26,7 @@ export function Header() {
         <Link
           href="/"
           aria-label={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-          className="flex items-center"
+          className="logo-marca flex items-center"
         >
           <Image
             src="/images/logo-horizontal.webp"
@@ -36,7 +37,10 @@ export function Header() {
             className="h-14 w-auto sm:h-20 lg:h-24"
           />
         </Link>
-        <BookingCTA className="shrink-0 px-4 text-sm sm:px-6 sm:text-base" />
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+          <ThemeToggle />
+          <BookingCTA className="px-4 text-sm sm:px-6 sm:text-base" />
+        </div>
       </div>
       <nav aria-label="Navegación principal" className="border-t border-arena">
         <ul className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2">
@@ -44,7 +48,7 @@ export function Header() {
             <li key={link.href} className="shrink-0">
               <Link
                 href={link.href}
-                className="inline-flex min-h-11 items-center px-3 font-sans text-sm font-semibold whitespace-nowrap text-quebrada hover:text-pacifico"
+                className="inline-flex min-h-11 items-center px-3 font-sans text-sm font-semibold whitespace-nowrap text-quebrada hover:text-enlace"
               >
                 {link.label}
               </Link>

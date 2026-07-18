@@ -10,7 +10,7 @@ export function VoiceLine({ className = "" }: { className?: string }) {
       viewBox="0 0 400 32"
       fill="none"
       aria-hidden="true"
-      className={`voice-line h-6 w-full max-w-xs text-pacifico ${className}`}
+      className={`voice-line h-6 w-full max-w-xs text-enlace ${className}`}
       preserveAspectRatio="xMidYMid meet"
     >
       <path

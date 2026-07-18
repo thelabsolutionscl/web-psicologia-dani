@@ -99,7 +99,7 @@ export default function PreciosPage() {
               <h3 className="font-sans text-lg font-bold text-quebrada">
                 {e.nombre}
               </h3>
-              <p className="mt-3 font-sans text-lg font-bold text-pacifico">
+              <p className="mt-3 font-sans text-lg font-bold text-enlace">
                 {siPendiente(e.precio, "Valor por confirmar")}
               </p>
               <p className="mt-1 font-sans text-sm text-quebrada/70">
@@ -153,7 +153,7 @@ export default function PreciosPage() {
       <section className="mx-auto max-w-6xl px-4 pb-12">
         <div className="grid gap-6 sm:grid-cols-3">
           <Card>
-            <Wallet className="size-6 text-pacifico" aria-hidden="true" />
+            <Wallet className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Abono de {PRECIOS.abonoReserva}
             </p>
@@ -162,14 +162,14 @@ export default function PreciosPage() {
             </p>
           </Card>
           <Card>
-            <Receipt className="size-6 text-pacifico" aria-hidden="true" />
+            <Receipt className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Boleta reembolsable
             </p>
             <p className="mt-1 text-base text-quebrada/90">{PREVISION}.</p>
           </Card>
           <Card>
-            <Users className="size-6 text-pacifico" aria-hidden="true" />
+            <Users className="size-6 text-enlace" aria-hidden="true" />
             <p className="mt-3 font-sans text-base font-bold">
               Cupos limitados
             </p>
