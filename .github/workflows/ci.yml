@@ -22,10 +22,13 @@ jobs:
         run: npm ci
 
       - name: Chequeo de tipos
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Lint
         run: npm run lint
+
+      - name: Pruebas unitarias
+        run: npm test
 
       - name: Build de producción
         run: npm run build

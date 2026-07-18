@@ -22,6 +22,11 @@ import {
 const description =
   "Psicóloga y fonoaudióloga online en todo Chile: evaluaciones de autismo, TDAH y lenguaje, psicoterapia y acompañamiento especializado en duelo.";
 
+/* LQIP: miniatura 16×17 de daniela-hero.webp para evitar el salto de layout
+   y mostrar un desenfoque mientras carga la imagen del hero (LCP). */
+const HERO_BLUR =
+  "data:image/webp;base64,UklGRowAAABXRUJQVlA4IIAAAABwBACdASoQABEAPu1iqU2ppaOiMAgBMB2JbACdMoRwBqAAaImVuuWCesj6AAD+1GVNKItNTbSIFkSRqwH6DmqAucQlhTvp4wXkdrIVvMfaAwXIngXQVlc79t4Z9Qkrov0ozoe2qJU8PP15jHdLs5APPpqP80oG0cqJvUWWUAAAAA==";
+
 export const metadata: Metadata = {
   title: { absolute: `${SITE_NAME} — Psicóloga y fonoaudióloga` },
   description,
@@ -145,6 +150,8 @@ export default function HomePage() {
             width={1212}
             height={1297}
             priority
+            placeholder="blur"
+            blurDataURL={HERO_BLUR}
             sizes="(min-width: 1024px) 45vw, (min-width: 640px) 28rem, 100vw"
             className="h-auto w-full rounded-2xl border border-arena object-cover"
           />

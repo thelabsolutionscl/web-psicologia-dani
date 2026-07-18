@@ -196,14 +196,22 @@ export default async function AdminReservasPage() {
         <h1 className="font-display text-2xl font-bold tracking-tight">
           Reservas
         </h1>
-        <form action={logoutAdmin}>
-          <button
-            type="submit"
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href="/admin/export"
             className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-sans text-sm font-semibold text-quebrada/80 hover:border-quebrada/40"
           >
-            Cerrar sesión
-          </button>
-        </form>
+            Exportar CSV
+          </a>
+          <form action={logoutAdmin}>
+            <button
+              type="submit"
+              className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-sans text-sm font-semibold text-quebrada/80 hover:border-quebrada/40"
+            >
+              Cerrar sesión
+            </button>
+          </form>
+        </div>
       </div>
 
       <Metricas reservas={reservas} />
