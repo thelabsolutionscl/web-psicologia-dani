@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { CtaFinal } from "@/components/sections/CtaFinal";
+import { Newsletter } from "@/components/sections/Newsletter";
 import { PageHero } from "@/components/sections/PageHero";
 import { Card } from "@/components/ui/Card";
 import { formatDate, getAllPosts } from "@/lib/blog";
@@ -48,6 +49,7 @@ export default function BlogPage() {
         ))}
       </section>
 
+      <Newsletter />
       <CtaFinal />
     </>
   );

@@ -75,6 +75,17 @@ create table if not exists public.rate_limits (
 
 alter table public.rate_limits enable row level security;
 
+-- Suscriptores del boletín (captación desde el blog). Sin datos clínicos:
+-- solo correo y origen. RLS activo; solo el servidor escribe/lee.
+create table if not exists public.suscriptores (
+  id uuid primary key default gen_random_uuid(),
+  created_at timestamptz not null default now(),
+  correo text not null unique,
+  origen text not null default ''
+);
+
+alter table public.suscriptores enable row level security;
+
 create or replace function public.check_rate_limit(
   p_clave text,
   p_max int,
