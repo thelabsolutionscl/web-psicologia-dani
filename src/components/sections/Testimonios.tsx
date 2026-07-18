@@ -1,3 +1,4 @@
+import { JsonLd, reviewsJsonLd } from "@/lib/seo";
 import { Card } from "@/components/ui/Card";
 import { VoiceDivider } from "@/components/VoiceLine";
 import { TESTIMONIOS } from "@/lib/testimonios";
@@ -13,6 +14,7 @@ export function Testimonios() {
 
   return (
     <section aria-labelledby="testimonios-titulo" className="bg-white">
+      <JsonLd data={reviewsJsonLd(TESTIMONIOS)} />
       <div className="mx-auto max-w-6xl px-4 py-16">
         <div className="text-center">
           <h2

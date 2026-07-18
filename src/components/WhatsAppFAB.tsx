@@ -2,6 +2,7 @@
 
 import { MessageCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { track } from "@/lib/analytics";
 import { WHATSAPP_MESSAGES, whatsappHref } from "@/lib/site";
 
 function messageForPath(pathname: string): string {
@@ -31,6 +32,7 @@ export function WhatsAppFAB({ message }: { message?: string }) {
       href={whatsappHref(text)}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => track("whatsapp_click", { origen: "fab", ruta: pathname })}
       className="fixed right-4 bottom-4 z-50 flex size-14 items-center justify-center rounded-full bg-pacifico text-white shadow-lg transition-transform hover:scale-105 md:right-6 md:bottom-6"
     >
       <MessageCircle className="size-7" aria-hidden="true" />

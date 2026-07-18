@@ -116,10 +116,14 @@ export function personJsonLd(): JsonLdData {
   };
 }
 
+/** @id estable del negocio para que los nodos JSON-LD se fusionen. */
+export const BUSINESS_ID = `${SITE_URL}#negocio`;
+
 export function medicalBusinessJsonLd(): JsonLdData {
   return {
     "@context": "https://schema.org",
     "@type": "MedicalBusiness",
+    "@id": BUSINESS_ID,
     name: SITE_NAME,
     url: SITE_URL,
     slogan: TAGLINE,
@@ -139,6 +143,32 @@ export function medicalBusinessJsonLd(): JsonLdData {
       },
     },
     sameAs: [SOCIAL.linkedin, SOCIAL.instagram],
+  };
+}
+
+/**
+ * Reseñas reales asociadas al negocio. Se emiten sin `reviewRating`
+ * porque no pedimos una puntuación numérica a las personas: publicar una
+ * estrella inventada sería deshonesto (y contrario a las políticas de
+ * datos estructurados de Google). El testimonio queda igualmente
+ * vinculado al negocio mediante el mismo @id.
+ */
+export function reviewsJsonLd(
+  reviews: { cita: string; autora: string; contexto?: string }[],
+): JsonLdData {
+  return {
+    "@context": "https://schema.org",
+    "@type": "MedicalBusiness",
+    "@id": BUSINESS_ID,
+    name: SITE_NAME,
+    url: SITE_URL,
+    review: reviews.map((r) => ({
+      "@type": "Review",
+      author: { "@type": "Person", name: r.autora },
+      reviewBody: r.cita,
+      ...(r.contexto ? { name: r.contexto } : {}),
+      itemReviewed: { "@id": BUSINESS_ID },
+    })),
   };
 }
 

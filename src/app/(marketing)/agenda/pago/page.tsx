@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { CheckCircle2, Clock, XCircle } from "lucide-react";
+import { TrackOnMount } from "@/components/TrackOnMount";
 import { ButtonLink } from "@/components/ui/Button";
 import { VoiceLine } from "@/components/VoiceLine";
 import { confirmacionPagoPaciente } from "@/lib/email";
@@ -110,6 +111,7 @@ export default async function PagoPage({
 
   return (
     <section className="mx-auto flex max-w-2xl flex-col items-center px-4 py-24 text-center">
+      <TrackOnMount evento={`pago_${estado}`} />
       <Icon
         className={`size-12 ${estado === "rechazado" ? "text-quebrada" : "text-pacifico"}`}
         aria-hidden="true"

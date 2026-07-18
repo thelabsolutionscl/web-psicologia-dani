@@ -9,6 +9,7 @@ import {
   useTransition,
 } from "react";
 import { submitBooking, type BookingState } from "@/app/actions/booking";
+import { track } from "@/lib/analytics";
 import { Button } from "@/components/ui/Button";
 import { InputField, TextareaField } from "@/components/ui/Input";
 import {
@@ -165,11 +166,16 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
       const estado = await submitBooking(solicitud);
       // Con pago del abono: redirigir al checkout de la pasarela.
       if (estado.checkoutUrl) {
+        track("reserva_checkout", { servicio: solicitud.servicioNombre });
         window.location.href = estado.checkoutUrl;
         return;
       }
       setResultado(estado);
       if (estado.ok || estado.soloWhatsapp) {
+        track("reserva_enviada", {
+          servicio: solicitud.servicioNombre,
+          via: estado.ok ? "servidor" : "whatsapp",
+        });
         setPaso(3);
       } else if (estado.conflicto) {
         // El cupo lo ganó otra persona: volver a fecha/hora con datos frescos.
@@ -223,6 +229,12 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
             href={bookingWhatsappHref(solicitud)}
             target="_blank"
             rel="noopener noreferrer"
+            onClick={() =>
+              track("whatsapp_click", {
+                origen: "confirmacion_reserva",
+                servicio: solicitud.servicioNombre,
+              })
+            }
             className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-pacifico px-6 py-2.5 font-sans text-base font-semibold text-white hover:bg-pacifico/90"
           >
             <MessageCircle className="size-5" aria-hidden="true" />
