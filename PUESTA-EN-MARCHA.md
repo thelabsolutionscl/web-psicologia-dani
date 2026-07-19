@@ -177,7 +177,8 @@ Cuando Daniela entregue los datos, editar estos archivos (son ediciones de una o
 ## Notas
 - El panel de administración está en `/admin` (no indexable). Se entra con `ADMIN_PASSWORD`.
 - Los días y los bloqueos de agenda se gestionan desde `/admin/disponibilidad`.
-- Desde `/admin` se puede **exportar todas las reservas a CSV** (botón "Exportar CSV") para respaldo o contabilidad; abre directo en Excel (UTF-8).
+- Desde `/admin` se puede **exportar reservas y suscriptores a CSV** (botones "Exportar…") para respaldo o contabilidad; abren directo en Excel (UTF-8). El panel incluye **buscador**, **paginación** del historial y una métrica de **abonos recibidos en el mes**.
+- **Seguridad:** además de los headers habituales, el sitio envía una **Content-Security-Policy** que restringe orígenes de scripts, imágenes y conexiones (compatible con la generación estática y con el redireccionamiento de Mercado Pago).
 - El **boletín** del blog guarda los correos en la tabla `suscriptores` (Supabase). Sin base configurada, avisa por correo a `CONTACT_TO_EMAIL`. Para enviar campañas se conecta luego un proveedor (p. ej. Resend Broadcasts o Mailchimp) con esa lista.
 - **Monitoreo de errores:** con `NEXT_PUBLIC_SENTRY_DSN` se activa el reporte a Sentry (instalar `@sentry/nextjs` y completar el gancho en `src/lib/monitoring.ts`). Sin DSN, los errores quedan en los logs de Vercel.
 - **Tema claro/oscuro:** el sitio respeta la preferencia del sistema y ofrece un botón (sol/luna) en el encabezado para alternarlo; la elección se recuerda en el navegador. El tema claro es el original, sin cambios.

@@ -7,10 +7,18 @@ import {
   type EstadoReserva,
   type Reserva,
 } from "@/lib/reservas-db";
+import { PRECIOS } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
 const ACTIVAS: EstadoReserva[] = ["confirmada", "pagada"];
+const POR_PAGINA = 20;
+
+/** Monto del abono en CLP a partir del texto de PRECIOS ("$5.000"). */
+const ABONO_CLP = Number(PRECIOS.abonoReserva.replace(/[^\d]/g, "")) || 0;
+
+const clp = (n: number) =>
+  n.toLocaleString("es-CL", { style: "currency", currency: "CLP", maximumFractionDigits: 0 });
 
 function Metricas({ reservas }: { reservas: Reserva[] }) {
   const hoy = new Date().toISOString().slice(0, 10);
@@ -27,16 +35,22 @@ function Metricas({ reservas }: { reservas: Reserva[] }) {
   const delMes = reservas.filter(
     (r) => r.fecha.startsWith(mes) && ACTIVAS.includes(r.estado),
   ).length;
+  // Abonos efectivamente recibidos este mes (reservas ya pagadas). El
+  // saldo se paga fuera del sitio, así que no se contabiliza aquí.
+  const abonosMes = reservas.filter(
+    (r) => r.fecha.startsWith(mes) && r.estado === "pagada",
+  ).length;
 
   const tarjetas = [
     { label: "Solicitudes por confirmar", valor: pendientes, alerta: pendientes > 0 },
     { label: "Confirmadas hoy", valor: hoyCount },
     { label: "Próximos 7 días", valor: semana },
     { label: "Confirmadas este mes", valor: delMes },
+    { label: "Abonos recibidos este mes", valor: clp(abonosMes * ABONO_CLP) },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
+    <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
       {tarjetas.map((t) => (
         <div
           key={t.label}
@@ -44,7 +58,9 @@ function Metricas({ reservas }: { reservas: Reserva[] }) {
             t.alerta ? "border-pacifico" : "border-arena"
           }`}
         >
-          <p className="font-sans text-3xl font-bold text-quebrada">{t.valor}</p>
+          <p className="font-sans text-2xl font-bold tracking-tight text-quebrada tabular-nums lg:text-3xl">
+            {t.valor}
+          </p>
           <p className="mt-1 font-sans text-sm text-quebrada/70">{t.label}</p>
         </div>
       ))}
@@ -171,7 +187,11 @@ function TablaReservas({ reservas }: { reservas: Reserva[] }) {
   );
 }
 
-export default async function AdminReservasPage() {
+export default async function AdminReservasPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string; p?: string }>;
+}) {
   await requireAdmin();
 
   if (!dbConfigured()) {
@@ -185,10 +205,30 @@ export default async function AdminReservasPage() {
     );
   }
 
-  const reservas = await listReservas();
+  const { q = "", p = "1" } = await searchParams;
+  const consulta = q.trim().toLowerCase();
+  const pagina = Math.max(1, Number(p) || 1);
+
+  const todas = await listReservas();
+  const reservas = consulta
+    ? todas.filter((r) =>
+        `${r.nombre} ${r.correo} ${r.telefono} ${r.servicio_nombre}`
+          .toLowerCase()
+          .includes(consulta),
+      )
+    : todas;
+
   const hoy = new Date().toISOString().slice(0, 10);
   const proximas = reservas.filter((r) => r.fecha >= hoy);
-  const pasadas = reservas.filter((r) => r.fecha < hoy).reverse();
+  const pasadasTodas = reservas.filter((r) => r.fecha < hoy).reverse();
+  const totalPaginas = Math.max(1, Math.ceil(pasadasTodas.length / POR_PAGINA));
+  const paginaActual = Math.min(pagina, totalPaginas);
+  const pasadas = pasadasTodas.slice(
+    (paginaActual - 1) * POR_PAGINA,
+    paginaActual * POR_PAGINA,
+  );
+  const qs = (n: number) =>
+    `?${new URLSearchParams({ ...(consulta ? { q } : {}), p: String(n) })}`;
 
   return (
     <div className="space-y-10">
@@ -220,8 +260,41 @@ export default async function AdminReservasPage() {
         </div>
       </div>
 
-      <Metricas reservas={reservas} />
+      <Metricas reservas={todas} />
       <NuevaReservaManual />
+
+      <form method="get" className="flex flex-wrap gap-2">
+        <label htmlFor="q" className="sr-only">
+          Buscar por nombre, correo o servicio
+        </label>
+        <input
+          id="q"
+          name="q"
+          type="search"
+          defaultValue={q}
+          placeholder="Buscar por nombre, correo, teléfono o servicio…"
+          className="min-h-11 flex-1 rounded-full border border-arena bg-superficie px-4 font-sans text-sm text-quebrada outline-none focus:border-pacifico"
+        />
+        <button
+          type="submit"
+          className="inline-flex min-h-11 items-center rounded-full bg-pacifico px-5 font-sans text-sm font-semibold text-white hover:bg-pacifico/90"
+        >
+          Buscar
+        </button>
+        {consulta ? (
+          <a
+            href="/admin"
+            className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-sans text-sm font-semibold text-quebrada/80 hover:border-quebrada/40"
+          >
+            Limpiar
+          </a>
+        ) : null}
+      </form>
+      {consulta ? (
+        <p className="font-sans text-sm text-quebrada/70">
+          {reservas.length} resultado{reservas.length === 1 ? "" : "s"} para “{q}”.
+        </p>
+      ) : null}
 
       <section>
         <h2 className="mb-3 font-sans text-lg font-bold">
@@ -238,10 +311,42 @@ export default async function AdminReservasPage() {
 
       <section>
         <h2 className="mb-3 font-sans text-lg font-bold">
-          Pasadas ({pasadas.length})
+          Pasadas ({pasadasTodas.length})
         </h2>
-        {pasadas.length > 0 ? (
-          <TablaReservas reservas={pasadas} />
+        {pasadasTodas.length > 0 ? (
+          <>
+            <TablaReservas reservas={pasadas} />
+            {totalPaginas > 1 ? (
+              <nav
+                aria-label="Paginación del historial"
+                className="mt-4 flex items-center justify-between gap-2 font-sans text-sm"
+              >
+                {paginaActual > 1 ? (
+                  <a
+                    href={qs(paginaActual - 1)}
+                    className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-semibold text-quebrada/80 hover:border-quebrada/40"
+                  >
+                    ← Anteriores
+                  </a>
+                ) : (
+                  <span />
+                )}
+                <span className="text-quebrada/70">
+                  Página {paginaActual} de {totalPaginas}
+                </span>
+                {paginaActual < totalPaginas ? (
+                  <a
+                    href={qs(paginaActual + 1)}
+                    className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-semibold text-quebrada/80 hover:border-quebrada/40"
+                  >
+                    Siguientes →
+                  </a>
+                ) : (
+                  <span />
+                )}
+              </nav>
+            ) : null}
+          </>
         ) : (
           <p className="text-base text-quebrada/70">Sin historial todavía.</p>
         )}
