@@ -201,7 +201,13 @@ export default async function AdminReservasPage() {
             href="/admin/export"
             className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-sans text-sm font-semibold text-quebrada/80 hover:border-quebrada/40"
           >
-            Exportar CSV
+            Exportar reservas (CSV)
+          </a>
+          <a
+            href="/admin/export-boletin"
+            className="inline-flex min-h-11 items-center rounded-full border border-arena px-4 font-sans text-sm font-semibold text-quebrada/80 hover:border-quebrada/40"
+          >
+            Exportar boletín (CSV)
           </a>
           <form action={logoutAdmin}>
             <button

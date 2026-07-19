@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { celdaCSV, reservasACSV } from "@/lib/csv";
+import { celdaCSV, reservasACSV, suscriptoresACSV } from "@/lib/csv";
+import type { Suscriptor } from "@/lib/newsletter-db";
 import type { Reserva } from "@/lib/reservas-db";
 
 describe("celdaCSV", () => {
@@ -69,5 +70,28 @@ describe("reservasACSV", () => {
     const csv = reservasACSV([]);
     const lineas = csv.replace("﻿", "").split("\r\n");
     expect(lineas).toHaveLength(1);
+  });
+});
+
+describe("suscriptoresACSV", () => {
+  const sub: Suscriptor = {
+    id: "s1",
+    created_at: "2026-07-19T15:00:00Z",
+    correo: "ana@example.com",
+    origen: "blog",
+  };
+
+  it("emite encabezado y una fila por suscriptor", () => {
+    const csv = suscriptoresACSV([sub]);
+    const lineas = csv.replace("﻿", "").split("\r\n");
+    expect(lineas).toHaveLength(2);
+    expect(lineas[0]).toBe("Correo,Origen,Fecha de alta");
+    expect(lineas[1]).toContain("ana@example.com");
+    expect(lineas[1]).toContain("blog");
+  });
+
+  it("escapa correos maliciosos (inyección de fórmulas)", () => {
+    const csv = suscriptoresACSV([{ ...sub, correo: "=cmd|calc" }]);
+    expect(csv).toContain("'=cmd|calc");
   });
 });

@@ -19,6 +19,28 @@ export function newsletterDbConfigured(): boolean {
   return Boolean(process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
+export type Suscriptor = {
+  id: string;
+  created_at: string;
+  correo: string;
+  origen: string;
+};
+
+/** Lista completa de suscriptores (para el export CSV del panel). */
+export async function listSuscriptores(): Promise<Suscriptor[]> {
+  const db = getClient();
+  if (!db) return [];
+  const { data, error } = await db
+    .from("suscriptores")
+    .select("*")
+    .order("created_at", { ascending: false });
+  if (error) {
+    console.error("[newsletter] error listando suscriptores:", error.message);
+    return [];
+  }
+  return (data ?? []) as Suscriptor[];
+}
+
 /**
  * Guarda un correo. Devuelve "guardado" (nuevo), "existente" (ya estaba,
  * idempotente), "sin-db" o "error". El correo duplicado no es un fallo:

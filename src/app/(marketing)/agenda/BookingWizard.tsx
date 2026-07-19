@@ -10,6 +10,7 @@ import {
 } from "react";
 import { submitBooking, type BookingState } from "@/app/actions/booking";
 import { track } from "@/lib/analytics";
+import { AgregarACalendario } from "@/components/AgregarACalendario";
 import { Button } from "@/components/ui/Button";
 import { InputField, TextareaField } from "@/components/ui/Input";
 import {
@@ -142,8 +143,6 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   }, [cargarDisponibilidad]);
 
   const diaSeleccionado = dias.find((d) => d.fecha === fecha);
-  const diaCompleto = (f: string) =>
-    BLOQUES.every((b) => ocupados.has(slotKey(f, b)));
 
   const solicitud: BookingRequest | null =
     servicio && fecha && bloque
@@ -241,6 +240,13 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
             {resultado.ok ? "Adelantar por WhatsApp" : "Enviar por WhatsApp"}
           </a>
         </div>
+        {resultado.ok ? (
+          <AgregarACalendario
+            servicioNombre={solicitud.servicioNombre}
+            fecha={solicitud.fecha}
+            bloque={solicitud.bloque}
+          />
+        ) : null}
       </div>
     );
   }
@@ -320,7 +326,11 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
           ) : (
             <div className="mt-4 grid max-h-72 gap-2 overflow-y-auto pr-1 sm:grid-cols-2">
               {dias.map((d) => {
-                const completo = diaCompleto(d.fecha);
+                // Aviso honesto de escasez: se calcula con los cupos reales.
+                const libres = BLOQUES.filter(
+                  (b) => !ocupados.has(slotKey(d.fecha, b)),
+                ).length;
+                const completo = libres === 0;
                 return (
                   <OpcionBoton
                     key={d.fecha}
@@ -334,7 +344,16 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
                     }}
                   >
                     {d.etiqueta}
-                    {completo ? " — sin cupos" : ""}
+                    {completo ? (
+                      " — sin cupos"
+                    ) : libres === 1 ? (
+                      <span className="font-semibold text-anahuaca">
+                        {" "}
+                        — queda 1 cupo
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </OpcionBoton>
                 );
               })}

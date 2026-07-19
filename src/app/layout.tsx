@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Figtree, Source_Serif_4 } from "next/font/google";
 import { Analytics } from "@/components/Analytics";
+import { WebVitals } from "@/components/WebVitals";
 import { JsonLd, medicalBusinessJsonLd, personJsonLd } from "@/lib/seo";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 import "./globals.css";
@@ -72,6 +73,7 @@ export default function RootLayout({
         <JsonLd data={medicalBusinessJsonLd()} />
         {children}
         <Analytics />
+        <WebVitals />
       </body>
     </html>
   );
