@@ -1,3 +1,4 @@
+import { BarraAgendaMovil } from "@/components/BarraAgendaMovil";
 import { Footer } from "@/components/sections/Footer";
 import { Header } from "@/components/sections/Header";
 import { WhatsAppFAB } from "@/components/WhatsAppFAB";
@@ -11,6 +12,7 @@ export default function MarketingLayout({
       <main id="contenido">{children}</main>
       <Footer />
       <WhatsAppFAB />
+      <BarraAgendaMovil />
     </>
   );
 }

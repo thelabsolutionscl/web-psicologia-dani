@@ -28,8 +28,8 @@ export default function AgendaPage() {
         <BookingWizard pagoActivo={pagosConfigurados()} />
         <p className="mt-6 text-center font-sans text-sm text-quebrada/80">
           ¿Vives fuera de Chile? Los bloques están en hora de Chile
-          continental: revisa la equivalencia con tu zona horaria antes de
-          reservar.
+          continental: al elegir fecha y bloque verás automáticamente la
+          equivalencia con tu zona horaria.
         </p>
       </section>
     </>

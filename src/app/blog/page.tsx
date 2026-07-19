@@ -30,7 +30,7 @@ export default function BlogPage() {
         {posts.map((post) => (
           <Card key={post.slug}>
             <p className="font-sans text-sm font-semibold text-enlace">
-              {formatDate(post.date)}
+              {formatDate(post.date)} · {post.minutos} min de lectura
             </p>
             <h2 className="mt-2 font-display text-xl font-semibold tracking-tight">
               <Link href={`/blog/${post.slug}`} className="hover:text-enlace">

@@ -11,6 +11,7 @@ import {
 import { submitBooking, type BookingState } from "@/app/actions/booking";
 import { track } from "@/lib/analytics";
 import { AgregarACalendario } from "@/components/AgregarACalendario";
+import { HoraLocal } from "@/components/HoraLocal";
 import { Button } from "@/components/ui/Button";
 import { InputField, TextareaField } from "@/components/ui/Input";
 import {
@@ -218,6 +219,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
             </dd>
           </div>
         </dl>
+        <HoraLocal fecha={solicitud.fecha} bloque={solicitud.bloque} />
         <p className="mt-5 text-base text-quebrada/90">
           {resultado.ok
             ? `Te contactaré por WhatsApp o correo para confirmar la hora y coordinar el abono de ${PRECIOS.abonoReserva}. La hora queda tomada solo con la confirmación.`
@@ -380,6 +382,8 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
               );
             })}
           </div>
+          {/* Equivalencia horaria para quien agenda desde el extranjero */}
+          {fecha && bloque ? <HoraLocal fecha={fecha} bloque={bloque} /> : null}
           <div className="mt-6 flex flex-wrap gap-3">
             <Button
               type="button"

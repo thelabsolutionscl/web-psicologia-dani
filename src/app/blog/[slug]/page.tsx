@@ -2,11 +2,19 @@ import type { Metadata } from "next";
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 import { MDXRemote } from "next-mdx-remote/rsc";
+import { CompartirPost } from "@/components/CompartirPost";
 import { CtaFinal } from "@/components/sections/CtaFinal";
 import { ButtonLink } from "@/components/ui/Button";
+import { Card } from "@/components/ui/Card";
 import { VoiceLine } from "@/components/VoiceLine";
-import { formatDate, getAllPosts, getPost } from "@/lib/blog";
+import {
+  formatDate,
+  getAllPosts,
+  getPost,
+  getRelatedPosts,
+} from "@/lib/blog";
 import {
   absoluteUrl,
   articleJsonLd,
@@ -112,6 +120,9 @@ export default async function BlogPostPage({
   const post = getPost(slug);
   if (!post) notFound();
 
+  const relacionados = getRelatedPosts(slug);
+  const url = absoluteUrl(`/blog/${slug}`);
+
   return (
     <>
       <JsonLd
@@ -133,7 +144,8 @@ export default async function BlogPostPage({
       <article className="mx-auto max-w-2xl px-4 pt-14 pb-16 sm:pt-20">
         <header>
           <p className="font-sans text-sm font-semibold text-enlace">
-            {formatDate(post.meta.date)} · {SITE_NAME}
+            {formatDate(post.meta.date)} · {SITE_NAME} ·{" "}
+            {post.meta.minutos} min de lectura
           </p>
           <h1 className="mt-3 font-display text-3xl font-bold tracking-tight text-balance">
             {post.meta.title}
@@ -151,6 +163,8 @@ export default async function BlogPostPage({
           profesional.
         </p>
 
+        <CompartirPost titulo={post.meta.title} url={url} />
+
         <div className="mt-8 rounded-2xl border border-arena bg-superficie p-6">
           <p className="font-sans text-base font-bold text-quebrada">
             ¿Te hizo sentido este artículo?
@@ -166,6 +180,41 @@ export default async function BlogPostPage({
           </div>
         </div>
       </article>
+
+      {relacionados.length > 0 ? (
+        <section
+          aria-labelledby="relacionados-titulo"
+          className="mx-auto max-w-2xl px-4 pb-4"
+        >
+          <h2
+            id="relacionados-titulo"
+            className="font-display text-xl font-bold tracking-tight"
+          >
+            Seguir leyendo
+          </h2>
+          <div className="mt-5 grid gap-4 sm:grid-cols-2">
+            {relacionados.map((r) => (
+              <Card key={r.slug}>
+                <p className="font-sans text-sm font-semibold text-enlace">
+                  {formatDate(r.date)} · {r.minutos} min
+                </p>
+                <h3 className="mt-2 font-display text-lg font-semibold tracking-tight">
+                  <Link href={`/blog/${r.slug}`} className="hover:text-enlace">
+                    {r.title}
+                  </Link>
+                </h3>
+                <Link
+                  href={`/blog/${r.slug}`}
+                  className="mt-3 inline-flex min-h-11 items-center gap-2 font-sans text-sm font-semibold text-enlace hover:underline"
+                >
+                  Leer el artículo
+                  <ArrowRight className="size-4" aria-hidden="true" />
+                </Link>
+              </Card>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <CtaFinal />
     </>

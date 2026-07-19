@@ -16,11 +16,19 @@ export type PostMeta = {
   /** Ruta del servicio relacionado para el CTA de cierre. */
   service: string;
   serviceLabel: string;
+  /** Minutos de lectura estimados (≈200 palabras/min). */
+  minutos: number;
 };
 
 export type Post = { meta: PostMeta; content: string };
 
 const BLOG_DIR = path.join(process.cwd(), "content/blog");
+
+/** Minutos de lectura estimados: ~200 palabras/minuto, mínimo 1. */
+export function minutosLectura(texto: string): number {
+  const palabras = texto.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(palabras / 200));
+}
 
 function parsePost(fileName: string): Post {
   const slug = fileName.replace(/\.mdx$/, "");
@@ -44,6 +52,7 @@ function parsePost(fileName: string): Post {
       date: data.date,
       service: data.service,
       serviceLabel: data.serviceLabel,
+      minutos: minutosLectura(content),
     },
     content,
   };
@@ -62,6 +71,21 @@ export function getPost(slug: string): Post | null {
   const file = path.join(BLOG_DIR, `${slug}.mdx`);
   if (!fs.existsSync(file)) return null;
   return parsePost(`${slug}.mdx`);
+}
+
+/**
+ * Artículos relacionados con `slug`: primero los del mismo servicio y,
+ * si no alcanzan, se completa con los más recientes. Nunca incluye el
+ * propio post. Devuelve como máximo `limite`.
+ */
+export function getRelatedPosts(slug: string, limite = 2): PostMeta[] {
+  const actual = getPost(slug)?.meta;
+  const otros = getAllPosts().filter((p) => p.slug !== slug);
+  const mismoServicio = otros.filter(
+    (p) => actual?.service && p.service === actual.service,
+  );
+  const resto = otros.filter((p) => !mismoServicio.includes(p));
+  return [...mismoServicio, ...resto].slice(0, limite);
 }
 
 /** Fecha legible en español de Chile. */

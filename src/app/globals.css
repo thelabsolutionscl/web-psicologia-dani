@@ -97,6 +97,28 @@ body {
   background-color: var(--color-arena);
 }
 
+/* Barra CTA móvil: entrada suave desde abajo */
+.barra-cta-movil {
+  animation: barra-subir 0.25s ease-out;
+}
+
+@keyframes barra-subir {
+  from {
+    transform: translateY(1rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .barra-cta-movil {
+    animation: none;
+  }
+}
+
 /* "La línea de la voz": animación de dibujo sutil, estática si el
    usuario prefiere movimiento reducido */
 .voice-line path {

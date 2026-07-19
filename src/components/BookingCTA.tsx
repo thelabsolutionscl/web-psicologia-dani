@@ -10,14 +10,17 @@ export function BookingCTA({
   label = "Agenda tu hora",
   variant = "primary",
   className = "",
+  onClick,
 }: {
   label?: string;
   variant?: "primary" | "secondary" | "outline" | "invertido";
   className?: string;
+  /** Solo desde componentes cliente (p. ej. para registrar el clic). */
+  onClick?: React.MouseEventHandler<HTMLAnchorElement>;
 }) {
   const href = BOOKING_URL || "/agenda";
   return (
-    <ButtonLink href={href} variant={variant} className={className}>
+    <ButtonLink href={href} variant={variant} className={className} onClick={onClick}>
       {label}
     </ButtonLink>
   );
