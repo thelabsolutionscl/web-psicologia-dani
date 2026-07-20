@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { HeartHandshake, Puzzle, Sparkles } from "lucide-react";
+import { HeartHandshake, Puzzle, Sprout } from "lucide-react";
 import { BookingCTA } from "@/components/BookingCTA";
 import { CtaFinal } from "@/components/sections/CtaFinal";
 import { FaqSection } from "@/components/sections/FaqSection";
@@ -20,7 +20,10 @@ import {
 } from "@/lib/site";
 
 const description =
-  "Psicóloga y fonoaudióloga online en todo Chile: evaluaciones de autismo, TDAH y lenguaje, psicoterapia y acompañamiento especializado en duelo.";
+  "Psicóloga y fonoaudióloga clínica y educacional, online en todo Chile: psicoterapia, evaluación del neurodesarrollo, fonoaudiología, orientación familiar y bienestar integral.";
+
+const heroTitle =
+  "Evaluación y acompañamiento psicológico y fonoaudiológico, online en todo Chile";
 
 /* LQIP: miniatura 16×17 de daniela-hero.webp para evitar el salto de layout
    y mostrar un desenfoque mientras carga la imagen del hero (LCP). */
@@ -38,81 +41,115 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     locale: "es_CL",
     type: "website",
-    ...ogImages(
-      "Evaluación y acompañamiento del neurodesarrollo, online en todo Chile",
-    ),
+    ...ogImages(heroTitle),
   },
   twitter: {
     card: "summary_large_image",
     title: `${SITE_NAME} — Psicóloga y fonoaudióloga`,
     description,
-    ...ogImages(
-      "Evaluación y acompañamiento del neurodesarrollo, online en todo Chile",
-    ),
+    ...ogImages(heroTitle),
   },
 };
 
 const services = [
   {
-    title: "Evaluaciones diagnósticas",
+    title: "🧠 Psicoterapia",
     description:
-      "Autismo, TDAH y lenguaje, con instrumentos estandarizados e informe integral. Entrevistas online y una jornada presencial de evaluación en Arica.",
-    href: "/evaluaciones",
-    linkLabel: "Ver evaluaciones",
-  },
-  {
-    title: "Psicoterapia",
-    description:
-      "Atención online para niños, adolescentes y adultos: regulación emocional, ansiedad y acompañamiento en distintas etapas de la vida.",
+      "Acompañamiento psicológico para niñas, niños, adolescentes, adultos y familias, orientado al bienestar emocional, la regulación emocional, la ansiedad, el duelo, el trauma, el desarrollo personal y los desafíos de las distintas etapas de la vida, desde un enfoque integrativo basado en evidencia.",
     href: "/terapias",
-    linkLabel: "Ver terapias",
+    linkLabel: "Conocer más",
   },
   {
-    title: "Acompañamiento en duelo",
+    title: "🧩 Evaluación Diagnóstica y Neurodesarrollo",
     description:
-      "Un espacio especializado para transitar pérdidas significativas, con formación específica en duelo (certificaciones 2025).",
-    href: "/terapias#duelo",
+      "Evaluación integral de autismo, TDAH, dificultades del lenguaje, aprendizaje y otras condiciones del neurodesarrollo mediante entrevistas clínicas, observación e instrumentos estandarizados, favoreciendo un proceso diagnóstico ético, riguroso y respetuoso.",
+    href: "/evaluaciones",
+    linkLabel: "Conocer evaluaciones",
+  },
+  {
+    title: "💬 Fonoaudiología",
+    description:
+      "Evaluación e intervención en habla, lenguaje, comunicación y aprendizaje para niñas, niños, adolescentes y adultos, promoviendo el desarrollo de habilidades comunicativas en cada etapa de la vida.",
+    href: "/evaluaciones/lenguaje",
+    linkLabel: "Conocer más",
+  },
+  {
+    title: "👨‍👩‍👧 Orientación Familiar",
+    description:
+      "Acompañamiento a madres, padres y cuidadores para fortalecer los vínculos, la parentalidad positiva, el desarrollo infantil y la convivencia familiar.",
+    href: "/contacto",
+    linkLabel: "Conocer más",
+  },
+  {
+    title: "🤰 Psicología Perinatal y Lactancia",
+    description:
+      "Acompañamiento durante el embarazo, el posparto, la maternidad, la paternidad y la lactancia, promoviendo el bienestar emocional de la madre, el bebé y la familia.",
+    href: "/terapias",
+    linkLabel: "Conocer más",
+  },
+  {
+    title: "🌿 Terapia Integral y Desarrollo Personal",
+    description:
+      "Un espacio para el autoconocimiento y el crecimiento personal que integra herramientas de la Psicología Transpersonal, Terapia Gestalt, Programación Neurolingüística (PNL), Mindfulness, Radiestesia, Armonización de Chacras, Liberación Emocional, EFT Tapping y Flores de Bach, adaptadas a las necesidades y objetivos de cada persona.",
+    href: "/terapias",
+    linkLabel: "Conocer más",
+  },
+  {
+    title: "🎓 Capacitaciones y Asesorías",
+    description:
+      "Acompañamiento a equipos educativos y de salud en el desarrollo de prácticas inclusivas y neuroafirmativas, entregando herramientas basadas en evidencia para comprender, acompañar y potenciar el desarrollo de personas neurodivergentes y sus familias.",
+    href: "/contacto",
     linkLabel: "Conocer más",
   },
 ];
 
 const steps = [
   {
-    title: "Agenda online",
-    description: `Elige tu hora y resérvala con un abono de ${PRECIOS.abonoReserva}. El saldo se paga antes de la sesión.`,
+    title: "Agenda tu primera sesión",
+    description: `Reserva tu hora de manera online mediante un abono de ${PRECIOS.abonoReserva}, que se descontará del valor de la atención. Antes de la sesión recibirás un formulario para conocer el motivo de consulta, tus antecedentes y expectativas. Esto nos permitirá aprovechar mejor nuestro primer encuentro y definir juntos el camino más adecuado para tu proceso.`,
   },
   {
-    title: "Sesiones por videollamada",
+    title: "Evaluación integral y plan personalizado",
     description:
-      "Nos encontramos online desde cualquier lugar de Chile. Si tu evaluación lo requiere, coordinamos una jornada presencial en Arica.",
+      "Realizaremos una evaluación acorde a tus necesidades, integrando los aspectos emocionales, cognitivos, comunicativos y del neurodesarrollo cuando corresponda. Si es necesario, utilizaremos instrumentos estandarizados, cuestionarios y elaboraremos un plan de intervención personalizado. En aquellos casos que lo requieran, coordinaremos una jornada de evaluación presencial en Arica.",
   },
   {
-    title: "Devolución e informe online",
+    title: "Acompañamiento, seguimiento y orientación",
     description:
-      "Recibes la devolución y el informe en una sesión online, con orientaciones claras para los pasos siguientes.",
+      "Durante el proceso contarás con un acompañamiento cercano y personalizado. Cuando corresponda, entregaremos retroalimentación, informes y orientaciones para la familia, establecimientos educacionales u otros profesionales. Revisaremos juntos los avances, resolveremos tus dudas y ajustaremos el plan de trabajo según tus necesidades y objetivos.",
   },
 ];
 
 const faqItems: FaqItem[] = [
   {
-    question: "¿Atiendes solo online?",
+    question: "¿Las atenciones son solo online?",
     answer:
-      "Las entrevistas, sesiones de terapia y devoluciones son online, para todo Chile. Para las evaluaciones que requieren observación directa (como la de autismo) se coordina una jornada presencial en Arica, en Carlos Dittborn 0118.",
+      "La mayoría de las entrevistas, sesiones de terapia y devoluciones de resultados se realizan en modalidad online, lo que permite atender a personas de todo Chile. Cuando la evaluación requiere observación clínica directa —como en algunos procesos diagnósticos del neurodesarrollo— se coordina una jornada presencial en Arica, en Carlos Dittborn 0118.",
   },
   {
-    question: "¿Cómo reservo una hora?",
+    question: "¿Cómo puedo reservar una hora?",
     answer:
-      "Agendas online y reservas con un abono de $5.000; el saldo se paga antes de la sesión. Los cupos son limitados: hay dos horarios diarios, entre 17:30 y 19:30, hora de Chile continental.",
+      "Puedes agendar tu atención directamente desde la página web. La reserva se confirma con un abono de $5.000, el cual se descuenta del valor total de la sesión. El saldo debe estar pagado antes de la atención. Las atenciones se realizan en horarios previamente establecidos. Al momento de agendar podrás conocer los horarios disponibles según la agenda vigente.",
   },
   {
-    question: "¿La boleta sirve para reembolso?",
+    question: "¿Las boletas son reembolsables?",
     answer:
-      "Sí. Se entrega boleta de honorarios, reembolsable en Isapre y seguros complementarios según tu plan.",
+      "Sí. Se emite boleta de honorarios, la cual puede ser utilizada para solicitar reembolso en Isapres y seguros complementarios, de acuerdo con las condiciones y cobertura de tu plan de salud.",
   },
   {
-    question: "¿Desde qué edad se puede evaluar?",
+    question: "¿Desde qué edad realizas evaluaciones?",
     answer:
-      "La evaluación diagnóstica de autismo se realiza desde los 2 años, y también en adolescentes y adultos. Si tienes dudas sobre el caso de tu hijo o hija, escríbeme y lo conversamos.",
+      "Realizo evaluaciones del neurodesarrollo en niñas, niños, adolescentes y adultos, según el motivo de consulta. Si tienes dudas sobre cuál es la evaluación más adecuada para ti o para tu hijo o hija, estaré encantada de orientarte antes de agendar.",
+  },
+  {
+    question: "¿Qué incluye una evaluación diagnóstica?",
+    answer:
+      "Cada evaluación es personalizada e incluye entrevista clínica, aplicación de instrumentos cuando corresponde, análisis de resultados, devolución de la información y un informe escrito con orientaciones y recomendaciones.",
+  },
+  {
+    question: "¿Qué diferencia tiene mi forma de trabajar?",
+    answer:
+      "Mi formación como Psicóloga Clínica y Educacional y Fonoaudióloga me permite integrar los aspectos emocionales, cognitivos, comunicativos y del neurodesarrollo en un mismo proceso de evaluación y acompañamiento. Esto favorece una comprensión más amplia de cada persona y un plan de intervención verdaderamente personalizado.",
   },
 ];
 
@@ -123,15 +160,21 @@ export default function HomePage() {
       <section className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-10 px-4 pt-14 pb-16 lg:grid-cols-2 sm:pt-20">
         <div>
           <h1 className="font-display text-3xl font-bold tracking-tight text-balance break-words hyphens-auto sm:text-4xl">
-            Evaluación y acompañamiento del neurodesarrollo, online en todo
-            Chile
+            {heroTitle}
           </h1>
           <VoiceLine className="mt-4" />
           <p className="mt-5 text-xl text-enlace italic">“{TAGLINE}”</p>
           <p className="mt-4 max-w-prose text-lg text-quebrada/90">
-            Soy {SITE_NAME}, psicóloga y fonoaudióloga. Acompaño a niños,
-            niñas, adolescentes y adultos con una mirada que integra lo
-            comunicativo, lo cognitivo y lo emocional.
+            Soy {SITE_NAME}, Psicóloga y Fonoaudióloga Clínica y Educacional.
+            Creo profundamente que cada persona posee fortalezas y recursos para
+            crecer, sanar y desarrollarse cuando encuentra un espacio de escucha,
+            comprensión y acompañamiento.
+          </p>
+          <p className="mt-4 max-w-prose text-lg text-quebrada/90">
+            Desde un enfoque integrativo, basado en evidencia y centrado en la
+            persona, acompaño a niñas, niños, adolescentes, adultos y familias en
+            procesos orientados al bienestar emocional, la comunicación, el
+            neurodesarrollo, el aprendizaje y el crecimiento personal.
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
             <BookingCTA />
@@ -179,27 +222,21 @@ export default function HomePage() {
             Dos especialidades, una sola mirada
           </h2>
           <p className="mt-4 max-w-prose text-lg text-quebrada/90">
-            Psicóloga y fonoaudióloga en una misma profesional: eso cambia la
-            experiencia de evaluación y tratamiento de tu familia.
+            Psicología y Fonoaudiología en una misma profesional para comprender
+            a la persona desde una mirada integral y holística, integrando
+            aspectos emocionales, cognitivos, comunicativos, relacionales y del
+            neurodesarrollo para ofrecer una atención personalizada, basada en
+            evidencia y centrada en la persona.
           </p>
           <div className="mt-8 grid gap-6 md:grid-cols-3">
             <div className="flex gap-4">
               <Puzzle className="size-8 shrink-0 text-enlace" aria-hidden="true" />
               <p className="text-base text-quebrada/90">
                 <strong className="font-semibold text-quebrada">
-                  Evaluación completa sin peregrinar
+                  Evaluación integral:
                 </strong>{" "}
-                entre especialistas distintos, en un solo proceso coordinado.
-              </p>
-            </div>
-            <div className="flex gap-4">
-              <Sparkles className="size-8 shrink-0 text-enlace" aria-hidden="true" />
-              <p className="text-base text-quebrada/90">
-                <strong className="font-semibold text-quebrada">
-                  Un informe que integra
-                </strong>{" "}
-                lenguaje, cognición y emoción, útil como insumo para el colegio
-                y otros especialistas.
+                una comprensión global de los aspectos emocionales, cognitivos,
+                comunicativos y del neurodesarrollo.
               </p>
             </div>
             <div className="flex gap-4">
@@ -209,10 +246,21 @@ export default function HomePage() {
               />
               <p className="text-base text-quebrada/90">
                 <strong className="font-semibold text-quebrada">
-                  Tratamiento coordinado:
+                  Atención coordinada:
                 </strong>{" "}
-                lo comunicativo y lo emocional se trabajan juntos, no en
-                paralelo.
+                procesos de evaluación e intervención coherentes, con una mirada
+                integradora y, cuando es necesario, articulados con otros
+                profesionales de la salud y la educación.
+              </p>
+            </div>
+            <div className="flex gap-4">
+              <Sprout className="size-8 shrink-0 text-enlace" aria-hidden="true" />
+              <p className="text-base text-quebrada/90">
+                <strong className="font-semibold text-quebrada">
+                  Acompañamiento personalizado:
+                </strong>{" "}
+                intervenciones adaptadas a cada persona y familia, respetando su
+                historia, fortalezas y objetivos de desarrollo.
               </p>
             </div>
           </div>
@@ -225,9 +273,14 @@ export default function HomePage() {
           id="proceso-titulo"
           className="mb-8 font-display text-2xl font-bold tracking-tight"
         >
-          Cómo funciona
+          ¿Cómo será tu proceso de acompañamiento?
         </h2>
         <ProcessSteps steps={steps} />
+        <p className="mt-8 max-w-prose text-lg text-quebrada/90">
+          Te acompañaré paso a paso, con una atención cercana, personalizada y
+          basada en evidencia, para que siempre sepas qué esperar en cada etapa
+          del proceso.
+        </p>
       </section>
 
       {/* 5. TrustBar */}

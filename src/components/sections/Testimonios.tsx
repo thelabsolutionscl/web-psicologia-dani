@@ -13,19 +13,29 @@ export function Testimonios() {
   const destacado = TESTIMONIOS.length === 1;
 
   return (
-    <section aria-labelledby="testimonios-titulo" className="bg-superficie">
+    <section
+      id="testimonios"
+      aria-labelledby="testimonios-titulo"
+      className="scroll-mt-24 bg-superficie"
+    >
       <JsonLd data={reviewsJsonLd(TESTIMONIOS)} />
       <div className="mx-auto max-w-6xl px-4 py-16">
-        <div className="text-center">
+        <div className="mx-auto max-w-3xl text-center">
           <h2
             id="testimonios-titulo"
             className="font-display text-2xl font-bold tracking-tight"
           >
-            Lo que dicen quienes han vivido el proceso
+            Historias de quienes confiaron en este proceso
           </h2>
           <div className="mt-3 flex justify-center">
             <VoiceDivider />
           </div>
+          <p className="mt-4 text-base text-quebrada/90">
+            Cada proceso es único y cada experiencia también. Estos testimonios
+            fueron compartidos voluntariamente por personas que decidieron
+            compartir parte de su camino, con el propósito de acompañar a quienes
+            hoy buscan apoyo profesional.
+          </p>
         </div>
 
         <div
@@ -60,6 +70,12 @@ export function Testimonios() {
             </Card>
           ))}
         </div>
+
+        <p className="mx-auto mt-10 max-w-3xl text-center font-display text-lg font-semibold text-quebrada italic">
+          La confianza de quienes acompaño es uno de los pilares de mi trabajo.
+          Gracias a cada persona que ha permitido compartir una parte de su
+          historia para acompañar a otras en el inicio de su propio camino.
+        </p>
       </div>
     </section>
   );

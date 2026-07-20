@@ -1,10 +1,10 @@
-import { Award, Clock, Receipt, ShieldCheck } from "lucide-react";
+import { Award, Brain, Receipt, ShieldCheck } from "lucide-react";
 import { PREVISION, REGISTROS } from "@/lib/site";
 
 const items = [
+  { icon: Brain, text: "Psicóloga Clínica y Educacional · Fonoaudióloga" },
+  { icon: Award, text: "Más de 20 años de experiencia clínica y educacional" },
   { icon: ShieldCheck, text: REGISTROS.superintendencia },
-  { icon: Award, text: REGISTROS.colegioFono },
-  { icon: Clock, text: "+20 años de experiencia" },
   { icon: Receipt, text: PREVISION },
 ];
 

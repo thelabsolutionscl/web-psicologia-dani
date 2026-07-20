@@ -13,13 +13,13 @@ import {
 } from "@/lib/site";
 
 const footerNav = [
-  { href: "/evaluaciones", label: "Evaluaciones" },
-  { href: "/terapias", label: "Terapias" },
-  { href: "/radiestesia", label: "Radiestesia" },
-  { href: "/precios", label: "Precios" },
-  { href: "/atencion-online", label: "Atención online" },
   { href: "/sobre-mi", label: "Sobre mí" },
+  { href: "/evaluaciones", label: "Evaluaciones" },
+  { href: "/terapias", label: "Terapias y valores" },
+  { href: "/atencion-online", label: "Modalidad de atención" },
+  { href: "/agenda", label: "Reserva de horas" },
   { href: "/blog", label: "Blog" },
+  { href: "/#testimonios", label: "Testimonios" },
   { href: "/contacto", label: "Contacto" },
 ];
 
@@ -36,12 +36,11 @@ export function Footer() {
         <div>
           <p className="font-sans text-base font-bold">{SITE_NAME}</p>
           <p className="mt-1 font-sans text-sm text-enlace">
-            Psicóloga · Fonoaudióloga
+            Psicología · Fonoaudiología · Neurodesarrollo · Bienestar Integral
           </p>
           <p className="mt-3 text-base italic">“{TAGLINE}”</p>
           <ul className="mt-4 space-y-1 font-sans text-sm text-quebrada/80">
             <li>{REGISTROS.superintendencia}</li>
-            <li>{REGISTROS.colegioFono}</li>
             <li>{PREVISION}</li>
           </ul>
           <div className="mt-8 flex justify-center">

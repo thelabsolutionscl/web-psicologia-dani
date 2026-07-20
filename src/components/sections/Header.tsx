@@ -5,12 +5,14 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { SITE_NAME } from "@/lib/site";
 
 const navLinks = [
-  { href: "/evaluaciones", label: "Evaluaciones" },
-  { href: "/terapias", label: "Terapias" },
-  { href: "/radiestesia", label: "Radiestesia" },
-  { href: "/atencion-online", label: "Atención online" },
+  { href: "/", label: "Inicio" },
   { href: "/sobre-mi", label: "Sobre mí" },
+  { href: "/evaluaciones", label: "Evaluaciones" },
+  { href: "/terapias", label: "Terapias y valores" },
+  { href: "/atencion-online", label: "Modalidad de atención" },
+  { href: "/agenda", label: "Reserva de horas" },
   { href: "/blog", label: "Blog" },
+  { href: "/#testimonios", label: "Testimonios" },
   { href: "/contacto", label: "Contacto" },
 ];
 

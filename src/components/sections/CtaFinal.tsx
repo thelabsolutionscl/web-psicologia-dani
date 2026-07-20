@@ -4,7 +4,7 @@ import { TAGLINE } from "@/lib/site";
 
 /** CTA de cierre con el lema textual (sección 2: no parafrasearlo). */
 export function CtaFinal({
-  title = "Demos el primer paso",
+  title = "Demos el primer paso juntos",
   ctaLabel = "Agenda tu hora",
 }: {
   title?: string;
