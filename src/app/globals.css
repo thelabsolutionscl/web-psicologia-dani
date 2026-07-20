@@ -62,19 +62,24 @@
   }
 }
 
-/* En tema oscuro el logotipo (palabra "Daniela Kaiser" en vino) pierde
-   contraste sobre el fondo oscuro. Se le da un respaldo crema fijo para
-   mantener los colores de marca legibles, sin recolorear el logo. */
-:root[data-theme="dark"] .logo-marca {
-  background-color: #f6efe8;
-  padding: 0.2rem 0.55rem;
-  border-radius: 0.85rem;
+/* Logotipo según el tema: en oscuro se usa una versión con el texto en
+   crema (el isotipo se mantiene), en vez de un respaldo claro. El tema se
+   fija antes del primer pintado, así que no hay parpadeo. */
+.logo-oscuro {
+  display: none;
+}
+:root[data-theme="dark"] .logo-claro {
+  display: none;
+}
+:root[data-theme="dark"] .logo-oscuro {
+  display: block;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .logo-marca {
-    background-color: #f6efe8;
-    padding: 0.2rem 0.55rem;
-    border-radius: 0.85rem;
+  :root:not([data-theme="light"]) .logo-claro {
+    display: none;
+  }
+  :root:not([data-theme="light"]) .logo-oscuro {
+    display: block;
   }
 }
 

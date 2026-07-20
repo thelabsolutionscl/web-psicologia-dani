@@ -26,7 +26,7 @@ export function Header() {
         <Link
           href="/"
           aria-label={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-          className="logo-marca flex items-center"
+          className="flex items-center"
         >
           <Image
             src="/images/logo-horizontal.webp"
@@ -34,7 +34,14 @@ export function Header() {
             width={1473}
             height={436}
             priority
-            className="h-14 w-auto sm:h-20 lg:h-24"
+            className="logo-claro h-14 w-auto sm:h-20 lg:h-24"
+          />
+          <Image
+            src="/images/logo-horizontal-dark.webp"
+            alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
+            width={1473}
+            height={436}
+            className="logo-oscuro h-14 w-auto sm:h-20 lg:h-24"
           />
         </Link>
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
