@@ -33,16 +33,16 @@ export function Header() {
           <Image
             src="/images/logo-horizontal.webp"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-            width={1473}
-            height={436}
+            width={1490}
+            height={408}
             priority
             className="logo-claro h-14 w-auto sm:h-20 lg:h-24"
           />
           <Image
             src="/images/logo-horizontal-dark.webp"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-            width={1473}
-            height={436}
+            width={1490}
+            height={408}
             className="logo-oscuro h-14 w-auto sm:h-20 lg:h-24"
           />
         </Link>
