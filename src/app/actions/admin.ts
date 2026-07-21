@@ -18,6 +18,7 @@ import {
   crearReservaManual,
   eliminarBloqueo,
   ESTADOS_RESERVA,
+  guardarNotaReserva,
   setDiasAtencion,
   type EstadoReserva,
   type Reserva,
@@ -66,6 +67,16 @@ export async function actualizarEstadoReserva(formData: FormData): Promise<void>
   if (reserva && estado === "confirmada") {
     await avisarConfirmacion(reserva);
   }
+  revalidatePath("/admin");
+}
+
+/** Guarda la nota interna de una reserva desde el panel. */
+export async function guardarNotaAction(formData: FormData): Promise<void> {
+  await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const notas = String(formData.get("notas") ?? "");
+  if (!id) return;
+  await guardarNotaReserva(id, notas);
   revalidatePath("/admin");
 }
 

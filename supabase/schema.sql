@@ -16,7 +16,7 @@ create table if not exists public.reservas (
   -- con dos cupos diarios es preferible que Daniela libere manualmente
   -- una solicitud falsa a que dos familias tomen la misma hora.
   estado text not null default 'solicitada'
-    check (estado in ('solicitada', 'confirmada', 'pagada', 'realizada', 'cancelada'))
+    check (estado in ('solicitada', 'confirmada', 'pagada', 'realizada', 'cancelada', 'no_show'))
 );
 
 -- Regla anti doble reserva: un solo registro activo por fecha + bloque.
@@ -35,6 +35,15 @@ alter table public.reservas add column if not exists expira_at timestamptz;
 
 -- Recordatorio automático (cron 24 h antes): marca si ya se envió el aviso.
 alter table public.reservas add column if not exists recordado boolean not null default false;
+
+-- Nota interna del panel (privada, no se muestra al paciente).
+alter table public.reservas add column if not exists notas text not null default '';
+
+-- Migración del estado 'no_show' (no asistió) sobre tablas ya creadas:
+-- recrea el CHECK para admitir el nuevo valor sin perder datos.
+alter table public.reservas drop constraint if exists reservas_estado_check;
+alter table public.reservas add constraint reservas_estado_check
+  check (estado in ('solicitada', 'confirmada', 'pagada', 'realizada', 'cancelada', 'no_show'));
 
 -- RLS activado y sin políticas públicas: a esta tabla solo accede el
 -- servidor (Server Actions / route handlers) con la service role key.

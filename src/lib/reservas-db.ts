@@ -91,6 +91,7 @@ export const ESTADOS_RESERVA = [
   "pagada",
   "realizada",
   "cancelada",
+  "no_show",
 ] as const;
 
 export type EstadoReserva = (typeof ESTADOS_RESERVA)[number];
@@ -108,6 +109,8 @@ export type Reserva = {
   mensaje: string;
   estado: EstadoReserva;
   expira_at: string | null;
+  /** Nota interna de Daniela (no visible para el paciente). */
+  notas?: string | null;
 };
 
 export async function listReservas(): Promise<Reserva[]> {
@@ -178,6 +181,24 @@ export async function cambiarEstado(
     return null;
   }
   return data as Reserva;
+}
+
+/** Guarda (o borra) la nota interna de una reserva. */
+export async function guardarNotaReserva(
+  id: string,
+  notas: string,
+): Promise<boolean> {
+  const db = getClient();
+  if (!db) return false;
+  const { error } = await db
+    .from("reservas")
+    .update({ notas: notas.slice(0, 2000) })
+    .eq("id", id);
+  if (error) {
+    console.error("[admin] error guardando nota:", error.message);
+    return false;
+  }
+  return true;
 }
 
 /**
