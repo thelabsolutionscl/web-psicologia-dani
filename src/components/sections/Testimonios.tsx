@@ -1,7 +1,23 @@
+import { Star } from "lucide-react";
 import { JsonLd, reviewsJsonLd } from "@/lib/seo";
 import { Card } from "@/components/ui/Card";
 import { VoiceDivider } from "@/components/VoiceLine";
 import { TESTIMONIOS } from "@/lib/testimonios";
+
+/** Valoración de 5 estrellas (decorativa, en el color de marca). */
+function Estrellas() {
+  return (
+    <div
+      className="flex gap-0.5 text-enlace"
+      role="img"
+      aria-label="Valoración: 5 de 5 estrellas"
+    >
+      {Array.from({ length: 5 }, (_, i) => (
+        <Star key={i} className="size-4 fill-current" aria-hidden="true" />
+      ))}
+    </div>
+  );
+}
 
 /**
  * Sección de testimonios. Se oculta por completo mientras no haya
@@ -50,9 +66,10 @@ export function Testimonios() {
               key={t.cita}
               className={destacado ? "px-8 py-8" : "w-full sm:w-[22rem]"}
             >
+              <Estrellas />
               <p
                 aria-hidden="true"
-                className="font-display text-4xl leading-none text-enlace/50"
+                className="mt-2 font-display text-4xl leading-none text-enlace/50"
               >
                 “
               </p>
