@@ -98,35 +98,29 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   const [resultado, setResultado] = useState<BookingState | null>(null);
   const [enviando, startTransition] = useTransition();
 
-  // Accesibilidad: al cambiar de paso, llevar el foco al título del nuevo
-  // paso para que teclado y lectores de pantalla no queden en el body.
   const tituloRef = useRef<HTMLElement | null>(null);
   const setTituloRef = (el: HTMLElement | null) => {
     tituloRef.current = el;
   };
-  const yaMontado = useRef(false);
-  useEffect(() => {
-    if (!yaMontado.current) {
-      yaMontado.current = true;
-      return;
-    }
-    tituloRef.current?.focus();
-  }, [paso]);
 
-  // Al completar una selección, desplaza suavemente hasta el botón
-  // "Continuar" del paso para hacer más intuitivo el paso a paso
+  // Desplaza suavemente hasta un elemento del paso (botón "Continuar" o la
+  // tarjeta de confirmación) para hacer más intuitivo el paso a paso
   // (respeta prefers-reduced-motion).
   const continuarServicioRef = useRef<HTMLDivElement | null>(null);
   const continuarFechaRef = useRef<HTMLDivElement | null>(null);
+  const confirmacionRef = useRef<HTMLDivElement | null>(null);
   const scrollHaciaRef = useCallback(
-    (ref: RefObject<HTMLDivElement | null>) => {
+    (
+      ref: RefObject<HTMLElement | null>,
+      block: ScrollLogicalPosition = "center",
+    ) => {
       requestAnimationFrame(() => {
         const reduce = window.matchMedia?.(
           "(prefers-reduced-motion: reduce)",
         ).matches;
         ref.current?.scrollIntoView({
           behavior: reduce ? "auto" : "smooth",
-          block: "center",
+          block,
         });
       });
     },
@@ -139,6 +133,23 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
     },
     [scrollHaciaRef],
   );
+
+  // Accesibilidad: al cambiar de paso, llevar el foco al título del nuevo
+  // paso para que teclado y lectores de pantalla no queden en el body. En
+  // la confirmación además baja suavemente hasta la tarjeta.
+  const yaMontado = useRef(false);
+  useEffect(() => {
+    if (!yaMontado.current) {
+      yaMontado.current = true;
+      return;
+    }
+    if (paso === 3) {
+      tituloRef.current?.focus({ preventScroll: true });
+      scrollHaciaRef(confirmacionRef, "start");
+    } else {
+      tituloRef.current?.focus();
+    }
+  }, [paso, scrollHaciaRef]);
 
   /* Disponibilidad real desde /api/disponibilidad (cupos ya tomados);
      si el API no responde, se muestran los días locales sin descuento. */
@@ -237,7 +248,10 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   /* Paso 4: confirmación */
   if (paso === 3 && solicitud && resultado) {
     return (
-      <div className="rounded-2xl border border-arena bg-superficie p-6 sm:p-8">
+      <div
+        ref={confirmacionRef}
+        className="scroll-mt-24 rounded-2xl border border-arena bg-superficie p-6 sm:p-8"
+      >
         <Check className="size-10 text-enlace" aria-hidden="true" />
         <h2
           ref={setTituloRef}
