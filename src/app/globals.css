@@ -62,27 +62,6 @@
   }
 }
 
-/* Logotipo según el tema: en oscuro se usa una versión con el texto en
-   crema (el isotipo se mantiene), en vez de un respaldo claro. El tema se
-   fija antes del primer pintado, así que no hay parpadeo. */
-.logo-oscuro {
-  display: none;
-}
-:root[data-theme="dark"] .logo-claro {
-  display: none;
-}
-:root[data-theme="dark"] .logo-oscuro {
-  display: block;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .logo-claro {
-    display: none;
-  }
-  :root:not([data-theme="light"]) .logo-oscuro {
-    display: block;
-  }
-}
-
 body {
   background-color: var(--color-camanchaca);
   color: var(--color-quebrada);
