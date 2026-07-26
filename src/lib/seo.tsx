@@ -133,10 +133,9 @@ export function medicalBusinessJsonLd(): JsonLdData {
       "@type": "Place",
       name: ADDRESS.role,
       description:
-        "Sede de jornadas presenciales de evaluación. Las entrevistas, sesiones y devoluciones se realizan online en todo Chile.",
+        "Atención presencial de evaluación en Arica. Las entrevistas, sesiones y devoluciones se realizan online en todo Chile.",
       address: {
         "@type": "PostalAddress",
-        streetAddress: ADDRESS.street,
         addressLocality: ADDRESS.city,
         addressRegion: ADDRESS.region,
         addressCountry: ADDRESS.country,

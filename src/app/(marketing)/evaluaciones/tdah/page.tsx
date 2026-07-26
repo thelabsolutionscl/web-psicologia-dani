@@ -46,7 +46,7 @@ const config: EvaluacionConfig = {
     {
       title: "Aplicación de instrumentos",
       description:
-        "Cuestionarios y pruebas según la edad y el caso. Si el proceso requiere aplicación presencial, se coordina una jornada en Arica (Carlos Dittborn 0118).",
+        "Cuestionarios y pruebas según la edad y el caso. Si el proceso requiere aplicación presencial, se coordina una jornada en Arica.",
     },
     {
       title: "Análisis integral",
@@ -73,7 +73,7 @@ const config: EvaluacionConfig = {
     {
       question: "¿Tengo que viajar a Arica?",
       answer:
-        "Las entrevistas y la devolución son online. Algunas pruebas, según la edad y el caso, requieren aplicación presencial en una jornada en Arica (Carlos Dittborn 0118). Escríbeme por WhatsApp antes de reservar y te explico cómo sería el proceso para tu caso.",
+        "Las entrevistas y la devolución son online. Algunas pruebas, según la edad y el caso, requieren aplicación presencial en una jornada en Arica. Escríbeme por WhatsApp antes de reservar y te explico cómo sería el proceso para tu caso.",
     },
     {
       question: "¿Cuánto cuesta y cómo se paga?",

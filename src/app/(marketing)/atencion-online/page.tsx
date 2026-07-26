@@ -75,8 +75,9 @@ export default function AtencionOnlinePage() {
               </strong>{" "}
               la observación directa de algunas evaluaciones — como el ADOS-2
               en la evaluación de autismo — requiere estar en la misma sala.
-              Esa parte se concentra en una sola jornada en {ADDRESS.label},
-              la sede de jornadas presenciales de evaluación.
+              Esa parte se concentra en una sola jornada presencial en{" "}
+              {ADDRESS.city}; la dirección exacta se coordina de forma
+              privada al agendar.
             </p>
             <p>
               Este modelo híbrido no es una limitación: es la forma honesta de

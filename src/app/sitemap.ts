@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { absoluteUrl } from "@/lib/seo";
+import { SERVICIO_SLUGS } from "@/lib/servicios";
 
 const routes: Array<{ path: string; priority: number }> = [
   { path: "/", priority: 1 },
@@ -8,6 +9,15 @@ const routes: Array<{ path: string; priority: number }> = [
   { path: "/evaluaciones/autismo", priority: 0.9 },
   { path: "/evaluaciones/tdah", priority: 0.9 },
   { path: "/evaluaciones/lenguaje", priority: 0.9 },
+  { path: "/servicios", priority: 0.8 },
+  { path: "/servicios/psicoterapia", priority: 0.8 },
+  { path: "/servicios/perinatal", priority: 0.8 },
+  { path: "/servicios/fonoaudiologia", priority: 0.8 },
+  { path: "/servicios/ivadec", priority: 0.8 },
+  { path: "/servicios/orientacion-familiar", priority: 0.7 },
+  { path: "/servicios/primeros-auxilios", priority: 0.7 },
+  { path: "/servicios/capacitaciones", priority: 0.7 },
+  { path: "/servicios/terapia-integral", priority: 0.6 },
   { path: "/terapias", priority: 0.8 },
   { path: "/radiestesia", priority: 0.6 },
   { path: "/precios", priority: 0.8 },
@@ -19,6 +29,16 @@ const routes: Array<{ path: string; priority: number }> = [
   { path: "/privacidad", priority: 0.2 },
   { path: "/terminos", priority: 0.2 },
 ];
+
+// Aviso en build si algún servicio queda fuera del sitemap.
+const enSitemap = new Set(routes.map((r) => r.path));
+for (const slug of SERVICIO_SLUGS) {
+  if (!enSitemap.has(`/servicios/${slug}`)) {
+    throw new Error(
+      `El servicio "/servicios/${slug}" no está en el sitemap (src/app/sitemap.ts).`,
+    );
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = routes.map(({ path, priority }) => ({

@@ -7,7 +7,9 @@ import { SITE_NAME } from "@/lib/site";
 const navLinks = [
   { href: "/", label: "Inicio" },
   { href: "/sobre-mi", label: "Sobre mí" },
+  { href: "/servicios", label: "Servicios" },
   { href: "/evaluaciones", label: "Evaluaciones" },
+  { href: "/servicios/perinatal", label: "Materna" },
   { href: "/terapias", label: "Terapias y valores" },
   { href: "/atencion-online", label: "Modalidad de atención" },
   { href: "/agenda", label: "Reserva de horas" },
