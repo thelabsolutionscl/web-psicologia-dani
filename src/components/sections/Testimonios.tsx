@@ -89,9 +89,9 @@ export function Testimonios() {
         </div>
 
         <p className="mx-auto mt-10 max-w-3xl text-center font-display text-lg font-semibold text-quebrada italic">
-          La confianza de quienes acompaño es uno de los pilares de mi trabajo.
+          “La confianza de quienes acompaño es uno de los pilares de mi trabajo.
           Gracias a cada persona que ha permitido compartir una parte de su
-          historia para acompañar a otras en el inicio de su propio camino.
+          historia para acompañar a otras en el inicio de su propio camino.”
         </p>
       </div>
     </section>

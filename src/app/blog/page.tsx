@@ -92,12 +92,13 @@ export default function BlogPage() {
       <section className="mx-auto max-w-3xl px-4 pb-10">
         <Card className="bg-superficie">
           <p className="text-base text-quebrada/90">
-            Creo que cuando comprendemos lo que nos ocurre, disminuye la
+            “Creo que cuando comprendemos lo que nos ocurre, disminuye la
             incertidumbre y aparecen nuevas posibilidades para avanzar. Este
             espacio nace para compartir información clara y confiable,{" "}
             <strong className="font-semibold text-quebrada">
               escrita desde la experiencia clínica y una mirada humana.
             </strong>
+            ”
           </p>
         </Card>
       </section>
