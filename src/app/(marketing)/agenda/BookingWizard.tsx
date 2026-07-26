@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   useTransition,
+  type RefObject,
 } from "react";
 import { submitBooking, type BookingState } from "@/app/actions/booking";
 import { track } from "@/lib/analytics";
@@ -112,21 +113,32 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
     tituloRef.current?.focus();
   }, [paso]);
 
-  // Al elegir un servicio, desplaza suavemente hasta el botón "Continuar"
-  // para hacer más intuitivo el paso a paso (respeta prefers-reduced-motion).
+  // Al completar una selección, desplaza suavemente hasta el botón
+  // "Continuar" del paso para hacer más intuitivo el paso a paso
+  // (respeta prefers-reduced-motion).
   const continuarServicioRef = useRef<HTMLDivElement | null>(null);
-  const seleccionarServicio = useCallback((s: ServiceOption) => {
-    setServicio(s);
-    requestAnimationFrame(() => {
-      const reduce = window.matchMedia?.(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
-      continuarServicioRef.current?.scrollIntoView({
-        behavior: reduce ? "auto" : "smooth",
-        block: "center",
+  const continuarFechaRef = useRef<HTMLDivElement | null>(null);
+  const scrollHaciaRef = useCallback(
+    (ref: RefObject<HTMLDivElement | null>) => {
+      requestAnimationFrame(() => {
+        const reduce = window.matchMedia?.(
+          "(prefers-reduced-motion: reduce)",
+        ).matches;
+        ref.current?.scrollIntoView({
+          behavior: reduce ? "auto" : "smooth",
+          block: "center",
+        });
       });
-    });
-  }, []);
+    },
+    [],
+  );
+  const seleccionarServicio = useCallback(
+    (s: ServiceOption) => {
+      setServicio(s);
+      scrollHaciaRef(continuarServicioRef);
+    },
+    [scrollHaciaRef],
+  );
 
   /* Disponibilidad real desde /api/disponibilidad (cupos ya tomados);
      si el API no responde, se muestran los días locales sin descuento. */
@@ -160,6 +172,20 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   }, [cargarDisponibilidad]);
 
   const diaSeleccionado = dias.find((d) => d.fecha === fecha);
+
+  // Paso 2: al quedar elegidos fecha y bloque, baja al botón "Continuar".
+  const seleccionarFecha = (f: string) => {
+    setFecha(f);
+    if (bloque && ocupados.has(slotKey(f, bloque))) {
+      setBloque(null); // el bloque ya no está libre en la nueva fecha
+    } else if (bloque) {
+      scrollHaciaRef(continuarFechaRef);
+    }
+  };
+  const seleccionarBloque = (b: string) => {
+    setBloque(b);
+    if (fecha) scrollHaciaRef(continuarFechaRef);
+  };
 
   const solicitud: BookingRequest | null =
     servicio && fecha && bloque
@@ -354,12 +380,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
                     key={d.fecha}
                     seleccionado={fecha === d.fecha}
                     deshabilitado={completo}
-                    onClick={() => {
-                      setFecha(d.fecha);
-                      if (bloque && ocupados.has(slotKey(d.fecha, bloque))) {
-                        setBloque(null);
-                      }
-                    }}
+                    onClick={() => seleccionarFecha(d.fecha)}
                   >
                     {d.etiqueta}
                     {completo ? (
@@ -386,7 +407,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
                   type="button"
                   aria-pressed={bloque === b}
                   disabled={tomado}
-                  onClick={() => setBloque(b)}
+                  onClick={() => seleccionarBloque(b)}
                   className={`inline-flex min-h-11 items-center rounded-full border px-5 font-sans text-base font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                     bloque === b
                       ? "border-pacifico bg-pacifico text-white"
@@ -400,7 +421,10 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
           </div>
           {/* Equivalencia horaria para quien agenda desde el extranjero */}
           {fecha && bloque ? <HoraLocal fecha={fecha} bloque={bloque} /> : null}
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div
+            className="mt-6 flex flex-wrap gap-3 scroll-mt-24"
+            ref={continuarFechaRef}
+          >
             <Button
               type="button"
               variant="outline"
