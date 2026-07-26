@@ -1,12 +1,12 @@
 "use client";
 
-import { Check, Copy, MessageCircle, Phone } from "lucide-react";
-import { useState } from "react";
+import { Mail, MessageCircle, Phone } from "lucide-react";
 import { telANumeroWa } from "./estados";
 
 /**
  * Acciones de contacto de un toque para cada reserva: escribir por
- * WhatsApp (mensaje ya armado), llamar y copiar el correo. Pensado para
+ * WhatsApp (mensaje ya armado), llamar y enviar un correo (abre el cliente
+ * de correo con asunto y cuerpo prellenados vía mailto:). Pensado para
  * usar el panel desde el celular.
  */
 export function ContactoRapido({
@@ -24,22 +24,16 @@ export function ContactoRapido({
   fecha: string;
   bloque: string;
 }) {
-  const [copiado, setCopiado] = useState(false);
+  const primerNombre = nombre.split(" ")[0];
 
-  const mensaje = `Hola ${nombre.split(" ")[0]}, te escribo de parte de Daniela Kaiser 🌿 para coordinar tu hora de ${servicio} el ${fecha} a las ${bloque} h. ¿La confirmamos?`;
+  const mensaje = `Hola ${primerNombre}, te escribo de parte de Daniela Kaiser 🌿 para coordinar tu hora de ${servicio} el ${fecha} a las ${bloque} h. ¿La confirmamos?`;
   const wa = telefono
     ? `https://wa.me/${telANumeroWa(telefono)}?text=${encodeURIComponent(mensaje)}`
     : null;
 
-  async function copiar() {
-    try {
-      await navigator.clipboard.writeText(correo);
-      setCopiado(true);
-      setTimeout(() => setCopiado(false), 2000);
-    } catch {
-      /* sin portapapeles: queda el enlace mailto */
-    }
-  }
+  const asuntoCorreo = `Tu hora de ${servicio} — Daniela Kaiser`;
+  const cuerpoCorreo = `Hola ${primerNombre}:\n\nTe escribo de parte de Daniela Kaiser para coordinar tu hora de ${servicio} el ${fecha} a las ${bloque} h. ¿La confirmamos?\n\nUn saludo,\nDaniela`;
+  const mailto = `mailto:${correo}?subject=${encodeURIComponent(asuntoCorreo)}&body=${encodeURIComponent(cuerpoCorreo)}`;
 
   const chip =
     "inline-flex min-h-11 items-center gap-1.5 rounded-full border border-arena px-3 font-sans text-sm font-semibold text-quebrada/80 transition-colors hover:border-pacifico/50 hover:text-enlace";
@@ -59,14 +53,10 @@ export function ContactoRapido({
         </a>
       ) : null}
       {correo ? (
-        <button type="button" onClick={copiar} className={chip}>
-          {copiado ? (
-            <Check className="size-4 text-enlace" aria-hidden="true" />
-          ) : (
-            <Copy className="size-4" aria-hidden="true" />
-          )}
-          {copiado ? "¡Copiado!" : "Copiar correo"}
-        </button>
+        <a href={mailto} className={chip}>
+          <Mail className="size-4" aria-hidden="true" />
+          Enviar correo
+        </a>
       ) : null}
     </div>
   );
