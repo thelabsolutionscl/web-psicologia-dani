@@ -112,6 +112,22 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
     tituloRef.current?.focus();
   }, [paso]);
 
+  // Al elegir un servicio, desplaza suavemente hasta el botón "Continuar"
+  // para hacer más intuitivo el paso a paso (respeta prefers-reduced-motion).
+  const continuarServicioRef = useRef<HTMLDivElement | null>(null);
+  const seleccionarServicio = useCallback((s: ServiceOption) => {
+    setServicio(s);
+    requestAnimationFrame(() => {
+      const reduce = window.matchMedia?.(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      continuarServicioRef.current?.scrollIntoView({
+        behavior: reduce ? "auto" : "smooth",
+        block: "center",
+      });
+    });
+  }, []);
+
   /* Disponibilidad real desde /api/disponibilidad (cupos ya tomados);
      si el API no responde, se muestran los días locales sin descuento. */
   const [dias, setDias] = useState<DayOption[]>([]);
@@ -272,7 +288,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
               <OpcionBoton
                 key={s.id}
                 seleccionado={servicio?.id === s.id}
-                onClick={() => setServicio(s)}
+                onClick={() => seleccionarServicio(s)}
               >
                 <span className="block font-semibold">{s.nombre}</span>
                 <span className="mt-1 block text-sm text-quebrada/80">
@@ -284,7 +300,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
               </OpcionBoton>
             ))}
           </div>
-          <div className="mt-6">
+          <div className="mt-6 scroll-mt-24" ref={continuarServicioRef}>
             <Button
               type="button"
               disabled={!servicio}
