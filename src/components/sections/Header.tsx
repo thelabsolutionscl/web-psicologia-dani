@@ -42,14 +42,14 @@ export function Header() {
             width={1546}
             height={480}
             priority
-            className="logo-claro h-20 w-auto sm:h-32 lg:h-36"
+            className="logo-claro h-14 w-auto sm:h-20 lg:h-24"
           />
           <Image
             src="/images/logo-horizontal-dark.webp"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
             width={1546}
             height={480}
-            className="logo-oscuro h-20 w-auto sm:h-32 lg:h-36"
+            className="logo-oscuro h-14 w-auto sm:h-20 lg:h-24"
           />
         </Link>
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
