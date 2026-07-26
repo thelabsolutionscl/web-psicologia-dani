@@ -7,7 +7,6 @@ import {
   REGISTROS,
   SITE_NAME,
   SOCIAL,
-  TAGLINE,
   WHATSAPP_MESSAGES,
   whatsappHref,
 } from "@/lib/site";
@@ -40,7 +39,6 @@ export function Footer() {
           <p className="mt-1 font-sans text-sm text-enlace">
             Psicología · Fonoaudiología · Neurodesarrollo · Bienestar Integral
           </p>
-          <p className="mt-3 text-base italic">“{TAGLINE}”</p>
           <ul className="mt-4 space-y-1 font-sans text-sm text-quebrada/80">
             <li>{REGISTROS.superintendencia}</li>
             <li>{PREVISION}</li>
