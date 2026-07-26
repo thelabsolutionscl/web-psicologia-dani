@@ -16,12 +16,15 @@ import { HORARIO, PRECIOS, whatsappHref } from "@/lib/site";
 export type ServiceOption = {
   id: string;
   nombre: string;
-  tipo: "evaluacion" | "terapia" | "bienestar";
+  tipo: "evaluacion" | "terapia" | "bienestar" | "capacitacion";
   /** Qué se reserva exactamente en este paso. */
   detalle: string;
-  /** Información de precio visible (regla 10.3: evaluaciones como proceso). */
+  /** Información de precio visible. */
   precio: string;
 };
+
+const PRECIO_SESION = `${PRECIOS.sesion} por sesión`;
+const PRECIO_EVAL = `Primera sesión ${PRECIOS.evaluacionPrimeraSesion} · valor final según el proceso`;
 
 export const SERVICIOS: ServiceOption[] = [
   {
@@ -29,38 +32,36 @@ export const SERVICIOS: ServiceOption[] = [
     nombre: "Evaluación de autismo",
     tipo: "evaluacion",
     detalle:
-      "Reservas la primera entrevista online del proceso completo (3 a 4 sesiones + jornada presencial en Arica).",
-    precio: "Proceso completo — valor por confirmar",
+      "Reservas la primera sesión (entrevista y orientación); la jornada presencial de observación se coordina en Arica.",
+    precio: PRECIO_EVAL,
   },
   {
     id: "evaluacion-tdah",
     nombre: "Evaluación de TDAH",
     tipo: "evaluacion",
-    detalle:
-      "Reservas la primera entrevista online del proceso completo (3 a 4 sesiones).",
-    precio: "Proceso completo — valor por confirmar",
+    detalle: "Reservas la primera sesión (entrevista y orientación).",
+    precio: PRECIO_EVAL,
   },
   {
     id: "evaluacion-lenguaje",
     nombre: "Evaluación de lenguaje",
     tipo: "evaluacion",
-    detalle:
-      "Reservas la primera entrevista online del proceso completo (3 a 4 sesiones).",
-    precio: "Proceso completo — valor por confirmar",
+    detalle: "Reservas la primera sesión (entrevista y orientación).",
+    precio: PRECIO_EVAL,
   },
   {
     id: "terapia-infanto-juvenil",
     nombre: "Psicoterapia infanto-juvenil",
     tipo: "terapia",
     detalle: "Sesión online de 60 minutos para niños, niñas y adolescentes.",
-    precio: `${PRECIOS.sesionTerapia} por sesión`,
+    precio: PRECIO_SESION,
   },
   {
     id: "terapia-adultos",
     nombre: "Psicoterapia de adultos",
     tipo: "terapia",
     detalle: "Sesión online de 60 minutos.",
-    precio: `${PRECIOS.sesionTerapia} por sesión`,
+    precio: PRECIO_SESION,
   },
   {
     id: "duelo",
@@ -68,7 +69,63 @@ export const SERVICIOS: ServiceOption[] = [
     tipo: "terapia",
     detalle:
       "Sesión online de 60 minutos, para adultos o infanto-juvenil con su familia.",
-    precio: `${PRECIOS.sesionTerapia} por sesión`,
+    precio: PRECIO_SESION,
+  },
+  {
+    id: "fonoaudiologia",
+    nombre: "Fonoaudiología",
+    tipo: "terapia",
+    detalle:
+      "Sesión online de habla, lenguaje, comunicación o aprendizaje para niños, adolescentes y adultos.",
+    precio: PRECIO_SESION,
+  },
+  {
+    id: "orientacion-familiar",
+    nombre: "Orientación familiar",
+    tipo: "terapia",
+    detalle:
+      "Sesión online de acompañamiento a madres, padres y cuidadores en parentalidad y convivencia.",
+    precio: PRECIO_SESION,
+  },
+  {
+    id: "perinatal",
+    nombre: "Psicología perinatal y lactancia materna",
+    tipo: "terapia",
+    detalle:
+      "Sesión online de acompañamiento en embarazo, posparto, maternidad, paternidad y lactancia.",
+    precio: PRECIO_SESION,
+  },
+  {
+    id: "terapia-integral",
+    nombre: "Terapia integral y desarrollo personal",
+    tipo: "bienestar",
+    detalle:
+      "Sesión online de acompañamiento complementario de bienestar y crecimiento personal.",
+    precio: PRECIO_SESION,
+  },
+  {
+    id: "primeros-auxilios",
+    nombre: "Primeros auxilios psicológicos",
+    tipo: "terapia",
+    detalle:
+      "Sesión online de contención y apoyo en situaciones de crisis, duelo o eventos estresantes.",
+    precio: PRECIO_SESION,
+  },
+  {
+    id: "ivadec",
+    nombre: "IVADEC-CIF (MINSAL–COMPIN)",
+    tipo: "evaluacion",
+    detalle:
+      "Reservas una orientación inicial; el IVADEC-CIF se cobra como valor único según la opción que elijas.",
+    precio: `Opción 1 ${PRECIOS.ivadec.opcion1} · Opción 2 ${PRECIOS.ivadec.opcion2} (valor único)`,
+  },
+  {
+    id: "capacitaciones",
+    nombre: "Capacitaciones y asesorías",
+    tipo: "capacitacion",
+    detalle:
+      "Reservas la primera reunión (diagnóstico / levantamiento de necesidades) para equipos e instituciones.",
+    precio: `Primera reunión ${PRECIOS.capacitacionPrimeraReunion}`,
   },
   {
     id: "radiestesia",
@@ -76,7 +133,7 @@ export const SERVICIOS: ServiceOption[] = [
     tipo: "bienestar",
     detalle:
       "Sesión individual de bienestar; una práctica complementaria, distinta del acompañamiento clínico.",
-    precio: "Valor por confirmar",
+    precio: PRECIO_SESION,
   },
 ];
 

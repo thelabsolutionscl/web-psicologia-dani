@@ -29,14 +29,18 @@ export const WHATSAPP_NUMBER =
 /** Teléfono profesional en formato legible (NAP del footer). */
 export const PHONE_DISPLAY = "+56 9 6682 8311";
 
-/** Sede de jornadas presenciales de evaluación (única dirección publicable). */
+/**
+ * Ubicación de las jornadas presenciales de evaluación. Por decisión de
+ * Daniela (ajustes 2026) NO se publica la dirección exacta: se comunica
+ * solo a nivel de ciudad ("atención presencial en Arica"), y la dirección
+ * se coordina de forma privada al agendar.
+ */
 export const ADDRESS = {
-  street: "Carlos Dittborn 0118",
   city: "Arica",
   region: "Arica y Parinacota",
   country: "CL",
-  label: "Carlos Dittborn 0118, Arica",
-  role: "Sede de jornadas presenciales de evaluación",
+  label: "Arica",
+  role: "Atención presencial de evaluación en Arica",
 } as const;
 
 export const SOCIAL = {
@@ -60,20 +64,38 @@ export const HORARIO = {
   dias: "[PLACEHOLDER: confirmar días de la semana]",
 } as const;
 
-/** Precios públicos. Las evaluaciones se cobran como proceso completo
- *  (regla 10.3) y su precio sigue pendiente. */
+/** Precios públicos (aranceles definidos por Daniela, ajustes 2026).
+ *  Todas las sesiones/primeras entrevistas valen lo mismo; las
+ *  evaluaciones y el IVADEC se informan según su proceso. */
 export const PRECIOS = {
-  sesionTerapia: "$40.000",
+  /** Valor por sesión de las atenciones clínicas (todas $45.000). */
+  sesion: "$45.000",
+  /** Alias histórico de `sesion` para no romper componentes previos. */
+  sesionTerapia: "$45.000",
   abonoReserva: "$5.000",
-  radiestesia: "[PLACEHOLDER: precio de la sesión de radiestesia]",
+  radiestesia: "$45.000",
+  /** Primera sesión (entrevista y orientación) de las evaluaciones
+   *  diagnósticas del neurodesarrollo; el valor final depende de los
+   *  instrumentos que requiera cada caso (se informa previamente). */
+  evaluacionPrimeraSesion: "$45.000",
   evaluacionProceso:
-    "[PLACEHOLDER: precio del proceso completo — lo define Daniela]",
-  /** Precio por evaluación (proceso completo). Reemplazar cada
-   *  placeholder cuando Daniela defina los valores. */
+    "Primera sesión $45.000 · valor final según el proceso de evaluación",
+  /** IVADEC-CIF (Instrumento de Valoración y Desempeño en Comunidad). */
+  ivadec: {
+    /** Solo evaluación e informe (el consultante lo presenta ante COMPIN). */
+    opcion1: "$60.000",
+    /** Evaluación + acompañamiento y presentación ante COMPIN. */
+    opcion2: "$100.000",
+  },
+  /** Primera reunión de capacitaciones y asesorías (diagnóstico /
+   *  levantamiento de necesidades); las siguientes se ajustan al alcance. */
+  capacitacionPrimeraReunion: "$45.000",
+  /** Precio por evaluación (primera sesión). Se mantienen las claves por
+   *  compatibilidad con las páginas de producto. */
   evaluaciones: {
-    autismo: "[PLACEHOLDER: precio proceso completo — autismo]",
-    tdah: "[PLACEHOLDER: precio proceso completo — TDAH]",
-    lenguaje: "[PLACEHOLDER: precio proceso completo — lenguaje]",
+    autismo: "$45.000",
+    tdah: "$45.000",
+    lenguaje: "$45.000",
   },
 } as const;
 
@@ -107,6 +129,12 @@ export const MOTIVOS_CONTACTO = [
   "Psicoterapia infanto-juvenil",
   "Psicoterapia de adultos",
   "Acompañamiento en duelo",
-  "Sesión de radiestesia",
+  "Fonoaudiología",
+  "Orientación familiar",
+  "Psicología perinatal y lactancia materna",
+  "Terapia integral y desarrollo personal",
+  "Primeros auxilios psicológicos",
+  "IVADEC-CIF (evaluación de discapacidad)",
+  "Capacitaciones y asesorías",
   "Otro motivo",
 ] as const;

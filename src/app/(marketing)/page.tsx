@@ -56,7 +56,7 @@ const services = [
     title: "🧠 Psicoterapia",
     description:
       "Acompañamiento psicológico para niñas, niños, adolescentes, adultos y familias, orientado al bienestar emocional, la regulación emocional, la ansiedad, el duelo, el trauma, el desarrollo personal y los desafíos de las distintas etapas de la vida, desde un enfoque integrativo basado en evidencia.",
-    href: "/terapias",
+    href: "/servicios/psicoterapia",
     linkLabel: "Conocer más",
   },
   {
@@ -64,41 +64,55 @@ const services = [
     description:
       "Evaluación integral de autismo, TDAH, dificultades del lenguaje, aprendizaje y otras condiciones del neurodesarrollo mediante entrevistas clínicas, observación e instrumentos estandarizados, favoreciendo un proceso diagnóstico ético, riguroso y respetuoso.",
     href: "/evaluaciones",
-    linkLabel: "Conocer evaluaciones",
+    linkLabel: "Conocer más",
   },
   {
     title: "💬 Fonoaudiología",
     description:
       "Evaluación e intervención en habla, lenguaje, comunicación y aprendizaje para niñas, niños, adolescentes y adultos, promoviendo el desarrollo de habilidades comunicativas en cada etapa de la vida.",
-    href: "/evaluaciones/lenguaje",
+    href: "/servicios/fonoaudiologia",
     linkLabel: "Conocer más",
   },
   {
     title: "👨‍👩‍👧 Orientación Familiar",
     description:
       "Acompañamiento a madres, padres y cuidadores para fortalecer los vínculos, la parentalidad positiva, el desarrollo infantil y la convivencia familiar.",
-    href: "/contacto",
+    href: "/servicios/orientacion-familiar",
     linkLabel: "Conocer más",
   },
   {
-    title: "🤰 Psicología Perinatal y Lactancia",
+    title: "🤰 Psicología Perinatal y Lactancia Materna",
     description:
       "Acompañamiento durante el embarazo, el posparto, la maternidad, la paternidad y la lactancia, promoviendo el bienestar emocional de la madre, el bebé y la familia.",
-    href: "/terapias",
+    href: "/servicios/perinatal",
     linkLabel: "Conocer más",
   },
   {
     title: "🌿 Terapia Integral y Desarrollo Personal",
     description:
       "Un espacio para el autoconocimiento y el crecimiento personal que integra herramientas de la Psicología Transpersonal, Terapia Gestalt, Programación Neurolingüística (PNL), Mindfulness, Radiestesia, Armonización de Chacras, Liberación Emocional, EFT Tapping y Flores de Bach, adaptadas a las necesidades y objetivos de cada persona.",
-    href: "/terapias",
+    href: "/servicios/terapia-integral",
+    linkLabel: "Conocer más",
+  },
+  {
+    title: "🫶 Primeros Auxilios Psicológicos",
+    description:
+      "Contención emocional y apoyo inmediato en situaciones de crisis, duelo, eventos traumáticos o emergencias psicosociales, con herramientas prácticas basadas en evidencia y un enfoque humano.",
+    href: "/servicios/primeros-auxilios",
+    linkLabel: "Conocer más",
+  },
+  {
+    title: "📋 IVADEC-CIF (MINSAL – COMPIN)",
+    description:
+      "Profesional certificada para aplicar el Instrumento de Valoración y Desempeño en Comunidad (IVADEC-CIF) y elaborar el informe técnico para el proceso de certificación de discapacidad ante COMPIN.",
+    href: "/servicios/ivadec",
     linkLabel: "Conocer más",
   },
   {
     title: "🎓 Capacitaciones y Asesorías",
     description:
       "Acompañamiento a equipos educativos y de salud en el desarrollo de prácticas inclusivas y neuroafirmativas, entregando herramientas basadas en evidencia para comprender, acompañar y potenciar el desarrollo de personas neurodivergentes y sus familias.",
-    href: "/contacto",
+    href: "/servicios/capacitaciones",
     linkLabel: "Conocer más",
   },
 ];
@@ -124,7 +138,7 @@ const faqItems: FaqItem[] = [
   {
     question: "¿Las atenciones son solo online?",
     answer:
-      "La mayoría de las entrevistas, sesiones de terapia y devoluciones de resultados se realizan en modalidad online, lo que permite atender a personas de todo Chile. Cuando la evaluación requiere observación clínica directa —como en algunos procesos diagnósticos del neurodesarrollo— se coordina una jornada presencial en Arica, en Carlos Dittborn 0118.",
+      "La mayoría de las entrevistas, sesiones de terapia y devoluciones de resultados se realizan en modalidad online, lo que permite atender a personas de todo Chile. Cuando la evaluación requiere observación clínica directa —como en algunos procesos diagnósticos del neurodesarrollo— se coordina una jornada presencial en Arica.",
   },
   {
     question: "¿Cómo puedo reservar una hora?",

@@ -14,7 +14,9 @@ import {
 
 const footerNav = [
   { href: "/sobre-mi", label: "Sobre mí" },
+  { href: "/servicios", label: "Servicios" },
   { href: "/evaluaciones", label: "Evaluaciones" },
+  { href: "/servicios/perinatal", label: "Psicología perinatal (Materna)" },
   { href: "/terapias", label: "Terapias y valores" },
   { href: "/atencion-online", label: "Modalidad de atención" },
   { href: "/agenda", label: "Reserva de horas" },
@@ -73,9 +75,7 @@ export function Footer() {
             <li className="py-2">
               Atención online en todo Chile.
               <br />
-              Jornadas presenciales de evaluación:
-              <br />
-              {ADDRESS.label}
+              Atención presencial de evaluación en {ADDRESS.city}.
             </li>
             <li className="flex gap-6">
               <a

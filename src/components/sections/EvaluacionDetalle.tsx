@@ -12,7 +12,7 @@ import {
   serviceJsonLd,
   type FaqItem,
 } from "@/lib/seo";
-import { PRECIOS, PREVISION, siPendiente } from "@/lib/site";
+import { PRECIOS, PREVISION } from "@/lib/site";
 
 export type EvaluacionConfig = {
   path: string;
@@ -130,15 +130,19 @@ export function EvaluacionDetalle({ config }: { config: EvaluacionConfig }) {
             id="precio-titulo"
             className="font-display text-2xl font-bold tracking-tight"
           >
-            Valor del proceso completo
+            Valor de la evaluación
           </h2>
-          <p className="mt-3 font-sans text-lg font-semibold text-quebrada">
-            {siPendiente(PRECIOS.evaluacionProceso, "Valor por confirmar")}
+          <p className="mt-3 font-sans text-2xl font-bold text-quebrada">
+            {PRECIOS.evaluacionPrimeraSesion}{" "}
+            <span className="font-sans text-base font-normal text-quebrada/70">
+              primera sesión (entrevista y orientación)
+            </span>
           </p>
           <p className="mt-2 text-base text-quebrada/90">
-            La evaluación se cobra como un proceso cerrado, que incluye las
-            entrevistas, la jornada de evaluación, el análisis y el informe
-            integral con su devolución. No se cobra por sesiones sueltas.
+            El valor final depende de las evaluaciones e instrumentos que
+            requiera cada caso, y se informa previamente. La evaluación es un
+            proceso que integra las entrevistas, la aplicación de instrumentos,
+            el análisis y el informe con su devolución.
           </p>
           <ul className="mt-5 space-y-3 font-sans text-sm font-semibold text-quebrada">
             <li className="flex items-center gap-3">

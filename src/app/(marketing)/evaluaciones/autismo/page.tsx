@@ -46,7 +46,7 @@ const config: EvaluacionConfig = {
     {
       title: "Jornada presencial en Arica",
       description:
-        "Una jornada de observación directa (ADOS-2) en Carlos Dittborn 0118, Arica, la sede de jornadas presenciales de evaluación.",
+        "Una jornada de observación directa (ADOS-2) en Arica; la dirección exacta se coordina de forma privada al agendar.",
     },
     {
       title: "Análisis integral",
@@ -73,7 +73,7 @@ const config: EvaluacionConfig = {
     {
       question: "¿Tengo que viajar a Arica?",
       answer:
-        "Las entrevistas y la devolución son online. La observación directa con ADOS-2 sí requiere presencialidad, y se concentra en una sola jornada en Arica (Carlos Dittborn 0118). Si viajar es difícil para tu familia, escríbeme por WhatsApp antes de reservar y conversamos honestamente tu situación.",
+        "Las entrevistas y la devolución son online. La observación directa con ADOS-2 sí requiere presencialidad, y se concentra en una sola jornada en Arica. Si viajar es difícil para tu familia, escríbeme por WhatsApp antes de reservar y conversamos honestamente tu situación.",
     },
     {
       question: "¿Qué incluye el informe?",
