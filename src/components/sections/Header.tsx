@@ -33,16 +33,23 @@ export function Header() {
           aria-label={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
           className="flex items-center"
         >
-          {/* Un único logo oficial (fondo crema). En claro se funde con el
-              header; en oscuro se muestra sobre su placa crema con esquinas
-              redondeadas para mantener legible el texto vino de la marca. */}
+          {/* Logo oficial: versión clara (texto vino sobre crema) y su
+              variante oscura de colores invertidos (texto claro), que se
+              alternan según el tema (ver globals.css). */}
           <Image
             src="/images/logo-horizontal.webp"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
             width={1546}
             height={480}
             priority
-            className="logo-marca h-16 w-auto rounded-xl sm:h-28 lg:h-32"
+            className="logo-claro h-20 w-auto sm:h-32 lg:h-36"
+          />
+          <Image
+            src="/images/logo-horizontal-dark.webp"
+            alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
+            width={1546}
+            height={480}
+            className="logo-oscuro h-20 w-auto sm:h-32 lg:h-36"
           />
         </Link>
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
