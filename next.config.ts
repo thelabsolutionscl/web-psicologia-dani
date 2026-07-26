@@ -48,6 +48,12 @@ const nextConfig: NextConfig = {
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },
+  async redirects() {
+    return [
+      // Los aranceles se consolidaron en "Terapias y valores" (ajustes 2026).
+      { source: "/precios", destination: "/terapias", permanent: true },
+    ];
+  },
 };
 
 export default nextConfig;
