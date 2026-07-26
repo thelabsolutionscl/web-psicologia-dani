@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BookingCTA } from "@/components/BookingCTA";
+import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { SITE_NAME } from "@/lib/site";
 
@@ -19,9 +20,9 @@ const navLinks = [
 ];
 
 /**
- * Header sticky con CTA persistente (sección 8). Sin JavaScript de
- * cliente: en móvil la navegación es una fila con scroll horizontal
- * (regla 10.7: Server Components por defecto).
+ * Header sticky con CTA persistente (sección 8). En escritorio la
+ * navegación es una fila bajo el topbar; en móvil se colapsa en un botón
+ * de menú (<MobileNav/>) que despliega la navegación y el CTA.
  */
 export function Header() {
   return (
@@ -35,8 +36,8 @@ export function Header() {
           <Image
             src="/images/logo-horizontal.webp"
             alt={`${SITE_NAME} — Psicóloga y fonoaudióloga`}
-            width={1490}
-            height={408}
+            width={1596}
+            height={530}
             priority
             className="logo-claro h-14 w-auto sm:h-20 lg:h-24"
           />
@@ -50,10 +51,18 @@ export function Header() {
         </Link>
         <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <ThemeToggle />
-          <BookingCTA className="px-4 text-sm sm:px-6 sm:text-base" />
+          {/* CTA visible solo en escritorio; en móvil vive dentro del menú */}
+          <div className="hidden sm:block">
+            <BookingCTA className="px-4 text-sm sm:px-6 sm:text-base" />
+          </div>
+          <MobileNav links={navLinks} />
         </div>
       </div>
-      <nav aria-label="Navegación principal" className="border-t border-arena">
+      {/* Navegación de escritorio (en móvil se usa el botón de menú) */}
+      <nav
+        aria-label="Navegación principal"
+        className="hidden border-t border-arena sm:block"
+      >
         <ul className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2">
           {navLinks.map((link) => (
             <li key={link.href} className="shrink-0">
