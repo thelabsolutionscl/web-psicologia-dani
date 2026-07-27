@@ -13,7 +13,7 @@ import { SITE_NAME } from "@/lib/site";
  */
 export function Header() {
   return (
-    <header className="sticky top-0 z-40 border-b border-arena bg-camanchaca/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-arena bg-camanchaca">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Link
           href="/"
