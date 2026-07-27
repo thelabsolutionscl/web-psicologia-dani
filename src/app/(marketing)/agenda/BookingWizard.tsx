@@ -107,6 +107,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   // tarjeta de confirmación) para hacer más intuitivo el paso a paso
   // (respeta prefers-reduced-motion).
   const continuarServicioRef = useRef<HTMLDivElement | null>(null);
+  const bloquesRef = useRef<HTMLDivElement | null>(null);
   const continuarFechaRef = useRef<HTMLDivElement | null>(null);
   const confirmacionRef = useRef<HTMLDivElement | null>(null);
   const scrollHaciaRef = useCallback(
@@ -187,11 +188,14 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
   // Paso 2: al quedar elegidos fecha y bloque, baja al botón "Continuar".
   const seleccionarFecha = (f: string) => {
     setFecha(f);
-    if (bloque && ocupados.has(slotKey(f, bloque))) {
+    const bloqueSigueValido =
+      bloque !== null && !ocupados.has(slotKey(f, bloque));
+    if (bloque && !bloqueSigueValido) {
       setBloque(null); // el bloque ya no está libre en la nueva fecha
-    } else if (bloque) {
-      scrollHaciaRef(continuarFechaRef);
     }
+    // Con la fecha lista, guía a elegir la hora; si la hora ya está y sigue
+    // libre, baja directo al botón "Continuar".
+    scrollHaciaRef(bloqueSigueValido ? continuarFechaRef : bloquesRef);
   };
   const seleccionarBloque = (b: string) => {
     setBloque(b);
@@ -412,7 +416,7 @@ export function BookingWizard({ pagoActivo = false }: { pagoActivo?: boolean }) 
               })}
             </div>
           )}
-          <div className="mt-5 flex flex-wrap gap-3">
+          <div className="mt-5 flex flex-wrap gap-3 scroll-mt-24" ref={bloquesRef}>
             {BLOQUES.map((b) => {
               const tomado = fecha ? ocupados.has(slotKey(fecha, b)) : false;
               return (
