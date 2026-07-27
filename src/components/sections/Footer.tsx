@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { LEGAL_LINKS, NAV_LINKS } from "@/lib/nav";
 import {
   ADDRESS,
   PHONE_DISPLAY,
@@ -10,24 +11,6 @@ import {
   WHATSAPP_MESSAGES,
   whatsappHref,
 } from "@/lib/site";
-
-const footerNav = [
-  { href: "/sobre-mi", label: "Sobre mí" },
-  { href: "/servicios", label: "Servicios" },
-  { href: "/evaluaciones", label: "Evaluaciones" },
-  { href: "/servicios/perinatal", label: "Psicología perinatal (Materna)" },
-  { href: "/terapias", label: "Terapias y valores" },
-  { href: "/atencion-online", label: "Modalidad de atención" },
-  { href: "/agenda", label: "Reserva de horas" },
-  { href: "/blog", label: "Blog" },
-  { href: "/#testimonios", label: "Testimonios" },
-  { href: "/contacto", label: "Contacto" },
-];
-
-const legalNav = [
-  { href: "/privacidad", label: "Política de privacidad" },
-  { href: "/terminos", label: "Términos y condiciones" },
-];
 
 /** Footer con nombre completo, lema, registros y NAP (sección 8). */
 export function Footer() {
@@ -101,7 +84,7 @@ export function Footer() {
             Navegación
           </p>
           <ul className="mt-1 font-sans text-sm">
-            {footerNav.map((link) => (
+            {NAV_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}
@@ -111,7 +94,7 @@ export function Footer() {
                 </Link>
               </li>
             ))}
-            {legalNav.map((link) => (
+            {LEGAL_LINKS.map((link) => (
               <li key={link.href}>
                 <Link
                   href={link.href}

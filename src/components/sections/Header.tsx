@@ -3,21 +3,8 @@ import Link from "next/link";
 import { BookingCTA } from "@/components/BookingCTA";
 import { MobileNav } from "@/components/MobileNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NAV_LINKS } from "@/lib/nav";
 import { SITE_NAME } from "@/lib/site";
-
-const navLinks = [
-  { href: "/", label: "Inicio" },
-  { href: "/sobre-mi", label: "Sobre mí" },
-  { href: "/servicios", label: "Servicios" },
-  { href: "/evaluaciones", label: "Evaluaciones" },
-  { href: "/servicios/perinatal", label: "Materna" },
-  { href: "/terapias", label: "Terapias y valores" },
-  { href: "/atencion-online", label: "Modalidad de atención" },
-  { href: "/agenda", label: "Reserva de horas" },
-  { href: "/blog", label: "Blog" },
-  { href: "/#testimonios", label: "Testimonios" },
-  { href: "/contacto", label: "Contacto" },
-];
 
 /**
  * Header sticky con CTA persistente (sección 8). En escritorio la
@@ -58,7 +45,7 @@ export function Header() {
           <div className="hidden sm:block">
             <BookingCTA className="px-4 text-sm sm:px-6 sm:text-base" />
           </div>
-          <MobileNav links={navLinks} />
+          <MobileNav links={NAV_LINKS} />
         </div>
       </div>
       {/* Navegación de escritorio (en móvil se usa el botón de menú) */}
@@ -67,7 +54,7 @@ export function Header() {
         className="hidden border-t border-arena sm:block"
       >
         <ul className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2">
-          {navLinks.map((link) => (
+          {NAV_LINKS.map((link) => (
             <li key={link.href} className="shrink-0">
               <Link
                 href={link.href}
